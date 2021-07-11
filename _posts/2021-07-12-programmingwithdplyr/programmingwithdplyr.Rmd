@@ -1,0 +1,21 @@
+---
+title: "Programming with {dplyr}"
+description: |
+  This post is about my mental model of how {dplyr} functions can be used to create your own functions.
+author:
+  - name: Vishal Katti
+date: 07-12-2021
+preview: placeholder.png
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+⚠️ Post under development ⚠️
+
+

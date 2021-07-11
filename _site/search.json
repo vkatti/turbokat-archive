@@ -1,0 +1,20 @@
+{
+  "articles": [
+    {
+      "path": "blog.html",
+      "title": "Blog",
+      "author": [],
+      "contents": "\r\n\r\n\r\n\r\n",
+      "last_modified": "2021-07-12T01:12:15+05:30"
+    },
+    {
+      "path": "index.html",
+      "title": "Vishal Katti",
+      "description": "This site is under development!\n",
+      "author": [],
+      "contents": "\r\n\r\nAbout Me:\r\nEducation:\r\n\r\n\r\n\r\n",
+      "last_modified": "2021-07-12T01:12:18+05:30"
+    }
+  ],
+  "collections": ["posts/posts.json"]
+}

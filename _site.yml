@@ -1,0 +1,18 @@
+name: "website"
+title: "Vishal Katti"
+description: |
+  Welcome to Vishal Katti's website
+output_dir: "_site"
+navbar:
+  right:
+    - text: "About"
+      href: index.html
+    - text: "Blog"
+      href: blog.html
+    - icon: fa fa-github
+      href: https://github.com/vkatti
+    - icon: fa fa-linkedin
+      href: www.linkedin.com/in/vishalkatti
+    - icon: fa fa-twitter
+      href: https://twitter.com/vishal_katti
+output: distill::distill_article
