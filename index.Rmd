@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ```
 
-![](profile.jpg)
+![](images/profile.jpg)
 
 
 ## About Me:
