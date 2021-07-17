@@ -3,6 +3,7 @@ title: "Vishal Katti"
 description: |
   Welcome to Vishal Katti's website
 output_dir: "_site"
+theme: katti_theme.css
 navbar:
   right:
     - text: "About"

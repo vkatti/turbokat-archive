@@ -5,15 +5,15 @@
       "title": "Blog",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-07-17T13:19:53+05:30"
+      "last_modified": "2021-07-18T01:06:28+05:30"
     },
     {
       "path": "index.html",
       "title": "Vishal Katti",
-      "description": "This site is under development!\n",
+      "description": "This site, just like me, is under development!\n",
       "author": [],
-      "contents": "\r\n\r\nAbout Me:\r\nEducation:\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-07-17T13:19:57+05:30"
+      "contents": "\r\nAbout Me:\r\n\r\nEducation:\r\n\r\n\r\n\r\n",
+      "last_modified": "2021-07-18T01:06:31+05:30"
     }
   ],
   "collections": ["posts/posts.json"]
