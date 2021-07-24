@@ -2146,6 +2146,7 @@ d-appendix {
 
 /* Optional: embed custom fonts here with `@import`          */
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code')
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono');
 /* This must remain at the top of this file.                 */
 
 
@@ -2165,7 +2166,7 @@ html {
   --fig-cap-color:   rgba(0, 0, 0, 0.6);
   /*-- Specify custom fonts ~~~ must be imported above   --*/
   --heading-font:    "Verdana", sans-serif;
-  --mono-font:       "Fira Code", monospace;
+  --mono-font:       "Space Mono", monospace;
   --body-font:       "Verdana", sans-serif;
   --navbar-font:     "Verdana", sans-serif;  /* websites + blogs only */
 }
@@ -2787,39 +2788,19 @@ x Input `..1` must be a logical vector, not a character.
 </code></pre>
 </div>
 <pre><code># A tibble: 315 x 9
-   city      year month sales   volume median listings inventory  date
-   &lt;chr&gt;    &lt;int&gt; &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
- 1 Brownsv~  2011     1    48   4.97e6  83300      784      12.6 2011 
- 2 Brownsv~  2011     2    47   5.56e6 101400      776      12.7 2011.
- 3 Brownsv~  2011     7    47   4.81e6  91200      749      13.1 2012.
- 4 Brownsv~  2011    12    39   4.20e6  86800      726      12.4 2012.
- 5 Brownsv~  2012     1    43   3.89e6  85000      791      13.6 2012 
- 6 Brownsv~  2012     3    27   2.98e6  93800      734      13.3 2012.
- 7 Brownsv~  2012    11    41   5.12e6  99000      807      14   2013.
- 8 Brownsv~  2013    11    38   4.82e6 108000      859      13.4 2014.
- 9 Brownsv~  2015     1    41   5.40e6  97000      733      10.7 2015 
-10 Galvest~  2011     1    43   8.88e6 170000     1015      13.7 2011 
-11 Galvest~  2012     1    39   5.82e6 122500     1004      13.3 2012 
-12 Galvest~  2013     1    45   1.02e7 165000      792       9.7 2013 
-13 Galvest~  2014     1    48   9.97e6 176700      718       8.4 2014 
-14 Galvest~  2015     1    43   1.08e7 187500      575       5.8 2015 
-15 Harling~  2011     4    36   5.35e6 133300      417       6.2 2011.
-16 Harling~  2012    11    44   5.41e6 103300     1635      22.4 2013.
-17 Harling~  2013     1    44   5.51e6  90000     1593      22.3 2013 
-18 Houston   2013     5  8439   2.12e9 186100    20526       3.3 2013.
-19 Houston   2013     7  8468   2.17e9 187800    21497       3.3 2014.
-20 Houston   2013     8  8155   2.08e9 186700    21366       3.3 2014.
-21 Houston   2014     6  8391   2.34e9 211200    19725       2.9 2014.
-22 Houston   2014     7  8391   2.28e9 199700    20214       3   2014.
-23 Houston   2014     8  8167   2.20e9 202400    20007       2.9 2015.
-24 Houston   2015     6  8449   2.49e9 222400    22311       3.2 2015.
-25 Houston   2015     7  8945   2.57e9 217600    23875       3.4 2016.
-26 Kerrvil~  2011     1    31   7.11e6 170000      777      22.2 2011 
-27 Kerrvil~  2011     2    22   3.70e6 140000      788      22.5 2011.
-28 Kerrvil~  2011     3    27   4.65e6 134000      842      24.5 2011.
-29 Kerrvil~  2011     4    35   5.62e6 143300      856      24.8 2011.
-30 Kerrvil~  2011     5    39   6.60e6 155000      875      25.5 2011.
-# ... with 285 more rows</code></pre>
+   city        year month sales volume median listings inventory  date
+   &lt;chr&gt;      &lt;int&gt; &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
+ 1 Brownsvil~  2011     1    48 4.97e6  83300      784      12.6 2011 
+ 2 Brownsvil~  2011     2    47 5.56e6 101400      776      12.7 2011.
+ 3 Brownsvil~  2011     7    47 4.81e6  91200      749      13.1 2012.
+ 4 Brownsvil~  2011    12    39 4.20e6  86800      726      12.4 2012.
+ 5 Brownsvil~  2012     1    43 3.89e6  85000      791      13.6 2012 
+ 6 Brownsvil~  2012     3    27 2.98e6  93800      734      13.3 2012.
+ 7 Brownsvil~  2012    11    41 5.12e6  99000      807      14   2013.
+ 8 Brownsvil~  2013    11    38 4.82e6 108000      859      13.4 2014.
+ 9 Brownsvil~  2015     1    41 5.40e6  97000      733      10.7 2015 
+10 Galveston   2011     1    43 8.88e6 170000     1015      13.7 2011 
+# ... with 305 more rows</code></pre>
 </div>
 <h1 id="mutate"><code>mutate()</code></h1>
 <p><code>mutate()</code> allows you to add new columns or modify existing columns. In the example below, we will create a new column <code>volume_in_millions</code> from the existing column <code>volume</code>. The names of both the columns can be passed to the function either as raw names or character strings.</p>
@@ -3300,39 +3281,19 @@ $ dMonth &lt;chr&gt; &quot;Jan 2000&quot;, &quot;Feb 2000&quot;, &quot;Mar 2000&
 </code></pre>
 </div>
 <pre><code># A tibble: 736 x 3
-   city      Year total_sales
-   &lt;chr&gt;    &lt;dbl&gt;       &lt;dbl&gt;
- 1 Abilene   2000        1375
- 2 Abilene   2001        1431
- 3 Abilene   2002        1516
- 4 Abilene   2003        1632
- 5 Abilene   2004        1830
- 6 Abilene   2005        1977
- 7 Abilene   2006        1997
- 8 Abilene   2007        2003
- 9 Abilene   2008        1651
-10 Abilene   2009        1634
-11 Abilene   2010        1590
-12 Abilene   2011        1719
-13 Abilene   2012        2016
-14 Abilene   2013        2171
-15 Abilene   2014        2164
-16 Abilene   2015        1435
-17 Amarillo  2000        2076
-18 Amarillo  2001        2343
-19 Amarillo  2002        2249
-20 Amarillo  2003        2828
-21 Amarillo  2004        3057
-22 Amarillo  2005        3113
-23 Amarillo  2006        3445
-24 Amarillo  2007        3300
-25 Amarillo  2008        3009
-26 Amarillo  2009        2797
-27 Amarillo  2010        2556
-28 Amarillo  2011        2705
-29 Amarillo  2012        2933
-30 Amarillo  2013        3057
-# ... with 706 more rows</code></pre>
+   city     Year total_sales
+   &lt;chr&gt;   &lt;dbl&gt;       &lt;dbl&gt;
+ 1 Abilene  2000        1375
+ 2 Abilene  2001        1431
+ 3 Abilene  2002        1516
+ 4 Abilene  2003        1632
+ 5 Abilene  2004        1830
+ 6 Abilene  2005        1977
+ 7 Abilene  2006        1997
+ 8 Abilene  2007        2003
+ 9 Abilene  2008        1651
+10 Abilene  2009        1634
+# ... with 726 more rows</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Half Yearly volumes per city</span>
 <span class='va'>small_df_with_date_cols</span> <span class='op'>%&gt;%</span> <span class='fu'>tx_summary</span><span class='op'>(</span>grp_col <span class='op'>=</span> <span class='va'>yHalf</span>, sum_col <span class='op'>=</span> <span class='va'>volume</span><span class='op'>)</span>
@@ -3351,27 +3312,7 @@ $ dMonth &lt;chr&gt; &quot;Jan 2000&quot;, &quot;Feb 2000&quot;, &quot;Mar 2000&
  8 Abilene 2003.     77500000
  9 Abilene 2004.     74205000
 10 Abilene 2004.     85465000
-11 Abilene 2005.     94980000
-12 Abilene 2005.    103875000
-13 Abilene 2006.    111770000
-14 Abilene 2006.    115760000
-15 Abilene 2007.    121955000
-16 Abilene 2007.    110107585
-17 Abilene 2008.    101306055
-18 Abilene 2008.     91214280
-19 Abilene 2009.     95990057
-20 Abilene 2009.    106367699
-21 Abilene 2010.    100830738
-22 Abilene 2010.     96626206
-23 Abilene 2011.    101595481
-24 Abilene 2011.    118570348
-25 Abilene 2012.    124258849
-26 Abilene 2012.    141298045
-27 Abilene 2013.    140574147
-28 Abilene 2013.    149706157
-29 Abilene 2014.    141037003
-30 Abilene 2014.    169948408
-# ... with 1,442 more rows</code></pre>
+# ... with 1,462 more rows</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Quarterly Sales per city</span>
 <span class='va'>small_df_with_date_cols</span> <span class='op'>%&gt;%</span> <span class='fu'>tx_summary</span><span class='op'>(</span>grp_col <span class='op'>=</span> <span class='va'>yQtr</span>, sum_col <span class='op'>=</span> <span class='va'>sales</span><span class='op'>)</span>
@@ -3390,27 +3331,7 @@ $ dMonth &lt;chr&gt; &quot;Jan 2000&quot;, &quot;Feb 2000&quot;, &quot;Mar 2000&
  8 Abilene 2001.         331
  9 Abilene 2002.         295
 10 Abilene 2002.         425
-11 Abilene 2002.         447
-12 Abilene 2002.         349
-13 Abilene 2003.         298
-14 Abilene 2003.         399
-15 Abilene 2003.         511
-16 Abilene 2003.         424
-17 Abilene 2004.         385
-18 Abilene 2004.         509
-19 Abilene 2004.         508
-20 Abilene 2004.         428
-21 Abilene 2005.         419
-22 Abilene 2005.         577
-23 Abilene 2005.         558
-24 Abilene 2005.         423
-25 Abilene 2006.         414
-26 Abilene 2006.         576
-27 Abilene 2006.         548
-28 Abilene 2006.         459
-29 Abilene 2007.         484
-30 Abilene 2007.         617
-# ... with 2,868 more rows</code></pre>
+# ... with 2,888 more rows</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Monthly Volumes per city</span>
 <span class='va'>small_df_with_date_cols</span> <span class='op'>%&gt;%</span> <span class='fu'>tx_summary</span><span class='op'>(</span>grp_col <span class='op'>=</span> <span class='va'>yMonth</span>, sum_col <span class='op'>=</span> <span class='va'>volume</span><span class='op'>)</span>
@@ -3429,27 +3350,7 @@ $ dMonth &lt;chr&gt; &quot;Jan 2000&quot;, &quot;Feb 2000&quot;, &quot;Mar 2000&
  8 Abilene  2000.     10710000
  9 Abilene  2000.      7615000
 10 Abilene  2000.      7040000
-11 Abilene  2000.      7890000
-12 Abilene  2000.      7285000
-13 Abilene  2001.      5730000
-14 Abilene  2001.      8670000
-15 Abilene  2001.      9550000
-16 Abilene  2001.      8705000
-17 Abilene  2001.     11850000
-18 Abilene  2001.     11290000
-19 Abilene  2001.     13175000
-20 Abilene  2001.     11840000
-21 Abilene  2001.      8395000
-22 Abilene  2001.      9010000
-23 Abilene  2001.      8955000
-24 Abilene  2001.      7195000
-25 Abilene  2002.      6530000
-26 Abilene  2002.      6860000
-27 Abilene  2002.      8385000
-28 Abilene  2002.     10465000
-29 Abilene  2002.     11465000
-30 Abilene  2002.     11600000
-# ... with 8,572 more rows</code></pre>
+# ... with 8,592 more rows</code></pre>
 </div>
 <h3 id="more-ideas">More ideas</h3>
 <p>You could further extend this by creating a custom filtering function that gives you, say, the rows with the highest or lowest <code>total_sales</code> or <code>total_volume</code>.</p>
