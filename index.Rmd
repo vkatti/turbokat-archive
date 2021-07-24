@@ -1,26 +1,44 @@
 ---
 title: "Vishal Katti"
+image: "images/profile.jpg"
 description: |
   This site, just like me, is under development!
 site: distill::distill_website
+links:
+  - label: LinkedIn
+    url: "www.linkedin.com/in/vishalkatti"
+  - label: Twitter
+    url: "https://twitter.com/vishal_katti"
+  - label: GitHub
+    url: "https://github.com/vkatti"
+  - label: Email
+    url: "mailto:katti.vishal@gmail.com"
+output:
+  postcards::trestles
 ---
+ 
+## Bio
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-
-# Learn more about creating websites with Distill at:
-# https://rstudio.github.io/distill/website.html
-
-```
-
-
-## About Me:
+Vishal Katti analyzes personnel safety, process safety, health and environmental performance metrics
+at ExxonMobil Services & Technology Pvt. Ltd. His focus is on identifying patterns and extracting key learnings for 
+business leaders to act on. He strives to streamline and automate data stewardship activities. 
+He resides in Bengaluru, India with his wife and 3yo daughter, but constantly longs for Goa where he spent most of his childhood.
 
 
-![](images/profile.jpg)
+## Education
+
+**Dr. B. R. Ambedkar National Institute of Technology (NIT)** | Jalandhar, Punjab, India
+
+Bachelor of Technology in Instrumentation & Control Engineering | August 2005 - April 2010
+
+**Smt. Parvatibai Chowgule College of Arts & Science** | Margao, Goa, India
+
+H.S.S.C. in Physics, Chemistry and Mathematics | June 2003 - April 2005
 
 
 
+## Experience
 
+**ExxonMobil Services & Technology Pvt. Ltd.** | Business Analytics Advisor | June 2018 - Present
 
-## Education:
+**Tata Consultancy Services** | Functional Consultant/Data Analyst | September 2010 - June 2018
