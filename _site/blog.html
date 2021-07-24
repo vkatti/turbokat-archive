@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
   <meta name="generator" content="distill" />
+  <link rel="alternate" type="application/rss+xml" href="https://vishalkatti.com/blog.xml" />
 
   <style type="text/css">
   /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
@@ -90,6 +91,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <title>Vishal Katti: Blog</title>
 
 
+  <link rel="license" href="https://creativecommons.org/licenses/by/4.0/"/>
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
@@ -101,6 +103,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
   <meta property="twitter:title" content="Vishal Katti: Blog"/>
+  <meta property="twitter:site" content="@vishal_katti"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
@@ -2360,6 +2363,35 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <script src="site_libs/webcomponents-2.0.0/webcomponents.js"></script>
   <script src="site_libs/distill-2.2.21/template.v2.js"></script>
   <!--radix_placeholder_site_in_header-->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      if (!/posts/.test(location.pathname)) {
+        return;
+      }
+
+      var script = document.createElement("script");
+      script.src = "https://utteranc.es/client.js";
+      script.setAttribute("repo", "vkatti/turbokat");
+      script.setAttribute("issue-term", "og:title");
+      script.setAttribute("crossorigin", "anonymous");
+      script.setAttribute("label", "comments ðŸ’¬");
+       script.setAttribute("theme", "github-light");
+
+      /* wait for article to load, append script to article element */
+      var observer = new MutationObserver(function (mutations, observer) {
+        var article = document.querySelector("d-article");
+        if (article) {
+          observer.disconnect();
+          /* HACK: article scroll */
+          article.setAttribute("style", "overflow-y: hidden");
+          article.appendChild(script);
+        }
+      });
+
+      observer.observe(document.body, { childList: true });
+    });
+  </script
+
   <!--/radix_placeholder_site_in_header-->
 
 
@@ -2392,6 +2424,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </a>
 <a href="https://twitter.com/vishal_katti">
 <i class="fa fa-twitter" aria-hidden="true"></i>
+</a>
+<a href="blog.xml">
+<i class="fa fa-rss" aria-hidden="true"></i>
 </a>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
 </div>
@@ -2537,9 +2572,9 @@ function init_posts_list() {
 <div class="posts-list">
 <h1 class="posts-list-caption" data-caption="Blog">Blog</h1>
 <a href="posts/2021-07-17-programmingwithdplyr/" class="post-preview">
-<script class="post-metadata" type="text/json">{"categories":["R","dplyr","NSE"]}</script>
+<script class="post-metadata" type="text/json">{"categories":["Rstats","dplyr","functions"]}</script>
 <div class="metadata">
-<div class="publishedDate">July 16, 2021</div>
+<div class="publishedDate">July 17, 2021</div>
 <div class="dt-authors">
 <div class="dt-author">Vishal Katti</div>
 </div>
@@ -2550,9 +2585,9 @@ function init_posts_list() {
 <div class="description">
 <h2>Programming with R {dplyr} - As I Understand It!!</h2>
 <div class="dt-tags">
-<div class="dt-tag">R</div>
+<div class="dt-tag">Rstats</div>
 <div class="dt-tag">dplyr</div>
-<div class="dt-tag">NSE</div>
+<div class="dt-tag">functions</div>
 </div>
 <p>This post is about how {dplyr} functions can be used to create your own functions..</p>
 </div>
@@ -2571,11 +2606,11 @@ function init_posts_list() {
 <span class="category-count">(1)</span>
 </li>
 <li>
-<a href="#category:NSE">NSE</a>
+<a href="#category:functions">functions</a>
 <span class="category-count">(1)</span>
 </li>
 <li>
-<a href="#category:R">R</a>
+<a href="#category:Rstats">Rstats</a>
 <span class="category-count">(1)</span>
 </li>
 </ul>
@@ -2585,7 +2620,7 @@ function init_posts_list() {
 <a href="#">More articles &raquo;</a>
 </div>
 </div>
-<!--/radix_placeholder_article_listing-->
+<!--/radix_placeholder_article_listing-->
 
 <div class="d-title">
 <h1>Blog</h1>
@@ -2608,7 +2643,12 @@ function init_posts_list() {
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
 <!--radix_placeholder_appendices-->
-<div class="appendix-bottom"></div>
+<div class="appendix-bottom">
+<h3 id="updates-and-corrections">Corrections</h3>
+<p>If you see mistakes or want to suggest changes, please <a href="https://www.github.com/vkatti/turbokat/issues/new">create an issue</a> on the source repository.</p>
+<h3 id="reuse">Reuse</h3>
+<p>Text and figures are licensed under Creative Commons Attribution <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Source code is available at <a href="https://www.github.com/vkatti/turbokat">https://www.github.com/vkatti/turbokat</a>, unless otherwise noted. The figures that have been reused from other sources don't fall under this license and can be recognized by a note in their caption: "Figure from ...".</p>
+</div>
 <!--/radix_placeholder_appendices-->
 <!--radix_placeholder_navigation_after_body-->
 <!--/radix_placeholder_navigation_after_body-->

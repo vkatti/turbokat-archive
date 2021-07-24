@@ -6,9 +6,9 @@ author:
   - name: Vishal Katti
 date: 07-17-2021
 categories:
-  - R
+  - Rstats
   - dplyr
-  - NSE
+  - functions
 preview: https://i.gifer.com/8inO.gif
 output:
   distill::distill_article:
@@ -474,7 +474,7 @@ You could further extend this by creating a custom filtering function that gives
 
 The ability to create such dynamic functions, enabled by the wonderful {dplyr} package, allows us to level-up in terms of programming with R and helps make our code neat and tidy.
 
-![How I feel while creating custom functions with {dplyr}! I can almost hear the music!](https://i.gifer.com/8inO.gif)
+![How I feel while creating custom functions with {dplyr}! I can almost hear the music! Source: gifer.com](https://i.gifer.com/8inO.gif)
 
 # References
 
@@ -483,12 +483,3 @@ The ability to create such dynamic functions, enabled by the wonderful {dplyr} p
 -   Garrett Grolemund, Hadley Wickham (2011). Dates and Times Made Easy with lubridate. Journal of Statistical Software, 40(3), 1-25. URL https://www.jstatsoft.org/v40/i03/.
 -   H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
 -   Jim Hester (2020). glue: Interpreted String Literals. R package version 1.4.2. https://CRAN.R-project.org/package=glue
-
-
-<script src="https://utteranc.es/client.js"
-        repo="vkatti/turbokat"
-        issue-term="title"
-        theme="github-light"
-        crossorigin="anonymous"
-        async>
-</script>

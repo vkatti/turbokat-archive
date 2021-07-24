@@ -5,7 +5,7 @@
       "title": "Blog",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-07-24T23:11:08+05:30"
+      "last_modified": "2021-07-24T23:51:40+05:30"
     },
     {
       "path": "index.html",
@@ -13,7 +13,7 @@
       "description": "This site, just like me, is under development!\n",
       "author": [],
       "contents": "\r\nAbout Me:\r\n\r\nEducation:\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-07-24T23:11:11+05:30"
+      "last_modified": "2021-07-24T23:51:43+05:30"
     }
   ],
   "collections": ["posts/posts.json"]
