@@ -486,7 +486,7 @@ The ability to create such dynamic functions, enabled by the wonderful {dplyr} p
 
 
 <script src="https://utteranc.es/client.js"
-        repo="turbokat"
+        repo="https://github.com/vkatti/turbokat"
         issue-term="title"
         theme="github-light"
         crossorigin="anonymous"
