@@ -19,7 +19,7 @@ output:
 <style>
 d-article div.sourceCode code,
 d-article pre code {
-	font-family: "Fira Code", monospace;
+	font-family: "Space Mono", monospace;
 }
 </style>
 
