@@ -89,7 +89,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_meta_tags-->
 <title>Vishal Katti: Programming with R {dplyr} - As I Understand It!!</title>
 
-<meta property="description" itemprop="description" content="This post is about how {dplyr} functions can be used to create your own functions.."/>
+<meta property="description" itemprop="description" content="How to create your own functions using {dplyr}"/>
 
 <link rel="canonical" href="https://vishalkatti.com/posts/2021-07-17-programmingwithdplyr/"/>
 <link rel="license" href="https://creativecommons.org/licenses/by/4.0/"/>
@@ -102,7 +102,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
 <meta property="og:title" content="Vishal Katti: Programming with R {dplyr} - As I Understand It!!"/>
 <meta property="og:type" content="article"/>
-<meta property="og:description" content="This post is about how {dplyr} functions can be used to create your own functions.."/>
+<meta property="og:description" content="How to create your own functions using {dplyr}"/>
 <meta property="og:url" content="https://vishalkatti.com/posts/2021-07-17-programmingwithdplyr/"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="Vishal Katti"/>
@@ -110,7 +110,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--  https://dev.twitter.com/cards/types/summary -->
 <meta property="twitter:card" content="summary"/>
 <meta property="twitter:title" content="Vishal Katti: Programming with R {dplyr} - As I Understand It!!"/>
-<meta property="twitter:description" content="This post is about how {dplyr} functions can be used to create your own functions.."/>
+<meta property="twitter:description" content="How to create your own functions using {dplyr}"/>
 <meta property="twitter:url" content="https://vishalkatti.com/posts/2021-07-17-programmingwithdplyr/"/>
 <meta property="twitter:site" content="@vishal_katti"/>
 
@@ -125,7 +125,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["creative_commons","title","description","author","date","categories","preview","output","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["CC BY"]},{"type":"character","attributes":{},"value":["Programming with R {dplyr} - As I Understand It!!"]},{"type":"character","attributes":{},"value":["This post is about how {dplyr} functions can be used to create your own functions.."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Vishal Katti"]}]}]},{"type":"character","attributes":{},"value":["07-17-2021"]},{"type":"character","attributes":{},"value":["Rstats","dplyr","functions"]},{"type":"character","attributes":{},"value":["https://i.gifer.com/8inO.gif"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["https://vishalkatti.com/posts/2021-07-17-programmingwithdplyr/"]},{"type":"character","attributes":{},"value":["https://vishalkatti.com/posts/2021-07-17-programmingwithdplyr/"]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["creative_commons","title","description","author","date","categories","preview","output","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["CC BY"]},{"type":"character","attributes":{},"value":["Programming with R {dplyr} - As I Understand It!!"]},{"type":"character","attributes":{},"value":["How to create your own functions using {dplyr}"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Vishal Katti"]}]}]},{"type":"character","attributes":{},"value":["07-17-2021"]},{"type":"character","attributes":{},"value":["Rstats","dplyr","functions"]},{"type":"character","attributes":{},"value":["https://i.gifer.com/8inO.gif"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["https://vishalkatti.com/posts/2021-07-17-programmingwithdplyr/"]},{"type":"character","attributes":{},"value":["https://vishalkatti.com/posts/2021-07-17-programmingwithdplyr/"]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -2218,6 +2218,22 @@ d-article div.sourceCode code,
 d-article pre code {
 	font-family: "Fira Code", monospace;
 	font-size: 1rem;
+}
+
+.posts-list .post-preview {
+    text-decoration: none;
+    overflow: hidden;
+    display: block;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 24px 24px;
+}
+
+.posts-list .post-preview .thumbnail {
+    box-sizing: border-box;
+    margin-bottom: 24px;
+    position: relative;
+    max-width: 500px;
+    box-shadow: 4px 4px 4px 4px rgb(0 0 0 / 20%);
 }</style>
 <style type="text/css">
 /* base style */
@@ -2424,7 +2440,7 @@ d-appendix d-footnote-list a.footnote-backlink {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Programming with R {dplyr} - As I Understand It!!","description":"This post is about how {dplyr} functions can be used to create your own functions..","authors":[{"author":"Vishal Katti","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-07-17T00:00:00.000+05:30","citationText":"Katti, 2021"}
+{"title":"Programming with R {dplyr} - As I Understand It!!","description":"How to create your own functions using {dplyr}","authors":[{"author":"Vishal Katti","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-07-17T00:00:00.000+05:30","citationText":"Katti, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2467,7 +2483,7 @@ d-appendix d-footnote-list a.footnote-backlink {
   <a href="../../blog.html#category:functions" class="dt-tag">functions</a>
 </div>
 <!--/radix_placeholder_categories-->
-<p><p>This post is about how {dplyr} functions can be used to create your own functions..</p></p>
+<p><p>How to create your own functions using {dplyr}</p></p>
 </div>
 
 <div class="d-byline">
@@ -2532,7 +2548,7 @@ d-appendix d-footnote-list a.footnote-backlink {
 <style>
 d-article div.sourceCode code,
 d-article pre code {
-    font-family: "Space Mono", monospace;
+    font-family: "Fira Code", monospace;
 }
 </style>
 <h1 id="introduction">Introduction</h1>

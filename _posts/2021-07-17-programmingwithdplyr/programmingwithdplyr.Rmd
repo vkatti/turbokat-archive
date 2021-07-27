@@ -1,7 +1,7 @@
 ---
 title: "Programming with R {dplyr} - As I Understand It!!"
 description: |
-  This post is about how {dplyr} functions can be used to create your own functions..
+  How to create your own functions using {dplyr}
 author:
   - name: Vishal Katti
 date: 07-17-2021

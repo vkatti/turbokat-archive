@@ -7,12 +7,24 @@
     <description>Welcome to Vishal Katti's website
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Sat, 17 Jul 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 27 Jul 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Interactive Drill-down Tables using {reactable}</title>
+      <dc:creator>Vishal Katti</dc:creator>
+      <link>https://vishalkatti.com/posts/2021-07-27-drilldown</link>
+      <description>How to create multi-level tables with hidden rows</description>
+      <category>Rstats</category>
+      <category>reactable</category>
+      <category>drill-down</category>
+      <guid>https://vishalkatti.com/posts/2021-07-27-drilldown</guid>
+      <pubDate>Tue, 27 Jul 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://i.imgur.com/Zzk5SWf.gif" medium="image" type="image/gif"/>
+    </item>
     <item>
       <title>Programming with R {dplyr} - As I Understand It!!</title>
       <dc:creator>Vishal Katti</dc:creator>
       <link>https://vishalkatti.com/posts/2021-07-17-programmingwithdplyr</link>
-      <description>This post is about how {dplyr} functions can be used to create your own functions..</description>
+      <description>How to create your own functions using {dplyr}</description>
       <category>Rstats</category>
       <category>dplyr</category>
       <category>functions</category>

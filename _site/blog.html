@@ -2198,6 +2198,22 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   d-article pre code {
   	font-family: "Fira Code", monospace;
   	font-size: 1rem;
+  }
+
+  .posts-list .post-preview {
+      text-decoration: none;
+      overflow: hidden;
+      display: block;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 24px 24px;
+  }
+
+  .posts-list .post-preview .thumbnail {
+      box-sizing: border-box;
+      margin-bottom: 24px;
+      position: relative;
+      max-width: 500px;
+      box-shadow: 4px 4px 4px 4px rgb(0 0 0 / 20%);
   }</style>
   <style type="text/css">
   /* base style */
@@ -2572,6 +2588,27 @@ function init_posts_list() {
 <div class="posts-container posts-with-sidebar posts-apply-limit l-screen-inset">
 <div class="posts-list">
 <h1 class="posts-list-caption" data-caption="Blog">Blog</h1>
+<a href="posts/2021-07-27-drilldown/" class="post-preview">
+<script class="post-metadata" type="text/json">{"categories":["Rstats","reactable","drill-down"]}</script>
+<div class="metadata">
+<div class="publishedDate">July 27, 2021</div>
+<div class="dt-authors">
+<div class="dt-author">Vishal Katti</div>
+</div>
+</div>
+<div class="thumbnail">
+<img src="https://i.imgur.com/Zzk5SWf.gif"/>
+</div>
+<div class="description">
+<h2>Interactive Drill-down Tables using {reactable}</h2>
+<div class="dt-tags">
+<div class="dt-tag">Rstats</div>
+<div class="dt-tag">reactable</div>
+<div class="dt-tag">drill-down</div>
+</div>
+<p>How to create multi-level tables with hidden rows</p>
+</div>
+</a>
 <a href="posts/2021-07-17-programmingwithdplyr/" class="post-preview">
 <script class="post-metadata" type="text/json">{"categories":["Rstats","dplyr","functions"]}</script>
 <div class="metadata">
@@ -2590,7 +2627,7 @@ function init_posts_list() {
 <div class="dt-tag">dplyr</div>
 <div class="dt-tag">functions</div>
 </div>
-<p>This post is about how {dplyr} functions can be used to create your own functions..</p>
+<p>How to create your own functions using {dplyr}</p>
 </div>
 </a>
 </div>
@@ -2600,10 +2637,14 @@ function init_posts_list() {
 <ul>
 <li>
 <a href="#category:Articles">Articles</a>
-<span class="category-count">(1)</span>
+<span class="category-count">(2)</span>
 </li>
 <li>
 <a href="#category:dplyr">dplyr</a>
+<span class="category-count">(1)</span>
+</li>
+<li>
+<a href="#category:drill-down">drill-down</a>
 <span class="category-count">(1)</span>
 </li>
 <li>
@@ -2611,8 +2652,12 @@ function init_posts_list() {
 <span class="category-count">(1)</span>
 </li>
 <li>
-<a href="#category:Rstats">Rstats</a>
+<a href="#category:reactable">reactable</a>
 <span class="category-count">(1)</span>
+</li>
+<li>
+<a href="#category:Rstats">Rstats</a>
+<span class="category-count">(2)</span>
 </li>
 </ul>
 </div>

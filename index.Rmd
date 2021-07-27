@@ -5,13 +5,13 @@ description: |
   This site, just like me, is under development!
 site: distill::distill_website
 links:
-  - label: LinkedIn
+  - label: '<i class="fab fa-linkedin"></i> LinkedIn'
     url: "https://www.linkedin.com/in/vishalkatti"
-  - label: Twitter
+  - label: '<i class="fab fa-twitter"></i> Twitter'
     url: "https://twitter.com/vishal_katti"
-  - label: GitHub
+  - label: '<i class="fab fa-github"></i> GitHub'
     url: "https://github.com/vkatti"
-  - label: Email
+  - label: '<i class="fas fa-envelope"></i> Email'
     url: "mailto:katti.vishal@gmail.com"
 output:
   postcards::trestles
@@ -22,7 +22,7 @@ output:
 Vishal Katti analyzes personnel safety, process safety, health and environmental performance metrics
 at ExxonMobil Services & Technology Pvt. Ltd. His focus is on identifying patterns and extracting key learnings for 
 business leaders to act on. He strives to streamline and automate data stewardship activities. 
-He resides in Bengaluru, India with his wife and 3yo daughter, but constantly longs for Goa where he spent most of his childhood.
+He resides in Bengaluru, India with his wife and 3yo daughter, but constantly longs for the sun and sands of Goa where he spent most of his childhood.
 
 
 ## Education

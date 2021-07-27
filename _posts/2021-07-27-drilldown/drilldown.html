@@ -1,0 +1,1776 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+  <meta name="generator" content="distill" />
+
+  <style type="text/css">
+  /* Hide doc at startup (prevent jankiness while JS renders/transforms) */
+  body {
+    visibility: hidden;
+  }
+  </style>
+
+ <!--radix_placeholder_import_source-->
+ <!--/radix_placeholder_import_source-->
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ad0000; } /* Alert */
+code span.an { color: #5e5e5e; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #ad0000; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007ba5; } /* ControlFlow */
+code span.ch { color: #20794d; } /* Char */
+code span.cn { color: #8f5902; } /* Constant */
+code span.co { color: #5e5e5e; } /* Comment */
+code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+code span.dt { color: #ad0000; } /* DataType */
+code span.dv { color: #ad0000; } /* DecVal */
+code span.er { color: #ad0000; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #ad0000; } /* Float */
+code span.fu { color: #4758ab; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #5e5e5e; } /* Information */
+code span.kw { color: #007ba5; } /* Keyword */
+code span.op { color: #5e5e5e; } /* Operator */
+code span.ot { color: #007ba5; } /* Other */
+code span.pp { color: #ad0000; } /* Preprocessor */
+code span.sc { color: #5e5e5e; } /* SpecialChar */
+code span.ss { color: #20794d; } /* SpecialString */
+code span.st { color: #20794d; } /* String */
+code span.va { color: #111111; } /* Variable */
+code span.vs { color: #20794d; } /* VerbatimString */
+code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+</style>
+
+
+  <!--radix_placeholder_meta_tags-->
+  <title>Interactive Drill-down Tables using {reactable}</title>
+
+  <meta property="description" itemprop="description" content="How to create multi-level tables with hidden rows"/>
+
+
+  <!--  https://schema.org/Article -->
+  <meta property="article:published" itemprop="datePublished" content="2021-07-27"/>
+  <meta property="article:created" itemprop="dateCreated" content="2021-07-27"/>
+  <meta name="article:author" content="Vishal Katti"/>
+
+  <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
+  <meta property="og:title" content="Interactive Drill-down Tables using {reactable}"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:description" content="How to create multi-level tables with hidden rows"/>
+  <meta property="og:locale" content="en_US"/>
+
+  <!--  https://dev.twitter.com/cards/types/summary -->
+  <meta property="twitter:card" content="summary"/>
+  <meta property="twitter:title" content="Interactive Drill-down Tables using {reactable}"/>
+  <meta property="twitter:description" content="How to create multi-level tables with hidden rows"/>
+
+  <!--/radix_placeholder_meta_tags-->
+  <!--radix_placeholder_rmarkdown_metadata-->
+
+  <script type="text/json" id="radix-rmarkdown-metadata">
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","preview","categories","output"]}},"value":[{"type":"character","attributes":{},"value":["Interactive Drill-down Tables using {reactable}"]},{"type":"character","attributes":{},"value":["How to create multi-level tables with hidden rows\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Vishal Katti"]}]}]},{"type":"character","attributes":{},"value":["2021-07-27"]},{"type":"character","attributes":{},"value":["https://i.imgur.com/Zzk5SWf.gif"]},{"type":"character","attributes":{},"value":["Rstats","reactable","drill-down"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]}]}
+  </script>
+  <!--/radix_placeholder_rmarkdown_metadata-->
+  
+  <script type="text/json" id="radix-resource-manifest">
+  {"type":"character","attributes":{},"value":["drilldown_files/anchor-4.2.2/anchor.min.js","drilldown_files/bowser-1.9.3/bowser.min.js","drilldown_files/core-js-2.5.3/LICENSE","drilldown_files/core-js-2.5.3/package.json","drilldown_files/core-js-2.5.3/shim.min.js","drilldown_files/distill-2.2.21/template.v2.js","drilldown_files/header-attrs-2.9/header-attrs.js","drilldown_files/htmlwidgets-1.5.3/htmlwidgets.js","drilldown_files/jquery-1.11.3/jquery.min.js","drilldown_files/pagedtable-1.1/css/pagedtable.css","drilldown_files/pagedtable-1.1/js/pagedtable.js","drilldown_files/popper-2.6.0/popper.min.js","drilldown_files/react-17.0.0/AUTHORS","drilldown_files/react-17.0.0/LICENSE.txt","drilldown_files/react-17.0.0/react-dom.min.js","drilldown_files/react-17.0.0/react.min.js","drilldown_files/reactable-binding-0.2.3/reactable.js","drilldown_files/reactwidget-1.0.0/react-tools.js","drilldown_files/reactwidget-1.0.0/react-tools.js.map","drilldown_files/tippy-6.2.7/tippy-bundle.umd.min.js","drilldown_files/tippy-6.2.7/tippy-light-border.css","drilldown_files/tippy-6.2.7/tippy.css","drilldown_files/tippy-6.2.7/tippy.umd.min.js","drilldown_files/webcomponents-2.0.0/webcomponents.js"]}
+  </script>
+  <!--radix_placeholder_navigation_in_header-->
+  <!--/radix_placeholder_navigation_in_header-->
+  <!--radix_placeholder_distill-->
+
+  <style type="text/css">
+
+  body {
+    background-color: white;
+  }
+
+  .pandoc-table {
+    width: 100%;
+  }
+
+  .pandoc-table>caption {
+    margin-bottom: 10px;
+  }
+
+  .pandoc-table th:not([align]) {
+    text-align: left;
+  }
+
+  .pagedtable-footer {
+    font-size: 15px;
+  }
+
+  d-byline .byline {
+    grid-template-columns: 2fr 2fr;
+  }
+
+  d-byline .byline h3 {
+    margin-block-start: 1.5em;
+  }
+
+  d-byline .byline .authors-affiliations h3 {
+    margin-block-start: 0.5em;
+  }
+
+  .authors-affiliations .orcid-id {
+    width: 16px;
+    height:16px;
+    margin-left: 4px;
+    margin-right: 4px;
+    vertical-align: middle;
+    padding-bottom: 2px;
+  }
+
+  d-title .dt-tags {
+    margin-top: 1em;
+    grid-column: text;
+  }
+
+  .dt-tags .dt-tag {
+    text-decoration: none;
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0em 0.4em;
+    margin-right: 0.5em;
+    margin-bottom: 0.4em;
+    font-size: 70%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  d-article table.gt_table td,
+  d-article table.gt_table th {
+    border-bottom: none;
+  }
+
+  .html-widget {
+    margin-bottom: 2.0em;
+  }
+
+  .l-screen-inset {
+    padding-right: 16px;
+  }
+
+  .l-screen .caption {
+    margin-left: 10px;
+  }
+
+  .shaded {
+    background: rgb(247, 247, 247);
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .html-widget {
+    margin-bottom: 0;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .shaded .shaded-content {
+    background: white;
+  }
+
+  .text-output {
+    margin-top: 0;
+    line-height: 1.5em;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  d-article {
+    padding-top: 2.5rem;
+    padding-bottom: 30px;
+  }
+
+  d-appendix {
+    padding-top: 30px;
+  }
+
+  d-article>p>img {
+    width: 100%;
+  }
+
+  d-article h2 {
+    margin: 1rem 0 1.5rem 0;
+  }
+
+  d-article h3 {
+    margin-top: 1.5rem;
+  }
+
+  d-article iframe {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 2.0em;
+    width: 100%;
+  }
+
+  /* Tweak code blocks */
+
+  d-article div.sourceCode code,
+  d-article pre code {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+  }
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: auto;
+  }
+
+  d-article div.sourceCode {
+    background-color: white;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 10px;
+    font-size: 12px;
+    border-left: 2px solid rgba(0,0,0,0.1);
+  }
+
+  d-article pre {
+    font-size: 12px;
+    color: black;
+    background: none;
+    margin-top: 0;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  d-article pre a {
+    border-bottom: none;
+  }
+
+  d-article pre a:hover {
+    border-bottom: none;
+    text-decoration: underline;
+  }
+
+  d-article details {
+    grid-column: text;
+    margin-bottom: 0.8em;
+  }
+
+  @media(min-width: 768px) {
+
+  d-article pre,
+  d-article div.sourceCode,
+  d-article div.sourceCode pre {
+    overflow: visible !important;
+  }
+
+  d-article div.sourceCode pre {
+    padding-left: 18px;
+    font-size: 14px;
+  }
+
+  d-article pre {
+    font-size: 14px;
+  }
+
+  }
+
+  figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  /* CSS for d-contents */
+
+  .d-contents {
+    grid-column: text;
+    color: rgba(0,0,0,0.8);
+    font-size: 0.9em;
+    padding-bottom: 1em;
+    margin-bottom: 1em;
+    padding-bottom: 0.5em;
+    margin-bottom: 1em;
+    padding-left: 0.25em;
+    justify-self: start;
+  }
+
+  @media(min-width: 1000px) {
+    .d-contents.d-contents-float {
+      height: 0;
+      grid-column-start: 1;
+      grid-column-end: 4;
+      justify-self: center;
+      padding-right: 3em;
+      padding-left: 2em;
+    }
+  }
+
+  .d-contents nav h3 {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 1em;
+  }
+
+  .d-contents li {
+    list-style-type: none
+  }
+
+  .d-contents nav > ul {
+    padding-left: 0;
+  }
+
+  .d-contents ul {
+    padding-left: 1em
+  }
+
+  .d-contents nav ul li {
+    margin-top: 0.6em;
+    margin-bottom: 0.2em;
+  }
+
+  .d-contents nav a {
+    font-size: 13px;
+    border-bottom: none;
+    text-decoration: none
+    color: rgba(0, 0, 0, 0.8);
+  }
+
+  .d-contents nav a:hover {
+    text-decoration: underline solid rgba(0, 0, 0, 0.6)
+  }
+
+  .d-contents nav > ul > li > a {
+    font-weight: 600;
+  }
+
+  .d-contents nav > ul > li > ul {
+    font-weight: inherit;
+  }
+
+  .d-contents nav > ul > li > ul > li {
+    margin-top: 0.2em;
+  }
+
+
+  .d-contents nav ul {
+    margin-top: 0;
+    margin-bottom: 0.25em;
+  }
+
+  .d-article-with-toc h2:nth-child(2) {
+    margin-top: 0;
+  }
+
+
+  /* Figure */
+
+  .figure {
+    position: relative;
+    margin-bottom: 2.5em;
+    margin-top: 1.5em;
+  }
+
+  .figure img {
+    width: 100%;
+  }
+
+  .figure .caption {
+    color: rgba(0, 0, 0, 0.6);
+    font-size: 12px;
+    line-height: 1.5em;
+  }
+
+  .figure img.external {
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.1);
+    padding: 18px;
+    box-sizing: border-box;
+  }
+
+  .figure .caption a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  .figure .caption b,
+  .figure .caption strong, {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 1.0);
+  }
+
+  /* Citations */
+
+  d-article .citation {
+    color: inherit;
+    cursor: inherit;
+  }
+
+  div.hanging-indent{
+    margin-left: 1em; text-indent: -1em;
+  }
+
+  /* Citation hover box */
+
+  .tippy-box[data-theme~=light-border] {
+    background-color: rgba(250, 250, 250, 0.95);
+  }
+
+  .tippy-content > p {
+    margin-bottom: 0;
+    padding: 2px;
+  }
+
+
+  /* Tweak 1000px media break to show more text */
+
+  @media(min-width: 1000px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 80px [middle-start] 50px [text-start kicker-end] 65px 65px 65px 65px 65px 65px 65px 65px [text-end gutter-start] 65px [middle-end] 65px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 16px;
+    }
+
+    .grid {
+      grid-column-gap: 16px;
+    }
+
+    d-article {
+      font-size: 1.06rem;
+      line-height: 1.7em;
+    }
+    figure .caption, .figure .caption, figure figcaption {
+      font-size: 13px;
+    }
+  }
+
+  @media(min-width: 1180px) {
+    .base-grid,
+    distill-header,
+    d-title,
+    d-abstract,
+    d-article,
+    d-appendix,
+    distill-appendix,
+    d-byline,
+    d-footnote-list,
+    d-citation-list,
+    distill-footer {
+      grid-template-columns: [screen-start] 1fr [page-start kicker-start] 60px [middle-start] 60px [text-start kicker-end] 60px 60px 60px 60px 60px 60px 60px 60px [text-end gutter-start] 60px [middle-end] 60px [page-end gutter-end] 1fr [screen-end];
+      grid-column-gap: 32px;
+    }
+
+    .grid {
+      grid-column-gap: 32px;
+    }
+  }
+
+
+  /* Get the citation styles for the appendix (not auto-injected on render since
+     we do our own rendering of the citation appendix) */
+
+  d-appendix .citation-appendix,
+  .d-appendix .citation-appendix {
+    font-size: 11px;
+    line-height: 15px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    padding-left: 18px;
+    border: 1px solid rgba(0,0,0,0.1);
+    background: rgba(0, 0, 0, 0.02);
+    padding: 10px 18px;
+    border-radius: 3px;
+    color: rgba(150, 150, 150, 1);
+    overflow: hidden;
+    margin-top: -12px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+
+  /* Include appendix styles here so they can be overridden */
+
+  d-appendix {
+    contain: layout style;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-top: 60px;
+    margin-bottom: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    color: rgba(0,0,0,0.5);
+    padding-top: 60px;
+    padding-bottom: 48px;
+  }
+
+  d-appendix h3 {
+    grid-column: page-start / text-start;
+    font-size: 15px;
+    font-weight: 500;
+    margin-top: 1em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.65);
+  }
+
+  d-appendix h3 + * {
+    margin-top: 1em;
+  }
+
+  d-appendix ol {
+    padding: 0 0 0 15px;
+  }
+
+  @media (min-width: 768px) {
+    d-appendix ol {
+      padding: 0 0 0 30px;
+      margin-left: -30px;
+    }
+  }
+
+  d-appendix li {
+    margin-bottom: 1em;
+  }
+
+  d-appendix a {
+    color: rgba(0, 0, 0, 0.6);
+  }
+
+  d-appendix > * {
+    grid-column: text;
+  }
+
+  d-appendix > d-footnote-list,
+  d-appendix > d-citation-list,
+  d-appendix > distill-appendix {
+    grid-column: screen;
+  }
+
+  /* Include footnote styles here so they can be overridden */
+
+  d-footnote-list {
+    contain: layout style;
+  }
+
+  d-footnote-list > * {
+    grid-column: text;
+  }
+
+  d-footnote-list a.footnote-backlink {
+    color: rgba(0,0,0,0.3);
+    padding-left: 0.5em;
+  }
+
+
+
+  /* Anchor.js */
+
+  .anchorjs-link {
+    /*transition: all .25s linear; */
+    text-decoration: none;
+    border-bottom: none;
+  }
+  *:hover > .anchorjs-link {
+    margin-left: -1.125em !important;
+    text-decoration: none;
+    border-bottom: none;
+  }
+
+  /* Social footer */
+
+  .social_footer {
+    margin-top: 30px;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.67);
+  }
+
+  .disqus-comments {
+    margin-right: 30px;
+  }
+
+  .disqus-comment-count {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+  }
+
+  #disqus_thread {
+    margin-top: 30px;
+  }
+
+  .article-sharing a {
+    border-bottom: none;
+    margin-right: 8px;
+  }
+
+  .article-sharing a:hover {
+    border-bottom: none;
+  }
+
+  .sidebar-section.subscribe {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .subscribe p {
+    margin-bottom: 0.5em;
+  }
+
+
+  .article-footer .subscribe {
+    font-size: 15px;
+    margin-top: 45px;
+  }
+
+
+  .sidebar-section.custom {
+    font-size: 12px;
+    line-height: 1.6em;
+  }
+
+  .custom p {
+    margin-bottom: 0.5em;
+  }
+
+  /* Styles for listing layout (hide title) */
+  .layout-listing d-title, .layout-listing .d-title {
+    display: none;
+  }
+
+  /* Styles for posts lists (not auto-injected) */
+
+
+  .posts-with-sidebar {
+    padding-left: 45px;
+    padding-right: 45px;
+  }
+
+  .posts-list .description h2,
+  .posts-list .description p {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  .posts-list .description h2 {
+    font-weight: 700;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .posts-list h2.post-tag {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    padding-bottom: 12px;
+  }
+  .posts-list {
+    margin-top: 60px;
+    margin-bottom: 24px;
+  }
+
+  .posts-list .post-preview {
+    text-decoration: none;
+    overflow: hidden;
+    display: block;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 24px 0;
+  }
+
+  .post-preview-last {
+    border-bottom: none !important;
+  }
+
+  .posts-list .posts-list-caption {
+    grid-column: screen;
+    font-weight: 400;
+  }
+
+  .posts-list .post-preview h2 {
+    margin: 0 0 6px 0;
+    line-height: 1.2em;
+    font-style: normal;
+    font-size: 24px;
+  }
+
+  .posts-list .post-preview p {
+    margin: 0 0 12px 0;
+    line-height: 1.4em;
+    font-size: 16px;
+  }
+
+  .posts-list .post-preview .thumbnail {
+    box-sizing: border-box;
+    margin-bottom: 24px;
+    position: relative;
+    max-width: 500px;
+  }
+  .posts-list .post-preview img {
+    width: 100%;
+    display: block;
+  }
+
+  .posts-list .metadata {
+    font-size: 12px;
+    line-height: 1.4em;
+    margin-bottom: 18px;
+  }
+
+  .posts-list .metadata > * {
+    display: inline-block;
+  }
+
+  .posts-list .metadata .publishedDate {
+    margin-right: 2em;
+  }
+
+  .posts-list .metadata .dt-authors {
+    display: block;
+    margin-top: 0.3em;
+    margin-right: 2em;
+  }
+
+  .posts-list .dt-tags {
+    display: block;
+    line-height: 1em;
+  }
+
+  .posts-list .dt-tags .dt-tag {
+    display: inline-block;
+    color: rgba(0,0,0,0.6);
+    padding: 0.3em 0.4em;
+    margin-right: 0.2em;
+    margin-bottom: 0.4em;
+    font-size: 60%;
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .posts-list img {
+    opacity: 1;
+  }
+
+  .posts-list img[data-src] {
+    opacity: 0;
+  }
+
+  .posts-more {
+    clear: both;
+  }
+
+
+  .posts-sidebar {
+    font-size: 16px;
+  }
+
+  .posts-sidebar h3 {
+    font-size: 16px;
+    margin-top: 0;
+    margin-bottom: 0.5em;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+
+  .sidebar-section {
+    margin-bottom: 30px;
+  }
+
+  .categories ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .categories li {
+    color: rgba(0, 0, 0, 0.8);
+    margin-bottom: 0;
+  }
+
+  .categories li>a {
+    border-bottom: none;
+  }
+
+  .categories li>a:hover {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+  }
+
+  .categories .active {
+    font-weight: 600;
+  }
+
+  .categories .category-count {
+    color: rgba(0, 0, 0, 0.4);
+  }
+
+
+  @media(min-width: 768px) {
+    .posts-list .post-preview h2 {
+      font-size: 26px;
+    }
+    .posts-list .post-preview .thumbnail {
+      float: right;
+      width: 30%;
+      margin-bottom: 0;
+    }
+    .posts-list .post-preview .description {
+      float: left;
+      width: 45%;
+    }
+    .posts-list .post-preview .metadata {
+      float: left;
+      width: 20%;
+      margin-top: 8px;
+    }
+    .posts-list .post-preview p {
+      margin: 0 0 12px 0;
+      line-height: 1.5em;
+      font-size: 16px;
+    }
+    .posts-with-sidebar .posts-list {
+      float: left;
+      width: 75%;
+    }
+    .posts-with-sidebar .posts-sidebar {
+      float: right;
+      width: 20%;
+      margin-top: 60px;
+      padding-top: 24px;
+      padding-bottom: 24px;
+    }
+  }
+
+
+  /* Improve display for browsers without grid (IE/Edge <= 15) */
+
+  .downlevel {
+    line-height: 1.6em;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    margin: 0;
+  }
+
+  .downlevel .d-title {
+    padding-top: 6rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .downlevel .d-title h1 {
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 1.1em;
+    margin: 0 0 0.5rem;
+  }
+
+  .downlevel .d-title p {
+    font-weight: 300;
+    font-size: 1.2rem;
+    line-height: 1.55em;
+    margin-top: 0;
+  }
+
+  .downlevel .d-byline {
+    padding-top: 0.8em;
+    padding-bottom: 0.8em;
+    font-size: 0.8rem;
+    line-height: 1.8em;
+  }
+
+  .downlevel .section-separator {
+    border: none;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+
+  .downlevel .d-article {
+    font-size: 1.06rem;
+    line-height: 1.7em;
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+
+  .downlevel .d-appendix {
+    padding-left: 0;
+    padding-right: 0;
+    max-width: none;
+    font-size: 0.8em;
+    line-height: 1.7em;
+    margin-bottom: 0;
+    color: rgba(0,0,0,0.5);
+    padding-top: 40px;
+    padding-bottom: 48px;
+  }
+
+  .downlevel .footnotes ol {
+    padding-left: 13px;
+  }
+
+  .downlevel .base-grid,
+  .downlevel .distill-header,
+  .downlevel .d-title,
+  .downlevel .d-abstract,
+  .downlevel .d-article,
+  .downlevel .d-appendix,
+  .downlevel .distill-appendix,
+  .downlevel .d-byline,
+  .downlevel .d-footnote-list,
+  .downlevel .d-citation-list,
+  .downlevel .distill-footer,
+  .downlevel .appendix-bottom,
+  .downlevel .posts-container {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
+  @media(min-width: 768px) {
+    .downlevel .base-grid,
+    .downlevel .distill-header,
+    .downlevel .d-title,
+    .downlevel .d-abstract,
+    .downlevel .d-article,
+    .downlevel .d-appendix,
+    .downlevel .distill-appendix,
+    .downlevel .d-byline,
+    .downlevel .d-footnote-list,
+    .downlevel .d-citation-list,
+    .downlevel .distill-footer,
+    .downlevel .appendix-bottom,
+    .downlevel .posts-container {
+    padding-left: 150px;
+    padding-right: 150px;
+    max-width: 900px;
+  }
+  }
+
+  .downlevel pre code {
+    display: block;
+    border-left: 2px solid rgba(0, 0, 0, .1);
+    padding: 0 0 0 20px;
+    font-size: 14px;
+  }
+
+  .downlevel code, .downlevel pre {
+    color: black;
+    background: none;
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+  }
+
+  .downlevel .posts-list .post-preview {
+    color: inherit;
+  }
+
+
+
+  </style>
+
+  <script type="application/javascript">
+
+  function is_downlevel_browser() {
+    if (bowser.isUnsupportedBrowser({ msie: "12", msedge: "16"},
+                                   window.navigator.userAgent)) {
+      return true;
+    } else {
+      return window.load_distill_framework === undefined;
+    }
+  }
+
+  // show body when load is complete
+  function on_load_complete() {
+
+    // add anchors
+    if (window.anchors) {
+      window.anchors.options.placement = 'left';
+      window.anchors.add('d-article > h2, d-article > h3, d-article > h4, d-article > h5');
+    }
+
+
+    // set body to visible
+    document.body.style.visibility = 'visible';
+
+    // force redraw for leaflet widgets
+    if (window.HTMLWidgets) {
+      var maps = window.HTMLWidgets.findAll(".leaflet");
+      $.each(maps, function(i, el) {
+        var map = this.getMap();
+        map.invalidateSize();
+        map.eachLayer(function(layer) {
+          if (layer instanceof L.TileLayer)
+            layer.redraw();
+        });
+      });
+    }
+
+    // trigger 'shown' so htmlwidgets resize
+    $('d-article').trigger('shown');
+  }
+
+  function init_distill() {
+
+    init_common();
+
+    // create front matter
+    var front_matter = $('<d-front-matter></d-front-matter>');
+    $('#distill-front-matter').wrap(front_matter);
+
+    // create d-title
+    $('.d-title').changeElementType('d-title');
+
+    // create d-byline
+    var byline = $('<d-byline></d-byline>');
+    $('.d-byline').replaceWith(byline);
+
+    // create d-article
+    var article = $('<d-article></d-article>');
+    $('.d-article').wrap(article).children().unwrap();
+
+    // move posts container into article
+    $('.posts-container').appendTo($('d-article'));
+
+    // create d-appendix
+    $('.d-appendix').changeElementType('d-appendix');
+
+    // flag indicating that we have appendix items
+    var appendix = $('.appendix-bottom').children('h3').length > 0;
+
+    // replace footnotes with <d-footnote>
+    $('.footnote-ref').each(function(i, val) {
+      appendix = true;
+      var href = $(this).attr('href');
+      var id = href.replace('#', '');
+      var fn = $('#' + id);
+      var fn_p = $('#' + id + '>p');
+      fn_p.find('.footnote-back').remove();
+      var text = fn_p.html();
+      var dtfn = $('<d-footnote></d-footnote>');
+      dtfn.html(text);
+      $(this).replaceWith(dtfn);
+    });
+    // remove footnotes
+    $('.footnotes').remove();
+
+    // move refs into #references-listing
+    $('#references-listing').replaceWith($('#refs'));
+
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      var id = $(this).attr('id');
+      $('.d-contents a[href="#' + id + '"]').parent().remove();
+      appendix = true;
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('d-appendix'));
+    });
+
+    // show d-appendix if we have appendix content
+    $("d-appendix").css('display', appendix ? 'grid' : 'none');
+
+    // localize layout chunks to just output
+    $('.layout-chunk').each(function(i, val) {
+
+      // capture layout
+      var layout = $(this).attr('data-layout');
+
+      // apply layout to markdown level block elements
+      var elements = $(this).children().not('details, div.sourceCode, pre, script');
+      elements.each(function(i, el) {
+        var layout_div = $('<div class="' + layout + '"></div>');
+        if (layout_div.hasClass('shaded')) {
+          var shaded_content = $('<div class="shaded-content"></div>');
+          $(this).wrap(shaded_content);
+          $(this).parent().wrap(layout_div);
+        } else {
+          $(this).wrap(layout_div);
+        }
+      });
+
+
+      // unwrap the layout-chunk div
+      $(this).children().unwrap();
+    });
+
+    // remove code block used to force  highlighting css
+    $('.distill-force-highlighting-css').parent().remove();
+
+    // remove empty line numbers inserted by pandoc when using a
+    // custom syntax highlighting theme
+    $('code.sourceCode a:empty').remove();
+
+    // load distill framework
+    load_distill_framework();
+
+    // wait for window.distillRunlevel == 4 to do post processing
+    function distill_post_process() {
+
+      if (!window.distillRunlevel || window.distillRunlevel < 4)
+        return;
+
+      // hide author/affiliations entirely if we have no authors
+      var front_matter = JSON.parse($("#distill-front-matter").html());
+      var have_authors = front_matter.authors && front_matter.authors.length > 0;
+      if (!have_authors)
+        $('d-byline').addClass('hidden');
+
+      // article with toc class
+      $('.d-contents').parent().addClass('d-article-with-toc');
+
+      // strip links that point to #
+      $('.authors-affiliations').find('a[href="#"]').removeAttr('href');
+
+      // add orcid ids
+      $('.authors-affiliations').find('.author').each(function(i, el) {
+        var orcid_id = front_matter.authors[i].orcidID;
+        if (orcid_id) {
+          var a = $('<a></a>');
+          a.attr('href', 'https://orcid.org/' + orcid_id);
+          var img = $('<img></img>');
+          img.addClass('orcid-id');
+          img.attr('alt', 'ORCID ID');
+          img.attr('src','data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg==');
+          a.append(img);
+          $(this).append(a);
+        }
+      });
+
+      // hide elements of author/affiliations grid that have no value
+      function hide_byline_column(caption) {
+        $('d-byline').find('h3:contains("' + caption + '")').parent().css('visibility', 'hidden');
+      }
+
+      // affiliations
+      var have_affiliations = false;
+      for (var i = 0; i<front_matter.authors.length; ++i) {
+        var author = front_matter.authors[i];
+        if (author.affiliation !== "&nbsp;") {
+          have_affiliations = true;
+          break;
+        }
+      }
+      if (!have_affiliations)
+        $('d-byline').find('h3:contains("Affiliations")').css('visibility', 'hidden');
+
+      // published date
+      if (!front_matter.publishedDate)
+        hide_byline_column("Published");
+
+      // document object identifier
+      var doi = $('d-byline').find('h3:contains("DOI")');
+      var doi_p = doi.next().empty();
+      if (!front_matter.doi) {
+        // if we have a citation and valid citationText then link to that
+        if ($('#citation').length > 0 && front_matter.citationText) {
+          doi.html('Citation');
+          $('<a href="#citation"></a>')
+            .text(front_matter.citationText)
+            .appendTo(doi_p);
+        } else {
+          hide_byline_column("DOI");
+        }
+      } else {
+        $('<a></a>')
+           .attr('href', "https://doi.org/" + front_matter.doi)
+           .html(front_matter.doi)
+           .appendTo(doi_p);
+      }
+
+       // change plural form of authors/affiliations
+      if (front_matter.authors.length === 1) {
+        var grid = $('.authors-affiliations');
+        grid.children('h3:contains("Authors")').text('Author');
+        grid.children('h3:contains("Affiliations")').text('Affiliation');
+      }
+
+      // remove d-appendix and d-footnote-list local styles
+      $('d-appendix > style:first-child').remove();
+      $('d-footnote-list > style:first-child').remove();
+
+      // move appendix-bottom entries to the bottom
+      $('.appendix-bottom').appendTo('d-appendix').children().unwrap();
+      $('.appendix-bottom').remove();
+
+      // hoverable references
+      $('span.citation[data-cites]').each(function() {
+        var refs = $(this).attr('data-cites').split(" ");
+        var refHtml = refs.map(function(ref) {
+          return "<p>" + $('#ref-' + ref).html() + "</p>";
+        }).join("\n");
+        window.tippy(this, {
+          allowHTML: true,
+          content: refHtml,
+          maxWidth: 500,
+          interactive: true,
+          interactiveBorder: 10,
+          theme: 'light-border',
+          placement: 'bottom-start'
+        });
+      });
+
+      // clear polling timer
+      clearInterval(tid);
+
+      // show body now that everything is ready
+      on_load_complete();
+    }
+
+    var tid = setInterval(distill_post_process, 50);
+    distill_post_process();
+
+  }
+
+  function init_downlevel() {
+
+    init_common();
+
+     // insert hr after d-title
+    $('.d-title').after($('<hr class="section-separator"/>'));
+
+    // check if we have authors
+    var front_matter = JSON.parse($("#distill-front-matter").html());
+    var have_authors = front_matter.authors && front_matter.authors.length > 0;
+
+    // manage byline/border
+    if (!have_authors)
+      $('.d-byline').remove();
+    $('.d-byline').after($('<hr class="section-separator"/>'));
+    $('.d-byline a').remove();
+
+    // remove toc
+    $('.d-contents').remove();
+
+    // move appendix elements
+    $('h1.appendix, h2.appendix').each(function(i, val) {
+      $(this).changeElementType('h3');
+    });
+    $('h3.appendix').each(function(i, val) {
+      $(this).nextUntil($('h1, h2, h3')).addBack().appendTo($('.d-appendix'));
+    });
+
+
+    // inject headers into references and footnotes
+    var refs_header = $('<h3></h3>');
+    refs_header.text('References');
+    $('#refs').prepend(refs_header);
+
+    var footnotes_header = $('<h3></h3');
+    footnotes_header.text('Footnotes');
+    $('.footnotes').children('hr').first().replaceWith(footnotes_header);
+
+    // move appendix-bottom entries to the bottom
+    $('.appendix-bottom').appendTo('.d-appendix').children().unwrap();
+    $('.appendix-bottom').remove();
+
+    // remove appendix if it's empty
+    if ($('.d-appendix').children().length === 0)
+      $('.d-appendix').remove();
+
+    // prepend separator above appendix
+    $('.d-appendix').before($('<hr class="section-separator" style="clear: both"/>'));
+
+    // trim code
+    $('pre>code').each(function(i, val) {
+      $(this).html($.trim($(this).html()));
+    });
+
+    // move posts-container right before article
+    $('.posts-container').insertBefore($('.d-article'));
+
+    $('body').addClass('downlevel');
+
+    on_load_complete();
+  }
+
+
+  function init_common() {
+
+    // jquery plugin to change element types
+    (function($) {
+      $.fn.changeElementType = function(newType) {
+        var attrs = {};
+
+        $.each(this[0].attributes, function(idx, attr) {
+          attrs[attr.nodeName] = attr.nodeValue;
+        });
+
+        this.replaceWith(function() {
+          return $("<" + newType + "/>", attrs).append($(this).contents());
+        });
+      };
+    })(jQuery);
+
+    // prevent underline for linked images
+    $('a > img').parent().css({'border-bottom' : 'none'});
+
+    // mark non-body figures created by knitr chunks as 100% width
+    $('.layout-chunk').each(function(i, val) {
+      var figures = $(this).find('img, .html-widget');
+      if ($(this).attr('data-layout') !== "l-body") {
+        figures.css('width', '100%');
+      } else {
+        figures.css('max-width', '100%');
+        figures.filter("[width]").each(function(i, val) {
+          var fig = $(this);
+          fig.css('width', fig.attr('width') + 'px');
+        });
+
+      }
+    });
+
+    // auto-append index.html to post-preview links in file: protocol
+    // and in rstudio ide preview
+    $('.post-preview').each(function(i, val) {
+      if (window.location.protocol === "file:")
+        $(this).attr('href', $(this).attr('href') + "index.html");
+    });
+
+    // get rid of index.html references in header
+    if (window.location.protocol !== "file:") {
+      $('.distill-site-header a[href]').each(function(i,val) {
+        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+      });
+    }
+
+    // add class to pandoc style tables
+    $('tr.header').parent('thead').parent('table').addClass('pandoc-table');
+    $('.kable-table').children('table').addClass('pandoc-table');
+
+    // add figcaption style to table captions
+    $('caption').parent('table').addClass("figcaption");
+
+    // initialize posts list
+    if (window.init_posts_list)
+      window.init_posts_list();
+
+    // implmement disqus comment link
+    $('.disqus-comment-count').click(function() {
+      window.headroom_prevent_pin = true;
+      $('#disqus_thread').toggleClass('hidden');
+      if (!$('#disqus_thread').hasClass('hidden')) {
+        var offset = $(this).offset();
+        $(window).resize();
+        $('html, body').animate({
+          scrollTop: offset.top - 35
+        });
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    if (is_downlevel_browser())
+      init_downlevel();
+    else
+      window.addEventListener('WebComponentsReady', init_distill);
+  });
+
+  </script>
+
+  <!--/radix_placeholder_distill-->
+  <script src="drilldown_files/header-attrs-2.9/header-attrs.js"></script>
+  <link href="drilldown_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
+  <script src="drilldown_files/pagedtable-1.1/js/pagedtable.js"></script>
+  <script src="drilldown_files/core-js-2.5.3/shim.min.js"></script>
+  <script src="drilldown_files/react-17.0.0/react.min.js"></script>
+  <script src="drilldown_files/react-17.0.0/react-dom.min.js"></script>
+  <script src="drilldown_files/reactwidget-1.0.0/react-tools.js"></script>
+  <script src="drilldown_files/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+  <script src="drilldown_files/reactable-binding-0.2.3/reactable.js"></script>
+  <script src="drilldown_files/jquery-1.11.3/jquery.min.js"></script>
+  <script src="drilldown_files/popper-2.6.0/popper.min.js"></script>
+  <link href="drilldown_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="drilldown_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="drilldown_files/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="drilldown_files/anchor-4.2.2/anchor.min.js"></script>
+  <script src="drilldown_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="drilldown_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="drilldown_files/distill-2.2.21/template.v2.js"></script>
+  <!--radix_placeholder_site_in_header-->
+  <!--/radix_placeholder_site_in_header-->
+
+
+</head>
+
+<body>
+
+<!--radix_placeholder_front_matter-->
+
+<script id="distill-front-matter" type="text/json">
+{"title":"Interactive Drill-down Tables using {reactable}","description":"How to create multi-level tables with hidden rows","authors":[{"author":"Vishal Katti","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-07-27T00:00:00.000+05:30","citationText":"Katti, 2021"}
+</script>
+
+<!--/radix_placeholder_front_matter-->
+<!--radix_placeholder_navigation_before_body-->
+<!--/radix_placeholder_navigation_before_body-->
+<!--radix_placeholder_site_before_body-->
+<!--/radix_placeholder_site_before_body-->
+
+<div class="d-title">
+<h1>Interactive Drill-down Tables using {reactable}</h1>
+<!--radix_placeholder_categories-->
+<div class="dt-tags">
+<div class="dt=tag">Rstats</div>
+<div class="dt=tag">reactable</div>
+<div class="dt=tag">drill-down</div>
+</div>
+<!--/radix_placeholder_categories-->
+<p><p>How to create multi-level tables with hidden rows</p></p>
+</div>
+
+<div class="d-byline">
+  Vishal Katti  
+  
+<br/>2021-07-27
+</div>
+
+<div class="d-article">
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#top-level-data-course">Top-Level data: <strong>course</strong></a></li>
+<li><a href="#second-level-data-student">Second Level Data: <strong>student</strong></a></li>
+<li><a href="#vanilla-reactable">Vanilla <code>reactable</code></a></li>
+<li><a href="#basic-formatting">Basic Formatting</a></li>
+<li><a href="#grouping-and-aggregating">Grouping and Aggregating</a></li>
+<li><a href="#the-final-drill-down-table">The final Drill-down Table</a></li>
+<li><a href="#conclusion">Conclusion</a></li>
+<li><a href="#references-citations">References &amp; Citations</a></li>
+</ul>
+</nav>
+</div>
+<style>
+d-article div.sourceCode code,
+d-article pre code {
+    font-family: "Fira Code", monospace;
+}
+</style>
+<p>We often come across denormalized data that has 2 or more levels of information. For example, top-level info like course info with data fields like course id, course name, description, start/end date and second-level info like student info with data fields like with student id, student name, age and gender. We may also have these two groups of data as separate tables with a primary-key foreign-key design, usually from a well-designed SQL database.</p>
+<p>Let us create some data.</p>
+<h2 id="top-level-data-course">Top-Level data: <strong>course</strong></h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span>, warn.conflicts <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/rstudio/rmarkdown'>rmarkdown</a></span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span>, warn.conflicts <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+
+<span class='va'>course</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>course_id           <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>,
+                 course_name         <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Course"</span>, <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span><span class='op'>)</span>,
+                 start_date          <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.Date.html'>seq.Date</a></span><span class='op'>(</span>from <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/as_date.html'>as_date</a></span><span class='op'>(</span><span class='st'>"2021-01-01"</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='st'>"month"</span>, length.out <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>,
+                 end_date            <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/round_date.html'>ceiling_date</a></span><span class='op'>(</span><span class='va'>start_date</span>, unit <span class='op'>=</span> <span class='st'>"month"</span><span class='op'>)</span> <span class='op'>-</span> <span class='fl'>1</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html'>paged_table</a></span><span class='op'>(</span><span class='va'>course</span><span class='op'>)</span>
+</code></pre>
+</div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["course_id"],"name":[1],"type":["int"],"align":["right"]},{"label":["course_name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["start_date"],"name":[3],"type":["date"],"align":["right"]},{"label":["end_date"],"name":[4],"type":["date"],"align":["right"]}],"data":[{"1":"1","2":"Course A","3":"2021-01-01","4":"2021-01-31"},{"1":"2","2":"Course B","3":"2021-02-01","4":"2021-02-28"},{"1":"3","2":"Course C","3":"2021-03-01","4":"2021-03-31"},{"1":"4","2":"Course D","3":"2021-04-01","4":"2021-04-30"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<h2 id="second-level-data-student">Second Level Data: <strong>student</strong></h2>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>42</span><span class='op'>)</span>
+<span class='va'>student</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tibble.tidyverse.org/reference/tibble.html'>tibble</a></span><span class='op'>(</span>s_id      <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>20</span>,
+                  s_name    <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Student"</span>, <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>20</span><span class='op'>]</span><span class='op'>)</span>,
+                  gender    <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"X"</span>,<span class='st'>"Y"</span>,<span class='st'>"Z"</span><span class='op'>)</span>, <span class='fl'>20</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+                  age       <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>18</span><span class='op'>:</span><span class='fl'>35</span>, <span class='fl'>20</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+                  course_id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='fl'>20</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html'>paged_table</a></span><span class='op'>(</span><span class='va'>student</span><span class='op'>)</span>
+</code></pre>
+</div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["s_id"],"name":[1],"type":["int"],"align":["right"]},{"label":["s_name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["gender"],"name":[3],"type":["chr"],"align":["left"]},{"label":["age"],"name":[4],"type":["int"],"align":["right"]},{"label":["course_id"],"name":[5],"type":["int"],"align":["right"]}],"data":[{"1":"1","2":"Student A","3":"X","4":"21","5":"3"},{"1":"2","2":"Student B","3":"X","4":"22","5":"4"},{"1":"3","2":"Student C","3":"X","4":"30","5":"3"},{"1":"4","2":"Student D","3":"X","4":"22","5":"1"},{"1":"5","2":"Student E","3":"Y","4":"19","5":"1"},{"1":"6","2":"Student F","3":"Y","4":"25","5":"2"},{"1":"7","2":"Student G","3":"Y","4":"20","5":"2"},{"1":"8","2":"Student H","3":"X","4":"18","5":"2"},{"1":"9","2":"Student I","3":"Z","4":"27","5":"2"},{"1":"10","2":"Student J","3":"Z","4":"28","5":"2"},{"1":"11","2":"Student K","3":"X","4":"32","5":"4"},{"1":"12","2":"Student L","3":"X","4":"25","5":"3"},{"1":"13","2":"Student M","3":"Y","4":"21","5":"2"},{"1":"14","2":"Student N","3":"Y","4":"21","5":"1"},{"1":"15","2":"Student O","3":"Y","4":"35","5":"2"},{"1":"16","2":"Student P","3":"Z","4":"30","5":"3"},{"1":"17","2":"Student Q","3":"Z","4":"22","5":"2"},{"1":"18","2":"Student R","3":"X","4":"21","5":"2"},{"1":"19","2":"Student S","3":"X","4":"19","5":"2"},{"1":"20","2":"Student T","3":"Z","4":"35","5":"4"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<p>If we are sourcing data from a database, it is probable that you would see these 2 levels of data in 2 separate tables/views, but most business users are comfortable with MS Excel and want <strong>all the data in one sheet</strong>!!</p>
+<p>So the data actually looks something like this.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>combined_df</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>left_join</a></span><span class='op'>(</span><span class='va'>course</span>, <span class='va'>student</span>, by <span class='op'>=</span> <span class='st'>"course_id"</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html'>paged_table</a></span><span class='op'>(</span><span class='va'>combined_df</span><span class='op'>)</span>
+</code></pre>
+</div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["course_id"],"name":[1],"type":["int"],"align":["right"]},{"label":["course_name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["start_date"],"name":[3],"type":["date"],"align":["right"]},{"label":["end_date"],"name":[4],"type":["date"],"align":["right"]},{"label":["s_id"],"name":[5],"type":["int"],"align":["right"]},{"label":["s_name"],"name":[6],"type":["chr"],"align":["left"]},{"label":["gender"],"name":[7],"type":["chr"],"align":["left"]},{"label":["age"],"name":[8],"type":["int"],"align":["right"]}],"data":[{"1":"1","2":"Course A","3":"2021-01-01","4":"2021-01-31","5":"4","6":"Student D","7":"X","8":"22"},{"1":"1","2":"Course A","3":"2021-01-01","4":"2021-01-31","5":"5","6":"Student E","7":"Y","8":"19"},{"1":"1","2":"Course A","3":"2021-01-01","4":"2021-01-31","5":"14","6":"Student N","7":"Y","8":"21"},{"1":"2","2":"Course B","3":"2021-02-01","4":"2021-02-28","5":"6","6":"Student F","7":"Y","8":"25"},{"1":"2","2":"Course B","3":"2021-02-01","4":"2021-02-28","5":"7","6":"Student G","7":"Y","8":"20"},{"1":"2","2":"Course B","3":"2021-02-01","4":"2021-02-28","5":"8","6":"Student H","7":"X","8":"18"},{"1":"2","2":"Course B","3":"2021-02-01","4":"2021-02-28","5":"9","6":"Student I","7":"Z","8":"27"},{"1":"2","2":"Course B","3":"2021-02-01","4":"2021-02-28","5":"10","6":"Student J","7":"Z","8":"28"},{"1":"2","2":"Course B","3":"2021-02-01","4":"2021-02-28","5":"13","6":"Student M","7":"Y","8":"21"},{"1":"2","2":"Course B","3":"2021-02-01","4":"2021-02-28","5":"15","6":"Student O","7":"Y","8":"35"},{"1":"2","2":"Course B","3":"2021-02-01","4":"2021-02-28","5":"17","6":"Student Q","7":"Z","8":"22"},{"1":"2","2":"Course B","3":"2021-02-01","4":"2021-02-28","5":"18","6":"Student R","7":"X","8":"21"},{"1":"2","2":"Course B","3":"2021-02-01","4":"2021-02-28","5":"19","6":"Student S","7":"X","8":"19"},{"1":"3","2":"Course C","3":"2021-03-01","4":"2021-03-31","5":"1","6":"Student A","7":"X","8":"21"},{"1":"3","2":"Course C","3":"2021-03-01","4":"2021-03-31","5":"3","6":"Student C","7":"X","8":"30"},{"1":"3","2":"Course C","3":"2021-03-01","4":"2021-03-31","5":"12","6":"Student L","7":"X","8":"25"},{"1":"3","2":"Course C","3":"2021-03-01","4":"2021-03-31","5":"16","6":"Student P","7":"Z","8":"30"},{"1":"4","2":"Course D","3":"2021-04-01","4":"2021-04-30","5":"2","6":"Student B","7":"X","8":"22"},{"1":"4","2":"Course D","3":"2021-04-01","4":"2021-04-30","5":"11","6":"Student K","7":"X","8":"32"},{"1":"4","2":"Course D","3":"2021-04-01","4":"2021-04-30","5":"20","6":"Student T","7":"Z","8":"35"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<p>Displaying such data in a table causes all the top-level data fields to repeat for every second-level record. You can see that <code>course_id</code>, <code>course_name</code>, <code>start_date</code> and <code>end_date</code> columns repeat for all students who enrolled in the same course. Take a moment to think about how would you display such data in an interactive table in a web page, HTML report or Shiny app.</p>
+<p>It is advisable to split such denormalized data into normalized data i.e. create the original top-level and second level tables from the <code>combined_df</code>.</p>
+<h2 id="vanilla-reactable">Vanilla <code>reactable</code></h2>
+<p>One of my favorite R packages is <code>{reactable}</code>. The default output creates a neat interactive table with pagination (if data has more than 10 rows) and ability to sort columns.</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://glin.github.io/reactable/'>reactable</a></span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span>, warn.conflicts <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://glin.github.io/reactable/reference/reactable.html'>reactable</a></span><span class='op'>(</span>data <span class='op'>=</span> <span class='va'>combined_df</span><span class='op'>)</span>
+</code></pre>
+</div>
+<div id="htmlwidget-0420b066e36ce9489c4b" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-0420b066e36ce9489c4b">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"course_id":[1,1,1,2,2,2,2,2,2,2,2,2,2,3,3,3,3,4,4,4],"course_name":["Course A","Course A","Course A","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course C","Course C","Course C","Course C","Course D","Course D","Course D"],"start_date":["2021-01-01","2021-01-01","2021-01-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-03-01","2021-03-01","2021-03-01","2021-03-01","2021-04-01","2021-04-01","2021-04-01"],"end_date":["2021-01-31","2021-01-31","2021-01-31","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-03-31","2021-03-31","2021-03-31","2021-03-31","2021-04-30","2021-04-30","2021-04-30"],"s_id":[4,5,14,6,7,8,9,10,13,15,17,18,19,1,3,12,16,2,11,20],"s_name":["Student D","Student E","Student N","Student F","Student G","Student H","Student I","Student J","Student M","Student O","Student Q","Student R","Student S","Student A","Student C","Student L","Student P","Student B","Student K","Student T"],"gender":["X","Y","Y","Y","Y","X","Z","Z","Y","Y","Z","X","X","X","X","X","Z","X","X","Z"],"age":[22,19,21,25,20,18,27,28,21,35,22,21,19,21,30,25,30,22,32,35]},"columns":[{"accessor":"course_id","name":"course_id","type":"numeric"},{"accessor":"course_name","name":"course_name","type":"character"},{"accessor":"start_date","name":"start_date","type":"Date"},{"accessor":"end_date","name":"end_date","type":"Date"},{"accessor":"s_id","name":"s_id","type":"numeric"},{"accessor":"s_name","name":"s_name","type":"character"},{"accessor":"gender","name":"gender","type":"character"},{"accessor":"age","name":"age","type":"numeric"}],"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"dataKey":"413c1f3c101a174f7070712d78c69feb","key":"413c1f3c101a174f7070712d78c69feb"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+<h2 id="basic-formatting">Basic Formatting</h2>
+<p>With some additional tweaks, we can make it look better.</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://glin.github.io/reactable/reference/reactable.html'>reactable</a></span><span class='op'>(</span>
+  data       <span class='op'>=</span> <span class='va'>combined_df</span>,
+  compact    <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># for minimum row height</span>
+  filterable <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># for individual column filters</span>
+  striped    <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># banded rows</span>
+  resizable  <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># for resizable column widths</span>
+  columns    <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span> <span class='co'># define custom header name, width, alignment etc.</span>
+    course_id   <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"CID"</span>,         width <span class='op'>=</span> <span class='fl'>50</span>,  align <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span>,
+    course_name <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Course Name"</span>, width <span class='op'>=</span> <span class='fl'>140</span><span class='op'>)</span>,
+    start_date  <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Start Date"</span>,  width <span class='op'>=</span> <span class='fl'>120</span>, align <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span>,
+    end_date    <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"End Date"</span>,    width <span class='op'>=</span> <span class='fl'>120</span>, align <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span>,
+    s_id        <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"SID"</span>,         width <span class='op'>=</span> <span class='fl'>70</span>,  align <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span>,
+    s_name      <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Student Name"</span><span class='op'>)</span>,
+    gender      <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Gender"</span>,      width <span class='op'>=</span> <span class='fl'>80</span>,  align <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span>,
+    age         <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Age"</span>,         width <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</code></pre>
+</div>
+<div id="htmlwidget-d308ea22dc0f64dbf7ed" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-d308ea22dc0f64dbf7ed">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"course_id":[1,1,1,2,2,2,2,2,2,2,2,2,2,3,3,3,3,4,4,4],"course_name":["Course A","Course A","Course A","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course C","Course C","Course C","Course C","Course D","Course D","Course D"],"start_date":["2021-01-01","2021-01-01","2021-01-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-03-01","2021-03-01","2021-03-01","2021-03-01","2021-04-01","2021-04-01","2021-04-01"],"end_date":["2021-01-31","2021-01-31","2021-01-31","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-03-31","2021-03-31","2021-03-31","2021-03-31","2021-04-30","2021-04-30","2021-04-30"],"s_id":[4,5,14,6,7,8,9,10,13,15,17,18,19,1,3,12,16,2,11,20],"s_name":["Student D","Student E","Student N","Student F","Student G","Student H","Student I","Student J","Student M","Student O","Student Q","Student R","Student S","Student A","Student C","Student L","Student P","Student B","Student K","Student T"],"gender":["X","Y","Y","Y","Y","X","Z","Z","Y","Y","Z","X","X","X","X","X","Z","X","X","Z"],"age":[22,19,21,25,20,18,27,28,21,35,22,21,19,21,30,25,30,22,32,35]},"columns":[{"accessor":"course_id","name":"CID","type":"numeric","width":50,"align":"center"},{"accessor":"course_name","name":"Course Name","type":"character","width":140},{"accessor":"start_date","name":"Start Date","type":"Date","width":120,"align":"center"},{"accessor":"end_date","name":"End Date","type":"Date","width":120,"align":"center"},{"accessor":"s_id","name":"SID","type":"numeric","width":70,"align":"center"},{"accessor":"s_name","name":"Student Name","type":"character"},{"accessor":"gender","name":"Gender","type":"character","width":80,"align":"center"},{"accessor":"age","name":"Age","type":"numeric","width":50}],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"striped":true,"compact":true,"dataKey":"37ac57f783425a81c3f289334adfb3a2","key":"37ac57f783425a81c3f289334adfb3a2"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+<p>However, the problem of repeating top-level fields still persists.</p>
+<h2 id="grouping-and-aggregating">Grouping and Aggregating</h2>
+<p><code>{reactable}</code> has a <strong>groupBy</strong> argument which lets us combined rows with common data fields and the <strong>aggregate</strong> argument inside <code>colDef</code> lets us define what aggregation to be used for each column of the top-level data.</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://glin.github.io/reactable/reference/reactable.html'>reactable</a></span><span class='op'>(</span>
+  data       <span class='op'>=</span> <span class='va'>combined_df</span>,
+  compact    <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># for minimum row height</span>
+  filterable <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># for individual column filters</span>
+  striped    <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># banded rows</span>
+  resizable  <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># for resizable column widths</span>
+  groupBy    <span class='op'>=</span> <span class='st'>"course_id"</span>,
+  columns    <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    <span class='co'># show count of students in each course</span>
+    course_id   <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"CID"</span>,         width <span class='op'>=</span> <span class='fl'>100</span>,  align <span class='op'>=</span> <span class='st'>"left"</span>,    aggregate <span class='op'>=</span> <span class='st'>"count"</span><span class='op'>)</span>,  
+    <span class='co'># show unique course name</span>
+    course_name <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Course Name"</span>, width <span class='op'>=</span> <span class='fl'>140</span>,                     aggregate <span class='op'>=</span> <span class='st'>"unique"</span><span class='op'>)</span>, 
+    <span class='co'># show unique start date</span>
+    start_date  <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Start Date"</span>,  width <span class='op'>=</span> <span class='fl'>120</span>,  align <span class='op'>=</span> <span class='st'>"center"</span>,  aggregate <span class='op'>=</span> <span class='st'>"unique"</span><span class='op'>)</span>, 
+    <span class='co'># show unique end date</span>
+    end_date    <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"End Date"</span>,    width <span class='op'>=</span> <span class='fl'>120</span>,  align <span class='op'>=</span> <span class='st'>"center"</span>,  aggregate <span class='op'>=</span> <span class='st'>"unique"</span><span class='op'>)</span>, 
+    s_id        <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"SID"</span>,         width <span class='op'>=</span> <span class='fl'>70</span>,   align <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span>,
+    s_name      <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Student Name"</span><span class='op'>)</span>,
+    gender      <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Gender"</span>,      width <span class='op'>=</span> <span class='fl'>80</span>,   align <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span>,
+    age         <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Age"</span>,         width <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</code></pre>
+</div>
+<div id="htmlwidget-44db758151977091446d" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-44db758151977091446d">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"course_id":[1,1,1,2,2,2,2,2,2,2,2,2,2,3,3,3,3,4,4,4],"course_name":["Course A","Course A","Course A","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course C","Course C","Course C","Course C","Course D","Course D","Course D"],"start_date":["2021-01-01","2021-01-01","2021-01-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-03-01","2021-03-01","2021-03-01","2021-03-01","2021-04-01","2021-04-01","2021-04-01"],"end_date":["2021-01-31","2021-01-31","2021-01-31","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-03-31","2021-03-31","2021-03-31","2021-03-31","2021-04-30","2021-04-30","2021-04-30"],"s_id":[4,5,14,6,7,8,9,10,13,15,17,18,19,1,3,12,16,2,11,20],"s_name":["Student D","Student E","Student N","Student F","Student G","Student H","Student I","Student J","Student M","Student O","Student Q","Student R","Student S","Student A","Student C","Student L","Student P","Student B","Student K","Student T"],"gender":["X","Y","Y","Y","Y","X","Z","Z","Y","Y","Z","X","X","X","X","X","Z","X","X","Z"],"age":[22,19,21,25,20,18,27,28,21,35,22,21,19,21,30,25,30,22,32,35]},"columns":[{"accessor":"course_id","name":"CID","type":"numeric","aggregate":"count","width":100,"align":"left"},{"accessor":"course_name","name":"Course Name","type":"character","aggregate":"unique","width":140},{"accessor":"start_date","name":"Start Date","type":"Date","aggregate":"unique","width":120,"align":"center"},{"accessor":"end_date","name":"End Date","type":"Date","aggregate":"unique","width":120,"align":"center"},{"accessor":"s_id","name":"SID","type":"numeric","width":70,"align":"center"},{"accessor":"s_name","name":"Student Name","type":"character"},{"accessor":"gender","name":"Gender","type":"character","width":80,"align":"center"},{"accessor":"age","name":"Age","type":"numeric","width":50}],"pivotBy":["course_id"],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"striped":true,"compact":true,"dataKey":"e9fc15f3a53a06ad3569f7b3f70a31cd","key":"e9fc15f3a53a06ad3569f7b3f70a31cd"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+<p>In this case, all the columns which are not <code>aggregate</code>d remain hidden. Clicking the little triangle in the <code>CID</code> column displays the hidden rows. Looks better, but again, the issue of duplicated data remains.</p>
+<p>You can aggregate the second-level columns too, but this distorts the table and frankly, looks ugly. Here I aggregate the <code>SID</code> column in addition to all the other top-level columns.</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://glin.github.io/reactable/reference/reactable.html'>reactable</a></span><span class='op'>(</span>
+  data       <span class='op'>=</span> <span class='va'>combined_df</span>,
+  compact    <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># for minimum row height</span>
+  filterable <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># for individual column filters</span>
+  striped    <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># banded rows</span>
+  resizable  <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># for resizable column widths</span>
+  groupBy    <span class='op'>=</span> <span class='st'>"course_id"</span>,
+  columns    <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    course_id   <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"CID"</span>,         width <span class='op'>=</span> <span class='fl'>100</span>,  align <span class='op'>=</span> <span class='st'>"left"</span>,    aggregate <span class='op'>=</span> <span class='st'>"count"</span><span class='op'>)</span>,
+    course_name <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Course Name"</span>, width <span class='op'>=</span> <span class='fl'>140</span>,                     aggregate <span class='op'>=</span> <span class='st'>"unique"</span><span class='op'>)</span>,
+    start_date  <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Start Date"</span>,  width <span class='op'>=</span> <span class='fl'>120</span>,  align <span class='op'>=</span> <span class='st'>"center"</span>,  aggregate <span class='op'>=</span> <span class='st'>"unique"</span><span class='op'>)</span>,
+    end_date    <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"End Date"</span>,    width <span class='op'>=</span> <span class='fl'>120</span>,  align <span class='op'>=</span> <span class='st'>"center"</span>,  aggregate <span class='op'>=</span> <span class='st'>"unique"</span><span class='op'>)</span>,
+    <span class='co'># YIKES!! Aggregating Student ID to show unique ids in each course.</span>
+    s_id        <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"SID"</span>,         width <span class='op'>=</span> <span class='fl'>70</span>,   align <span class='op'>=</span> <span class='st'>"center"</span>,  aggregate <span class='op'>=</span> <span class='st'>"unique"</span><span class='op'>)</span>, 
+    s_name      <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Student Name"</span><span class='op'>)</span>,
+    gender      <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Gender"</span>,      width <span class='op'>=</span> <span class='fl'>80</span>,   align <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span>,
+    age         <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Age"</span>,         width <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
+  <span class='op'>)</span>
+<span class='op'>)</span>
+</code></pre>
+</div>
+<div id="htmlwidget-67b62794e33863e62991" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-67b62794e33863e62991">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"course_id":[1,1,1,2,2,2,2,2,2,2,2,2,2,3,3,3,3,4,4,4],"course_name":["Course A","Course A","Course A","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course C","Course C","Course C","Course C","Course D","Course D","Course D"],"start_date":["2021-01-01","2021-01-01","2021-01-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-03-01","2021-03-01","2021-03-01","2021-03-01","2021-04-01","2021-04-01","2021-04-01"],"end_date":["2021-01-31","2021-01-31","2021-01-31","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-03-31","2021-03-31","2021-03-31","2021-03-31","2021-04-30","2021-04-30","2021-04-30"],"s_id":[4,5,14,6,7,8,9,10,13,15,17,18,19,1,3,12,16,2,11,20],"s_name":["Student D","Student E","Student N","Student F","Student G","Student H","Student I","Student J","Student M","Student O","Student Q","Student R","Student S","Student A","Student C","Student L","Student P","Student B","Student K","Student T"],"gender":["X","Y","Y","Y","Y","X","Z","Z","Y","Y","Z","X","X","X","X","X","Z","X","X","Z"],"age":[22,19,21,25,20,18,27,28,21,35,22,21,19,21,30,25,30,22,32,35]},"columns":[{"accessor":"course_id","name":"CID","type":"numeric","aggregate":"count","width":100,"align":"left"},{"accessor":"course_name","name":"Course Name","type":"character","aggregate":"unique","width":140},{"accessor":"start_date","name":"Start Date","type":"Date","aggregate":"unique","width":120,"align":"center"},{"accessor":"end_date","name":"End Date","type":"Date","aggregate":"unique","width":120,"align":"center"},{"accessor":"s_id","name":"SID","type":"numeric","aggregate":"unique","width":70,"align":"center"},{"accessor":"s_name","name":"Student Name","type":"character"},{"accessor":"gender","name":"Gender","type":"character","width":80,"align":"center"},{"accessor":"age","name":"Age","type":"numeric","width":50}],"pivotBy":["course_id"],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"striped":true,"compact":true,"dataKey":"51a6dfecd993aea3dbb11e027155fa81","key":"51a6dfecd993aea3dbb11e027155fa81"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+<p>Wouldn’t it be nice if we could display only the top-level columns by default and on clicking the small triangle for a row, show all the second-level columns corresponding to that row only, like a drill-down table?</p>
+<p>To do this we need 2 separate tables. Earlier in this post, I said it is advisable to split such denormalized data into normalized data i.e. create the original top-level and second level tables from the <code>combined_df</code>. Let’s recreate the 2 tables.</p>
+<p>I want to demonstrate how we go from the combined data to the 2 tables. Hence I will not use the <code>course</code> and <code>student</code> tables created earlier.</p>
+<p>Creating the <code>top_level</code> table using just the columns in <code>course</code>. Let’s also create a new column <code>n_students</code> depicting count of students in each course.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>top_level</span> <span class='op'>&lt;-</span> <span class='va'>combined_df</span> <span class='op'>%&gt;%</span> 
+  <span class='co'># Only course info columns</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>course_id</span>, <span class='va'>course_name</span>, <span class='va'>start_date</span>, <span class='va'>end_date</span>, name <span class='op'>=</span> <span class='st'>"n_students"</span><span class='op'>)</span> 
+
+<span class='fu'><a href='https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html'>paged_table</a></span><span class='op'>(</span><span class='va'>top_level</span><span class='op'>)</span>
+</code></pre>
+</div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["course_id"],"name":[1],"type":["int"],"align":["right"]},{"label":["course_name"],"name":[2],"type":["chr"],"align":["left"]},{"label":["start_date"],"name":[3],"type":["date"],"align":["right"]},{"label":["end_date"],"name":[4],"type":["date"],"align":["right"]},{"label":["n_students"],"name":[5],"type":["int"],"align":["right"]}],"data":[{"1":"1","2":"Course A","3":"2021-01-01","4":"2021-01-31","5":"3"},{"1":"2","2":"Course B","3":"2021-02-01","4":"2021-02-28","5":"10"},{"1":"3","2":"Course C","3":"2021-03-01","4":"2021-03-31","5":"4"},{"1":"4","2":"Course D","3":"2021-04-01","4":"2021-04-30","5":"3"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>second_level</span> <span class='op'>&lt;-</span> <span class='va'>combined_df</span> <span class='op'>%&gt;%</span> 
+  <span class='co'># Only Student info columns with unique identifier for Course</span>
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>course_id</span>, <span class='va'>s_id</span>, <span class='va'>s_name</span>, <span class='va'>gender</span>, <span class='va'>age</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>s_id</span><span class='op'>)</span>
+
+<span class='fu'><a href='https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html'>paged_table</a></span><span class='op'>(</span><span class='va'>second_level</span><span class='op'>)</span>
+</code></pre>
+</div>
+<div data-pagedtable="false">
+<script data-pagedtable-source type="application/json">
+{"columns":[{"label":["course_id"],"name":[1],"type":["int"],"align":["right"]},{"label":["s_id"],"name":[2],"type":["int"],"align":["right"]},{"label":["s_name"],"name":[3],"type":["chr"],"align":["left"]},{"label":["gender"],"name":[4],"type":["chr"],"align":["left"]},{"label":["age"],"name":[5],"type":["int"],"align":["right"]}],"data":[{"1":"3","2":"1","3":"Student A","4":"X","5":"21"},{"1":"4","2":"2","3":"Student B","4":"X","5":"22"},{"1":"3","2":"3","3":"Student C","4":"X","5":"30"},{"1":"1","2":"4","3":"Student D","4":"X","5":"22"},{"1":"1","2":"5","3":"Student E","4":"Y","5":"19"},{"1":"2","2":"6","3":"Student F","4":"Y","5":"25"},{"1":"2","2":"7","3":"Student G","4":"Y","5":"20"},{"1":"2","2":"8","3":"Student H","4":"X","5":"18"},{"1":"2","2":"9","3":"Student I","4":"Z","5":"27"},{"1":"2","2":"10","3":"Student J","4":"Z","5":"28"},{"1":"4","2":"11","3":"Student K","4":"X","5":"32"},{"1":"3","2":"12","3":"Student L","4":"X","5":"25"},{"1":"2","2":"13","3":"Student M","4":"Y","5":"21"},{"1":"1","2":"14","3":"Student N","4":"Y","5":"21"},{"1":"2","2":"15","3":"Student O","4":"Y","5":"35"},{"1":"3","2":"16","3":"Student P","4":"Z","5":"30"},{"1":"2","2":"17","3":"Student Q","4":"Z","5":"22"},{"1":"2","2":"18","3":"Student R","4":"X","5":"21"},{"1":"2","2":"19","3":"Student S","4":"X","5":"19"},{"1":"4","2":"20","3":"Student T","4":"Z","5":"35"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+<h2 id="the-final-drill-down-table">The final Drill-down Table</h2>
+<p>Now that we have the 2 tables ready, let us now create the final <code>{reactable}</code>. The trick here is to use the <strong>details</strong> argument to which we pass another <code>{reactable}</code> of just the rows with students data corresponding to given course.</p>
+<div class="layout-chunk" data-layout="l-body-outset">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://glin.github.io/reactable/reference/reactable.html'>reactable</a></span><span class='op'>(</span>
+  data       <span class='op'>=</span> <span class='va'>top_level</span>,
+  compact    <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># for minimum row height</span>
+  filterable <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># for individual column filters</span>
+  striped    <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># banded rows</span>
+  resizable  <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='co'># for resizable column widths</span>
+  columns    <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+    course_id   <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"CID"</span>,             width <span class='op'>=</span> <span class='fl'>50</span>,  align <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span>,
+    course_name <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Course Name"</span><span class='op'>)</span>, 
+    start_date  <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Start Date"</span>,      width <span class='op'>=</span> <span class='fl'>120</span>, align <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span>,
+    end_date    <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"End Date"</span>,        width <span class='op'>=</span> <span class='fl'>120</span>, align <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span>,
+    n_students  <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"No. of Students"</span>, width <span class='op'>=</span> <span class='fl'>130</span>, align <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span>
+  <span class='op'>)</span>,
+  details <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>index</span><span class='op'>)</span> <span class='op'>{</span> <span class='co'># index is the row number of current row.</span>
+    <span class='co'># sub-table of only those students for current row.</span>
+    <span class='va'>sec_lvl</span> <span class='op'>=</span> <span class='va'>second_level</span><span class='op'>[</span><span class='va'>second_level</span><span class='op'>$</span><span class='va'>course_id</span> <span class='op'>==</span> <span class='va'>top_level</span><span class='op'>$</span><span class='va'>course_id</span><span class='op'>[</span><span class='va'>index</span><span class='op'>]</span>, <span class='op'>]</span> 
+    <span class='fu'><a href='https://glin.github.io/reactable/reference/reactable.html'>reactable</a></span><span class='op'>(</span>data       <span class='op'>=</span> <span class='va'>sec_lvl</span>,
+              compact    <span class='op'>=</span> <span class='cn'>TRUE</span>, 
+              filterable <span class='op'>=</span> <span class='cn'>TRUE</span>,
+              bordered   <span class='op'>=</span> <span class='cn'>TRUE</span>, 
+              resizable  <span class='op'>=</span> <span class='cn'>TRUE</span>,
+              columns    <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>
+                course_id   <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>show <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>, <span class='co'># hide the course id column</span>
+                s_id        <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"SID"</span>,    width <span class='op'>=</span> <span class='fl'>70</span>, align <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span>,
+                s_name      <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Student Name"</span><span class='op'>)</span>,
+                gender      <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Gender"</span>, width <span class='op'>=</span> <span class='fl'>90</span>, align <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span>,
+                age         <span class='op'>=</span> <span class='fu'><a href='https://glin.github.io/reactable/reference/colDef.html'>colDef</a></span><span class='op'>(</span>name <span class='op'>=</span> <span class='st'>"Age"</span>,    width <span class='op'>=</span> <span class='fl'>50</span>, align <span class='op'>=</span> <span class='st'>"center"</span><span class='op'>)</span>
+              <span class='op'>)</span>
+              <span class='op'>)</span>
+  <span class='op'>}</span>
+<span class='op'>)</span>
+</code></pre>
+</div>
+<div id="htmlwidget-5a0cb435521fcff53b1c" class="reactable html-widget" style="width:auto;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-5a0cb435521fcff53b1c">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"course_id":[1,2,3,4],"course_name":["Course A","Course B","Course C","Course D"],"start_date":["2021-01-01","2021-02-01","2021-03-01","2021-04-01"],"end_date":["2021-01-31","2021-02-28","2021-03-31","2021-04-30"],"n_students":[3,10,4,3]},"columns":[{"accessor":".details","name":"","type":"NULL","sortable":false,"resizable":false,"filterable":false,"width":45,"align":"center","details":[{"name":"Reactable","attribs":{"data":{"course_id":[1,1,1],"s_id":[4,5,14],"s_name":["Student D","Student E","Student N"],"gender":["X","Y","Y"],"age":[22,19,21]},"columns":[{"accessor":"course_id","name":"course_id","type":"numeric","show":false},{"accessor":"s_id","name":"SID","type":"numeric","width":70,"align":"center"},{"accessor":"s_name","name":"Student Name","type":"character"},{"accessor":"gender","name":"Gender","type":"character","width":90,"align":"center"},{"accessor":"age","name":"Age","type":"numeric","width":50,"align":"center"}],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"bordered":true,"compact":true,"dataKey":"12036566002706ab50f66831a92eae32","key":"12036566002706ab50f66831a92eae32","nested":true},"children":[]},{"name":"Reactable","attribs":{"data":{"course_id":[2,2,2,2,2,2,2,2,2,2],"s_id":[6,7,8,9,10,13,15,17,18,19],"s_name":["Student F","Student G","Student H","Student I","Student J","Student M","Student O","Student Q","Student R","Student S"],"gender":["Y","Y","X","Z","Z","Y","Y","Z","X","X"],"age":[25,20,18,27,28,21,35,22,21,19]},"columns":[{"accessor":"course_id","name":"course_id","type":"numeric","show":false},{"accessor":"s_id","name":"SID","type":"numeric","width":70,"align":"center"},{"accessor":"s_name","name":"Student Name","type":"character"},{"accessor":"gender","name":"Gender","type":"character","width":90,"align":"center"},{"accessor":"age","name":"Age","type":"numeric","width":50,"align":"center"}],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"bordered":true,"compact":true,"dataKey":"6587f2ad3dcb0fcc5216bf4473c986a0","key":"6587f2ad3dcb0fcc5216bf4473c986a0","nested":true},"children":[]},{"name":"Reactable","attribs":{"data":{"course_id":[3,3,3,3],"s_id":[1,3,12,16],"s_name":["Student A","Student C","Student L","Student P"],"gender":["X","X","X","Z"],"age":[21,30,25,30]},"columns":[{"accessor":"course_id","name":"course_id","type":"numeric","show":false},{"accessor":"s_id","name":"SID","type":"numeric","width":70,"align":"center"},{"accessor":"s_name","name":"Student Name","type":"character"},{"accessor":"gender","name":"Gender","type":"character","width":90,"align":"center"},{"accessor":"age","name":"Age","type":"numeric","width":50,"align":"center"}],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"bordered":true,"compact":true,"dataKey":"e3963514a17cdadfff8af46fde214632","key":"e3963514a17cdadfff8af46fde214632","nested":true},"children":[]},{"name":"Reactable","attribs":{"data":{"course_id":[4,4,4],"s_id":[2,11,20],"s_name":["Student B","Student K","Student T"],"gender":["X","X","Z"],"age":[22,32,35]},"columns":[{"accessor":"course_id","name":"course_id","type":"numeric","show":false},{"accessor":"s_id","name":"SID","type":"numeric","width":70,"align":"center"},{"accessor":"s_name","name":"Student Name","type":"character"},{"accessor":"gender","name":"Gender","type":"character","width":90,"align":"center"},{"accessor":"age","name":"Age","type":"numeric","width":50,"align":"center"}],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"bordered":true,"compact":true,"dataKey":"5a3a2a276df6d52409d68b95331871bb","key":"5a3a2a276df6d52409d68b95331871bb","nested":true},"children":[]}]},{"accessor":"course_id","name":"CID","type":"numeric","width":50,"align":"center"},{"accessor":"course_name","name":"Course Name","type":"character"},{"accessor":"start_date","name":"Start Date","type":"Date","width":120,"align":"center"},{"accessor":"end_date","name":"End Date","type":"Date","width":120,"align":"center"},{"accessor":"n_students","name":"No. of Students","type":"numeric","width":130,"align":"center"}],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"striped":true,"compact":true,"dataKey":"3be6d4b7204585a544def72d52d37613","key":"3be6d4b7204585a544def72d52d37613"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
+</div>
+<p>Since the sub-table is also a <code>{reactable}</code>, you can go another level down… and another, but please do consider the usability aspect of this feature before taking that decision. I haven’t tried going beyond 2 levels of data myself. Maybe a part 2 to this post??</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>Drill-down tables let you pack a lot of data in a compact manner and allow use by multiple audiences interested in varying degrees/levels of information. <code>{reactable}</code> can help create an interactive data table from tabular data with sorting and pagination by default. The data table is an HTML widget that can be used in R Markdown documents and Shiny applications, or viewed from an R console. A lot of features can be enabled/disabled using the basic arguments of the <code>reactable()</code> function and much more using custom JavaScript.</p>
+<h2 id="references-citations">References &amp; Citations</h2>
+<ul>
+<li>Greg Lin (2020). reactable: Interactive Data Tables Based on ‘React Table’. R package version 0.2.3. <a href="https://CRAN.R-project.org/package=reactable" class="uri">https://CRAN.R-project.org/package=reactable</a></li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<!--radix_placeholder_article_footer-->
+<!--/radix_placeholder_article_footer-->
+</div>
+
+<div class="d-appendix">
+</div>
+
+
+<!--radix_placeholder_site_after_body-->
+<!--/radix_placeholder_site_after_body-->
+<!--radix_placeholder_appendices-->
+<div class="appendix-bottom"></div>
+<!--/radix_placeholder_appendices-->
+<!--radix_placeholder_navigation_after_body-->
+<!--/radix_placeholder_navigation_after_body-->
+
+</body>
+
+</html>
