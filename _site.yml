@@ -10,6 +10,8 @@ navbar:
       href: index.html
     - text: "Blog"
       href: blog.html
+    - text: "CV"
+      href: content/docs/VishalKatti_CV.pdf
     - icon: fa fa-github
       href: https://github.com/vkatti
     - icon: fa fa-linkedin
