@@ -19,10 +19,7 @@ output:
  
 ## Bio
 
-Vishal Katti analyzes personnel safety, process safety, health and environmental performance metrics
-at ExxonMobil Services & Technology Pvt. Ltd. His focus is on identifying patterns and extracting key learnings for 
-business leaders to act on. He strives to streamline and automate data stewardship activities. 
-He resides in Bengaluru, India with his wife and 3yo daughter, but constantly longs for the sun and sands of Goa where he spent most of his childhood.
+Vishal Katti resides in Bengaluru, India with his wife and 3yo daughter, but constantly longs for the sun and sands of Goa where he spent most of his childhood.
 
 
 ## Education
@@ -39,6 +36,8 @@ H.S.S.C. in Physics, Chemistry and Mathematics | June 2003 - April 2005
 
 ## Experience
 
-**ExxonMobil Services & Technology Pvt. Ltd.** | Business Analytics Advisor | June 2018 - Present
+**Mindtree Ltd.** | Technical Architect | Sep 2021 to Present
+
+**ExxonMobil Services & Technology Pvt. Ltd.** | Business Analytics Advisor | June 2018 - August 2021
 
 **Tata Consultancy Services** | Functional Consultant/Data Analyst | September 2010 - June 2018
