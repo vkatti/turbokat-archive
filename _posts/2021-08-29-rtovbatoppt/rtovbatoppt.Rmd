@@ -4,7 +4,7 @@ description: |
   Using R to trigger Excel VBA macros to create PowerPoint presentations!
 author:
   - name: Vishal Katti
-date: 2021-08-29
+date: 2021-10-15
 draft: true
 output:
   distill::distill_article:
@@ -17,18 +17,19 @@ knitr::opts_chunk$set(echo = FALSE)
 
 One of the most common tasks in most offices, is creating presentations
 and reports in Microsoft PowerPoint. While the tool is great for
-creating adhoc presentations, editing the same with new data on a
+creating ad hoc presentations, editing the same with new data on a
 periodic basis gets tedious. Now, I know that some wonderful packages
 like `officer` and `officedown` exist that enable us to create
 PowerPoint presentations with editable charts from R itself. You can
-read all about this in [Alison Hill's blog post "Up and running with
+read all about this in the amazing [Alison Hill's blog post "Up and
+running with
 officedown"](https://alison.rbind.io/blog/2021-07-officedown/).
 
-Since I discovered R while looking for a better alternative to
-Excel/PowerPoint automation using VBA, the following is an alternative
-workflow to create multiple PowerPoint presentations using a combination
-of these technologies. Note that I am working on a Windows machine and
-certain steps shown below may be different for other operating systems.
+Since I discovered R while looking for a better alternative to VBA for
+data analysis and Excel/PowerPoint automation, the following is an
+alternative workflow to create multiple PowerPoint presentations using a
+combination of these technologies. Note that this workflow uses the
+`RDCOMCLient` package which works in Windows environment only.
 
 ## TL;DR
 
@@ -42,15 +43,27 @@ Jurassic Park scientists that Dr. Ian Malcolm remarked about!
 
 Advantages of this approach over `officer` and `officedown`:
 
-1.  Slide/content/header/footer formatting control is in the powerpoint
+1.  Slide/content/header/footer formatting control is in the PowerPoint
     template rather than R code.
 2.  All charts are native and can contain any feature (dual axis, mixed
-    data series like bar + line, line + points). All Excel chart types
-    are available.
+    data series like bar + line, line + points). All Excel chart-types
+    are available. Go wild!
 3.  You can use any PowerPoint template design (Yes, even your
     sad/weird/exciting corporate template!).
 
 Let's begin.
+
+Suppose we want to automate the following PowerPoint presentation. It
+contains 3 slides with a title slide and 2 content slides having graphs
+and tables created from the `gapminder` dataset. This `.pptx` file also
+has a custom footer.
+
+![The Gapminder World Population
+Report](images/base_report.gif "The Gapminder World Report")
+
+We want to create the same presentation with same structure but at a
+continent-level. `gapminder` has data for 5 continents and we wish to
+create 5 presentations by the end of this.
 
 ## The PowerPoint Template
 
@@ -67,12 +80,9 @@ shown below.
 (.potx)](images/save_as_potx.png "Save As PowerPoint Template (.potx)")
 
 Now let us prep the template. If you open the template file by
-double-click or right-click \> New, it would open a fresh presentation
-(.pptx) using the template. Right-Click and click Open in the context
-menu to open the template file (.potx) for editing.
-
-![INCORRECT: Double-Click or Right-Click \>
-New](images/edit_potx_new.png)
+double-click or right-click \> New, it would open a fresh `.pptx`
+presentation using the template. Right-Click and click Open in the
+context menu to open the `.potx` template file for editing.
 
 ![CORRECT: Right-Click \> Open](images/edit_potx_open.png)
 
@@ -84,10 +94,14 @@ placeholder name:
 2.  From Shape Format, click Selection Pane.
 3.  In the Selection Pane, change the name of the selected item.
 
-![Edit placeholder names using Selection Pane](images/edit_ph_names.png)
+![Add shape names from Selection
+Pane](images/add_shape_names.png "Add shape names from Selection Pane")
 
 Advisory: We use the format `NN_[Position]Object` where `NN` is the
 slide number, `[Position]` is the either TopLeft, TopRight, BottomLeft,
 BottomRight or any other position and finally, `Object` is either Table,
-Chart, Textbox etc. You can use any fancy identifier here, just make
-sure you, your future self, and others can recognise them.
+Chart, Title, Subtitle, TextBox etc. You can use any fancy identifier
+here, just make sure that your future self and others can recognise them
+easily.
+
+## The Excel VBA file
