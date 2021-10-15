@@ -117,7 +117,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["images/add_shape_names.png","images/base_report.gif","images/create_project.png","images/edit_potx_new.png","images/edit_potx_open.png","images/save_as_potx.png","rtovbatoppt_files/anchor-4.2.2/anchor.min.js","rtovbatoppt_files/bowser-1.9.3/bowser.min.js","rtovbatoppt_files/distill-2.2.21/template.v2.js","rtovbatoppt_files/header-attrs-2.9/header-attrs.js","rtovbatoppt_files/jquery-1.11.3/jquery.min.js","rtovbatoppt_files/popper-2.6.0/popper.min.js","rtovbatoppt_files/tippy-6.2.7/tippy-bundle.umd.min.js","rtovbatoppt_files/tippy-6.2.7/tippy-light-border.css","rtovbatoppt_files/tippy-6.2.7/tippy.css","rtovbatoppt_files/tippy-6.2.7/tippy.umd.min.js","rtovbatoppt_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["content/GP_template.potx","content/XL2PPT.xlsm","images/add_shape_names.png","images/base_report.gif","images/create_excel_template.png","images/create_project.png","images/edit_data.png","images/edit_potx_new.png","images/edit_potx_open.png","images/excel_template.png","images/save_as_potx.png","images/save_as_xlsm.png","rtovbatoppt_files/anchor-4.2.2/anchor.min.js","rtovbatoppt_files/bowser-1.9.3/bowser.min.js","rtovbatoppt_files/distill-2.2.21/template.v2.js","rtovbatoppt_files/header-attrs-2.9/header-attrs.js","rtovbatoppt_files/jquery-1.11.3/jquery.min.js","rtovbatoppt_files/popper-2.6.0/popper.min.js","rtovbatoppt_files/tippy-6.2.7/tippy-bundle.umd.min.js","rtovbatoppt_files/tippy-6.2.7/tippy-light-border.css","rtovbatoppt_files/tippy-6.2.7/tippy.css","rtovbatoppt_files/tippy-6.2.7/tippy.umd.min.js","rtovbatoppt_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1518,7 +1518,36 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <img src="images/add_shape_names.png" title="Add shape names from Selection Pane" alt="Add shape names from Selection Pane" /><figcaption aria-hidden="true">Add shape names from Selection Pane</figcaption>
 </figure>
 <p>Advisory: We use the format <code>NN_[Position]Object</code> where <code>NN</code> is the slide number, <code>[Position]</code> is the either TopLeft, TopRight, BottomLeft, BottomRight or any other position and finally, <code>Object</code> is either Table, Chart, Title, Subtitle, TextBox etc. You can use any fancy identifier here, just make sure that your future self and others can recognise them easily.</p>
-<h2 id="the-excel-vba-file">The Excel VBA file</h2>
+<p>Once you set the names of all the items that you want to customise, save the template.</p>
+<p>Download the <code>GP_template.potx</code> template <a href="content/GP_template.potx">here</a>.</p>
+<h2 id="the-excel-template">The Excel Template</h2>
+<p>To populate all the named items in the PowerPoint template, we will now create an Excel document which looks identical to the remplate with respect to the named items. Please see image below.</p>
+<figure>
+<img src="images/create_excel_template.png" title="PowerPoint item to Excel named range mapping" alt="PowerPoint item to Excel named range mapping" /><figcaption aria-hidden="true">PowerPoint item to Excel named range mapping</figcaption>
+</figure>
+<p>For every named item, depending on whether it is a textbox or chart or table, we will create a named range for that item. For example, for item <code>01_title</code> in the PowerPoint template, we create a <code>S1_title</code> named range (which points to cell C3) as a placeholder for it. If you don’t know how to create a named range in Excel, read more <a href="https://support.microsoft.com/en-us/office/define-and-use-names-in-formulas-4d0f13ac-53b7-422e-afd2-abd7ff379c64">here</a>.</p>
+<blockquote>
+<p>Excel does not allow named ranges to start with a number, hence <code>01_title</code> is mapped to <code>S1_title</code>. The S stands for Slide. Just one of those Excel quirks I guess!</p>
+</blockquote>
+<p>You can set a single Excel cell as named range for each <strong>textbox</strong> in the PowerPoint template. You can copy-paste <strong>tables</strong> from Powerpoint to the Excel template directly. The entire table must be set as a named range.</p>
+<p>For charts, right-click the chart in PowerPoint and select <code>Edit Data</code>. An excel worksheet is displayed with the underlying data. Copy-paste the entire data into the Excel template.</p>
+<figure>
+<img src="images/edit_data.png" title="Excel Chart: Right Click &gt; Edit Data" width="225" alt="Excel Chart: Right Click &gt; Edit Data" /><figcaption aria-hidden="true">Excel Chart: Right Click &gt; Edit Data</figcaption>
+</figure>
+<p>For the <code>GP_template.potx</code>, the corresponding excel template <code>XL2PPT.xlsm</code> looks like the below image. Please note that this template does not have the VBA macro yet.</p>
+<figure>
+<img src="images/excel_template.png" title="XL2PPT design" alt="XL2PPT design" /><figcaption aria-hidden="true">XL2PPT design</figcaption>
+</figure>
+<h2 id="the-vba-macro">The VBA Macro</h2>
+<p>We want the VBA macro to:</p>
+<ol type="1">
+<li>Open a new instance of PowerPoint presentation using the <code>GP_template.potx</code> file.</li>
+<li>Copy text/numbers from various placeholders and replace existing text/numbers in the PowerPoint presentation.</li>
+<li>Save the presentation with custom file name with <code>.pptx</code> extension.</li>
+</ol>
+<p>I will spare you the VBA details and let you download the <code>XL2PPT.xlsm</code> file from <a href="content/XL2PPT.xlsm">here</a>. The actual mapping of the named ranges in the Excel template to the named shapes in the PowerPoint template happens in the VBA code. However, at this stage, you can actually create the PowerPoint presentation by copying the numbers into the Excel template and hitting the big <code>RUN MACRO</code> button.</p>
+<h2 id="r">R</h2>
+<p>Suppose we want to create a 5 variations of PowerPoint presentation using the same template. While creating the presentation from Excel is now automated, how about creating the numbers for each of those 10 variations? This is where we bring in R with the <code>openxlsx</code> and <code>RDCOMClient</code> packages. We use the <code>tidyverse</code> set of packages to read in data, clean and massage the data into the various formats we need, <code>openxlsx</code> to write the data (single numbers, text or tables of numbers) to the Excel template and <code>RDCOMClient</code> to run the embedded VBA code in the Excel template.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

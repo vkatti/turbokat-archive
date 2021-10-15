@@ -29,7 +29,7 @@ Since I discovered R while looking for a better alternative to VBA for
 data analysis and Excel/PowerPoint automation, the following is an
 alternative workflow to create multiple PowerPoint presentations using a
 combination of these technologies. Note that this workflow uses the
-`RDCOMCLient` package which works in Windows environment only.
+`RDCOMClient` package which works in Windows environment only.
 
 ## TL;DR
 
@@ -104,4 +104,75 @@ Chart, Title, Subtitle, TextBox etc. You can use any fancy identifier
 here, just make sure that your future self and others can recognise them
 easily.
 
-## The Excel VBA file
+Once you set the names of all the items that you want to customise, save
+the template.
+
+Download the `GP_template.potx` template
+[here](content/GP_template.potx).
+
+## The Excel Template
+
+To populate all the named items in the PowerPoint template, we will now
+create an Excel document which looks identical to the template with
+respect to the named items. Please see image below.
+
+![PowerPoint item to Excel named range
+mapping](images/create_excel_template.png "PowerPoint item to Excel named range mapping")
+
+For every named item, depending on whether it is a textbox or chart or
+table, we will create a named range for that item. For example, for item
+`01_title` in the PowerPoint template, we create a `S1_title` named
+range (which points to cell C3) as a placeholder for it. If you don't
+know how to create a named range in Excel, read more
+[here](https://support.microsoft.com/en-us/office/define-and-use-names-in-formulas-4d0f13ac-53b7-422e-afd2-abd7ff379c64).
+
+> Excel does not allow named ranges names to start with a number, hence
+> `01_title` is mapped to `S1_title`. The S stands for Slide. Just one
+> of those Excel quirks I guess!
+
+You can set a single Excel cell as named range for each **textbox** in
+the PowerPoint template. You can copy-paste **tables** from Powerpoint
+to the Excel template directly. The entire table must be set as a named
+range.
+
+For charts, right-click the chart in PowerPoint and select `Edit Data`.
+An excel worksheet is displayed with the underlying data. Copy-paste the
+entire data into the Excel template.
+
+![Excel Chart: Right Click \> Edit
+Data](images/edit_data.png "Excel Chart: Right Click > Edit Data"){width="225"}
+
+For the `GP_template.potx`, the corresponding excel template
+`XL2PPT.xlsm` looks like the below image. Please note that this template
+does not have the VBA macro yet.
+
+![XL2PPT design](images/excel_template.png "XL2PPT design")
+
+## The VBA Macro
+
+We want the VBA macro to:
+
+1.  Open a new instance of PowerPoint presentation using the
+    `GP_template.potx` file.
+2.  Copy text/numbers from various placeholders and replace existing
+    text/numbers in the PowerPoint presentation.
+3.  Save the presentation with custom file name with `.pptx` extension.
+
+I will spare you the VBA details and let you download the `XL2PPT.xlsm`
+file from [here](content/XL2PPT.xlsm). The actual mapping of the named
+ranges in the Excel template to the named shapes in the PowerPoint
+template happens in the VBA code. However, at this stage, you can
+actually create the PowerPoint presentation by copying the numbers into
+the Excel template and hitting the big `RUN MACRO` button.
+
+## R
+
+Suppose we want to create a 5 variations of PowerPoint presentation
+using the same template. While creating the presentation from Excel is
+now automated, how about creating the numbers for each of those 10
+variations? This is where we bring in R with the `openxlsx` and
+`RDCOMClient` packages. We use the `tidyverse` set of packages to read
+in data, clean and massage the data into the various formats we need,
+`openxlsx` to write the data (single numbers, text or tables of numbers)
+to the Excel template and `RDCOMClient` to run the embedded VBA code in
+the Excel template.
