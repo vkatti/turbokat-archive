@@ -1,0 +1,33 @@
+In our case, we wish to create a presentation for each of the major regions Americas, Europe, Africa and Asia-Pacific. In effect, we will be creating 4 presentation for each region. Let us create the region column in the gapminder data. But first, let us load some relevant packages.
+
+{r load-packages}
+options(tidyverse.quiet = TRUE)
+library(tidyverse)
+library(openxlsx)
+library(RDCOMClient)
+
+{r read-data}
+gp <- gapminder::gapminder
+
+gp <- gp %>%
+  mutate(region = if_else(as.character(continent) %in% c("Asia","Oceania"),"Asia-Pacific", as.character(continent)))
+
+# Keep only relevant columns
+
+gp <- gp %>% select(region, country, year, pop)
+
+glimpse(gp)
+
+
+Now that we have the source data available, we must now create the datasets we need to create that we can write to the Excel template for each region. The idea here is to create the datasets in such a way that they can be easily filtered for each region and the resultant table can be written to the Excel template without further modification. For example, the chart on slide 2 needs raw data structured as below.
+
+02_chart
+
+This table shows the top 4 countries and all other countries clubbed into 'others' and then the total population of the region on a yearly basis. This table has to be created for all 4 regions.
+
+{r}
+pop_trend <- gp %>%
+  count(region, country, year, wt = pop, name = "pop", sort = TRUE) %>%
+  pivot_wider(names_from = year, values_from = pop, names_sort = TRUE)
+gt::gt(pop_trend)
+

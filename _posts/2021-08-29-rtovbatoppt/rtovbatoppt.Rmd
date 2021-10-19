@@ -1,18 +1,25 @@
 ---
-title: "Unholy Trinity of R, Excel VBA and Powerpoint"
+title: "Unholy Trinity of R, Excel VBA and Powerpoint - Part 1 of 2"
 description: |
   Using R to trigger Excel VBA macros to create PowerPoint presentations!
 author:
   - name: Vishal Katti
-date: 2021-10-15
-draft: true
+date: 2021-10-19
+preview: images/R2XL2PPT_logo.png
+categories:
+  - Rstats
+  - Excel
+  - VBA
+  - PowerPoint
 output:
   distill::distill_article:
     self_contained: false
+    toc: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE)
+library(details)
 ```
 
 One of the most common tasks in most offices, is creating presentations
@@ -33,10 +40,10 @@ combination of these technologies. Note that this workflow uses the
 
 ## TL;DR
 
-We create a PowerPoint template with named placeholders which we
-populate from an Excel file using VBA. The Excel file is loaded with
-data using R with the help of `openxlsx` package and then the macro is
-triggered using the `RDCOMClient` package.
+In this 2-part blog, we create a PowerPoint template with named
+placeholders which we populate from an Excel file using VBA. The Excel
+file is loaded with data using R with the help of `openxlsx` package and
+then the macro is triggered using the `RDCOMClient` package.
 
 This solution has great potential to give you the same feeling as those
 Jurassic Park scientists that Dr. Ian Malcolm remarked about!
@@ -158,16 +165,27 @@ We want the VBA macro to:
     text/numbers in the PowerPoint presentation.
 3.  Save the presentation with custom file name with `.pptx` extension.
 
-I will spare you the VBA details and let you download the `XL2PPT.xlsm`
-file from [here](content/XL2PPT.xlsm). The actual mapping of the named
-ranges in the Excel template to the named shapes in the PowerPoint
-template happens in the VBA code. However, at this stage, you can
-actually create the PowerPoint presentation by copying the numbers into
-the Excel template and hitting the big `RUN MACRO` button.
+The actual mapping of the named ranges in the Excel template to the
+named shapes in the PowerPoint template happens in the VBA code.
+However, at this stage, you can actually create the PowerPoint
+presentation by copying the numbers into the Excel template and hitting
+the big `RUN MACRO` button.
+
+For your reference, I am embedding the VBA macro code below. You can
+download the `XL2PPT.xlsm` file from [here](content/XL2PPT.xlsm).
+
+```{r VBA-Macro-Code, echo=FALSE}
+details(
+  '<script src="https://gist.github.com/vkatti/6b62c49c7dac8901b0194a758a77c0df.js"></script>',
+  summary = "VBA Macro Code",
+  lang = NULL
+)
+
+```
 
 ## R
 
-Suppose we want to create a 5 variations of PowerPoint presentation
+Suppose we want to create a 10 variations of PowerPoint presentation
 using the same template. While creating the presentation from Excel is
 now automated, how about creating the numbers for each of those 10
 variations? This is where we bring in R with the `openxlsx` and
@@ -176,3 +194,7 @@ in data, clean and massage the data into the various formats we need,
 `openxlsx` to write the data (single numbers, text or tables of numbers)
 to the Excel template and `RDCOMClient` to run the embedded VBA code in
 the Excel template.
+
+Check out the upcoming Part 2 of this blog to see how to run VBA code
+using R. Let me know if you find this useful or any corrections required
+in the comments below.
