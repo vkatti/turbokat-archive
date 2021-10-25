@@ -5,7 +5,7 @@ description: |
 author:
   - name: Vishal Katti
 date: 2021-07-27
-preview: https://i.imgur.com/Zzk5SWf.gif
+preview: images/drilldown.gif
 categories:
   - Rstats
   - reactable

@@ -97,5 +97,6 @@ d-article pre code {
     margin-bottom: 24px;
     position: relative;
     max-width: 500px;
-    box-shadow: 4px 4px 4px 4px rgb(0 0 0 / 20%);
+    filter: drop-shadow(4px 4px 4px black);
+    /*box-shadow: 4px 4px 4px 4px rgb(0 0 0 / 20%);*/
 }
