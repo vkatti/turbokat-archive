@@ -1,0 +1,155 @@
+---
+title: "Unholy Trinity of R, Excel VBA and Powerpoint - Part 2 of 2"
+description: |
+  Using R to trigger Excel VBA macros to create PowerPoint presentations!
+author:
+  - name: Vishal Katti
+date: 2021-10-25
+preview: images/R2XL2PPT_logo.png
+categories:
+  - Rstats
+  - Excel
+  - VBA
+  - PowerPoint
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+draft: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is part 2 of 2. Read part 1
+[here](https://www.vishalkatti.com/posts/2021-08-29-rtovbatoppt/ "link to Part 1 of this article.").
+
+## Quick Recap
+
+In the previous post, we create the `.potx` template from the `.pptx`
+file we wanted to automate and the Excel template with the macro `.xlsm`
+that uses the PowerPoint template to create a new `.pptx` file with
+given data using VBA.
+
+The report we want to automate is...
+
+![The Gapminder Report : The PowerPoint presentation we want to
+automate](images/base_report.gif "The Gapminder Report")
+
+...and the Excel and PowerPoint template we created are shown below.
+
+![Excel Template with VBA
+macro](images/excel_template.png "Excel Template with VBA macro")
+
+In this post, we will write the R script that will first massage the
+data into desired format and then load the data for one region into the
+Excel template and execute the VBA macro that will create the PowerPoint
+file with that data.
+
+## Strategy
+
+Before we dive into code, we need to check a few things. We wish to
+create a presentation for each continent in the Gapminder data. A closer
+look at the Presentation will tell you what kind of data we need for
+each slide/graph/table while the Excel template will reveal what should
+the structure of each dataset should be. While looking into this
+structure, some questions will pop-up. The idea here is to create the
+datasets in such a way that they can be easily filtered for each
+continent and the resultant table can be written to the Excel template
+without any or very little modification. Let us proceed slide-by-slide.
+
+Slide 1 is the title page and needs 2 strings; one for Title, one for
+Subtitle. The Title for the base presentation is "World Population". For
+each continent, it could be "\<continent_name\> Population". The
+subtitle is a combination of Author Name and Created Date. So we need a
+string like "\<author_name\> \| \<created_date\>" where created_date is
+the formatted system date.
+
+The chart on slide 2 needs raw data structured as below. You will notice
+that at a continent-level, this table needs a minimum of 5 countries. Do
+we have any continents in the Gapminder data with less than 5 countries?
+Yes, we have Oceania with only Australia and New Zealand. For ease of
+use, let us include these countries along with Asian countries in a new
+`Region` variable.
+
+![02_chart](images/02_chart.png "02_chart")
+
+We will create the `region` variable in the gapminder data. But first,
+let us load some relevant packages.
+
+```{r load-packages}
+options(tidyverse.quiet = TRUE)
+library(tidyverse)
+library(reactable)
+library(openxlsx)
+library(RDCOMClient)
+```
+
+```{r read-data}
+
+# Read in Gapminder data
+gp <- gapminder::gapminder
+
+# Create new region variable
+gp <- gp %>%
+  mutate(region = if_else(as.character(continent) %in% c("Asia","Oceania"),
+                          "Asia-Pacific", 
+                          as.character(continent)),
+         country = as.character(country))
+
+# Keep only relevant columns
+gp <- gp %>% select(region, country, year, pop)
+
+# View details
+glimpse(gp)
+```
+
+Now that we have the source data available, we must now create the
+datasets we need to create that we can write to the Excel template for
+each region.
+
+The required table shows the top 4 countries (based on 2007 population)
+and all other countries clubbed into 'others' in a given region and then
+the total population of the region on a yearly basis. This table has to
+be created for all 4 regions.
+
+```{r 02_chart, layout="l-body-outset"}
+pop_trend <- gp %>%
+  group_by(region, country, year) %>% 
+  summarise(pop = sum(pop, na.rm = TRUE),
+            .groups = 'drop') %>%
+  pivot_wider(names_from = year, values_from = pop, names_sort = TRUE) %>% 
+  arrange(desc(`2007`))
+
+reactable(pop_trend, compact=TRUE,
+                     style = "font-size:12px")
+```
+
+Now that we have the required columns, let's plan the row order. We
+notice that, for each region, we have the top 4 countries (as per 2007)
+, followed by 'Others'. Let's create the `top-4` dataset.
+
+```{r top-4, layout="l-body-outset"}
+top4 <- pop_trend %>% 
+  group_by(region) %>% 
+  slice_max(`2007`, n = 4, with_ties = FALSE) %>% 
+  ungroup()
+
+reactable(top4, compact=TRUE, style = "font-size:12px")
+```
+
+To create the `others` dataset, we exclude all countries that are
+present in the `top-4`.
+
+```{r others, layout="l-body-outset"}
+others <- pop_trend %>% 
+  filter(!country %in% top4$country) %>% 
+  group_by(region) %>% 
+  summarise(across(.cols = -country, .fns = sum),
+            .groups = 'drop') %>% 
+  mutate(country = "Others") %>% 
+  select(region, country, everything())
+
+reactable(others, compact=TRUE, style = "font-size:12px")
+```
