@@ -153,3 +153,38 @@ others <- pop_trend %>%
 
 reactable(others, compact=TRUE, style = "font-size:12px")
 ```
+
+Now that we have the datasets needed for `02_chart`, let's proceed to
+the create `02_table` . This table gives you the count of countries that
+fall under various population ranges.
+
+![02_table on Slide 2](images/02_table.png "02_table"){width="250"}
+
+Let's create `02_table`. To create this table, we first create a new
+variable called `pop_range`.
+
+```{r 02_table}
+
+pop_levels <- c('Less than 500K','500K - 1 Million',
+                '1M - 10 Million', '10M - 100 Million',
+                '100M - 1 Billion', 'More than 1 Billion')
+
+gp2007 <- gp %>% 
+  filter(year == 2007) %>% 
+  mutate(pop_range = case_when(pop < 5E5 ~ pop_levels[1],
+                               pop < 1E6 ~ pop_levels[2],
+                               pop < 1E7 ~ pop_levels[3],
+                               pop < 1E8 ~ pop_levels[4],
+                               pop < 1E9 ~ pop_levels[5],
+                               TRUE      ~ pop_levels[6]),
+         pop_range = factor(pop_range, levels = pop_levels))
+
+pop_groups <- gp2007 %>% 
+  group_by(region, pop_range, .drop = FALSE) %>% 
+  summarise(`# of Countries` = n(),
+            .groups = 'drop') %>% 
+  arrange(region, pop_range) %>% 
+  rename(`Population Category` = pop_range)
+
+reactable(pop_groups, compact=TRUE, style = "font-size:12px")
+```
