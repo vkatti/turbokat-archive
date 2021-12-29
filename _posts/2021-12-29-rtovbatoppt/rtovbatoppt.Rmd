@@ -335,7 +335,8 @@ Presentations in your working folder.
 You can download the full R script from
 [here](https://gist.github.com/vkatti/cc95c56e11c1b8985bbd288f353c7386 "Navigate to Github Gist").
 
-\# References
+
+## References & Citations
 
 -   Jennifer Bryan (2017). gapminder: Data from Gapminder. R package
     version 0.3.0.
@@ -364,9 +365,7 @@ You can download the full R script from
     <https://CRAN.R-project.org/package=openxlsx>
 
 -   Duncan Temple Lang (NA). RDCOMClient: R-DCOM client.
-
     <http://www.omegahat.net/RDCOMClient,> <http://www.omegahat.net>
-
     <http://www.omegahat.net/bugs.>
 
 -   <https://docs.microsoft.com/en-us/office/vba/api/overview/excel>
