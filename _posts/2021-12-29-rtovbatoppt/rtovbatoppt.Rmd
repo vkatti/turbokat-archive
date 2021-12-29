@@ -11,6 +11,8 @@ categories:
   - Excel
   - VBA
   - PowerPoint
+  - openxlsx
+  - RDCOMClient
 output:
   distill::distill_article:
     self_contained: false
