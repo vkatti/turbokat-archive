@@ -4,7 +4,7 @@ description: |
   Using R to trigger Excel VBA macros to create PowerPoint presentations!
 author:
   - name: Vishal Katti
-date: 2021-10-25
+date: 2021-12-30
 preview: images/R2XL2PPT_logo.png
 categories:
   - Rstats
@@ -224,3 +224,5 @@ top10 <- gp %>%
 
 reactable(top10, compact=TRUE, style = "font-size:12px")
 ```
+
+\#\# Loading the template
