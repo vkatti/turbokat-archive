@@ -4,7 +4,7 @@ description: |
   Using R to trigger Excel VBA macros to create PowerPoint presentations!
 author:
   - name: Vishal Katti
-date: 2021-12-30
+date: 2021-12-29
 preview: images/R2XL2PPT_logo.png
 categories:
   - Rstats
@@ -15,7 +15,6 @@ output:
   distill::distill_article:
     self_contained: false
     toc: true
-draft: true
 ---
 
 ```{r setup, include=FALSE}
@@ -128,6 +127,7 @@ pop_trend <- gp %>%
   group_by(region, country, year) %>% 
   summarise(pop = sum(pop, na.rm = TRUE),
             .groups = 'drop') %>%
+  mutate(pop = round(pop/1E6, 0)) %>% # population in millions
   pivot_wider(names_from = year, values_from = pop, names_sort = TRUE) %>% 
   arrange(desc(`2007`)) # sort by max pop to min pop in latest year i.e. 2007
 
@@ -220,9 +220,153 @@ top10 <- gp %>%
   ungroup() %>% 
   select(-year) %>% 
   mutate(pop = round(pop/1E6, 4)) %>% # population in millions
-  set_names(c("Region","Country","Population"))
+  set_names(c("region","country","population"))
 
 reactable(top10, compact=TRUE, style = "font-size:12px")
 ```
 
-\#\# Loading the template
+## The `for` loop!
+
+We now have to load the Excel template with the data at appropriate cell
+locations for one region at a time. Since we have about 4 regions, we
+will create a vector of unique regions to iterate over.
+
+```{r unique-regions}
+unique_regions <- gp %>% distinct(region) %>% pull()
+cat(unique_regions, sep = "\n")
+```
+
+As our last step, we will create the `for` loop that will iterate over
+`unique_regions` , filter the datasets for each region, write them to
+the Excel Template, save the template with temporary name. We save the
+file with different name to prevent unintentionally corrupting the Excel
+macro template. Finally, we run the macro in the renamed file.
+
+The code will look something like this
+
+```{r for-loop-skeleton, eval=FALSE}
+for (region in unique_regions) {
+  
+  # Step 1: filter the data sets
+  # Step 2: write the data sets
+  # Step 3: save the excel template with different name
+  # Step 4: load the renamed Excel file
+  # Step 5: run macro
+}
+```
+
+Let's populate the above `for` loop with the code we need.
+
+```{r create-ppt, eval=FALSE}
+for (curr_region in unique_regions) {
+  
+  # Step 1: filter the data sets
+  
+  # Slide 1
+  S1_title <- paste(curr_region, "Population")
+  S1_subtitle <- paste("Vishal Katti","|",format(Sys.Date(),"%b %d, %Y"), sep = "   ")
+  
+  # Slide 2
+  S2_title <- paste(curr_region, "Population since 1952")
+  
+  S2_top4 <- top4        %>% filter(region == all_of(curr_region)) %>% select(-region) %>% arrange(desc(`2007`))
+  S2_others <- others    %>% filter(region == all_of(curr_region)) %>% select(-region)
+  S2_top5 <- bind_rows(S2_top4, S2_others)
+  
+  S2_table <- pop_groups %>% filter(region == all_of(curr_region)) %>% select(-region)
+  
+  # Slide 3
+  S3_title <- paste("Top 10 most populated countries in", curr_region)
+  
+  S3_chart <- top10      %>% filter(region == all_of(curr_region)) %>% select(-region)
+  
+  S3_factoid <- paste("The population of", S3_chart$country[1], "is approx.",
+                      round(S3_chart$population[1]/S3_chart$population[10], 0),
+                      "times that of", S3_chart$country[10])
+  
+  # Step 2: write the data sets
+  
+  # Load the template
+  wb <- loadWorkbook("path/to/template/XL2PPT.xlsm") # relative to this R script
+  sht <- "Sheet1"
+  
+  # write data to coordinate (col, row)
+  writeData(wb, sht, S1_title,    xy = c(3, 3),  colNames = FALSE)
+  writeData(wb, sht, S1_subtitle, xy = c(3, 4),  colNames = FALSE)
+  writeData(wb, sht, S2_title,    xy = c(3, 7),  colNames = FALSE)
+  writeData(wb, sht, S2_top5,     xy = c(3, 9),  colNames = TRUE)
+  writeData(wb, sht, S2_table,    xy = c(18, 9), colNames = TRUE)
+  writeData(wb, sht, S3_title,    xy = c(3, 18), colNames = FALSE)
+  writeData(wb, sht, S3_factoid,  xy = c(3, 19), colNames = FALSE)
+  writeData(wb, sht, S3_chart,    xy = c(3, 21), colNames = TRUE)
+  
+  # Step 3: save the excel template with different name
+  saveWorkbook(wb, "path/to/template/XL2PPT_edited.xlsm", overwrite = TRUE)
+  gc(verbose = TRUE)
+  Sys.sleep(2)
+  
+  # Step 4: load the renamed Excel file
+  # Create Excel Application
+  xlApp <- COMCreate("Excel.Application")
+
+  # Open the Macro Excel book
+  xlWbk <- xlApp$Workbooks()$Open(normalizePath("path/to/template/XL2PPT_edited.xlsm", winslash = "/")) # Change to your directory
+  # its ok to run macro without visible excel application
+  # If you want to see your workbook, please set it to TRUE
+  xlApp[["Visible"]] <- FALSE
+  
+  # Step 5: run macro
+  xlApp$Run("Create_Continental_Deck") # Name of Macro to run
+
+  xlWbk$Close(TRUE) # save and close excel book
+  xlApp$Quit()
+  gc(verbose = TRUE)
+  Sys.sleep(2)
+}
+```
+
+Once the code runs completely, you will see 4 new PowerPoint
+Presentations in your working folder.
+
+![Output Files](images/output_ppt.png "Output Files")
+
+You can download the full R script from
+[here](https://gist.github.com/vkatti/cc95c56e11c1b8985bbd288f353c7386 "Navigate to Github Gist").
+
+\# References
+
+-   Jennifer Bryan (2017). gapminder: Data from Gapminder. R package
+    version 0.3.0.
+
+    <https://CRAN.R-project.org/package=gapminder>
+
+-   Hadley Wickham, Romain François, Lionel Henry and Kirill Müller
+    (2021). dplyr: A Grammar of Data Manipulation. R package version
+    1.0.7. <https://CRAN.R-project.org/package=dplyr>
+
+-   Hadley Wickham (2021). tidyr: Tidy Messy Data. R package version
+    1.1.3.
+
+    <https://CRAN.R-project.org/package=tidyr>
+
+-   Greg Lin (2020). reactable: Interactive Data Tables Based on 'React
+    Table'. R
+
+    package version 0.2.3.
+    <https://CRAN.R-project.org/package=reactable>
+
+-   Philipp Schauberger and Alexander Walker (2021). openxlsx: Read,
+    Write and Edit xlsx
+
+    Files. R package version 4.2.4.
+    <https://CRAN.R-project.org/package=openxlsx>
+
+-   Duncan Temple Lang (NA). RDCOMClient: R-DCOM client.
+
+    <http://www.omegahat.net/RDCOMClient,> <http://www.omegahat.net>
+
+    <http://www.omegahat.net/bugs.>
+
+-   <https://docs.microsoft.com/en-us/office/vba/api/overview/excel>
+
+-   <https://docs.microsoft.com/en-us/office/vba/api/overview/powerpoint>

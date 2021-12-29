@@ -7,7 +7,20 @@
     <description>Welcome to Vishal Katti's website
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Tue, 19 Oct 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 29 Dec 2021 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Unholy Trinity of R, Excel VBA and Powerpoint - Part 2 of 2</title>
+      <dc:creator>Vishal Katti</dc:creator>
+      <link>https://vishalkatti.com/posts/2021-12-29-rtovbatoppt</link>
+      <description>Using R to trigger Excel VBA macros to create PowerPoint presentations!</description>
+      <category>Rstats</category>
+      <category>Excel</category>
+      <category>VBA</category>
+      <category>PowerPoint</category>
+      <guid>https://vishalkatti.com/posts/2021-12-29-rtovbatoppt</guid>
+      <pubDate>Wed, 29 Dec 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://vishalkatti.com/posts/2021-12-29-rtovbatoppt/images/R2XL2PPT_logo.png" medium="image" type="image/png" width="1500" height="619"/>
+    </item>
     <item>
       <title>Unholy Trinity of R, Excel VBA and Powerpoint - Part 1 of 2</title>
       <dc:creator>Vishal Katti</dc:creator>
