@@ -59,12 +59,21 @@ datasets in such a way that they can be easily filtered for each
 continent and the resultant table can be written to the Excel template
 without any or very little modification. Let us proceed slide-by-slide.
 
+## Creating the datasets
+
+### Slide 1
+
 Slide 1 is the title page and needs 2 strings; one for Title, one for
 Subtitle. The Title for the base presentation is "World Population". For
 each continent, it could be "\<continent_name\> Population". The
 subtitle is a combination of Author Name and Created Date. So we need a
 string like "\<author_name\> \| \<created_date\>" where created_date is
 the formatted system date.
+
+These strings can be created while writing the data to the Excel
+template.
+
+### Slide 2
 
 The chart on slide 2 needs raw data structured as below. You will notice
 that at a continent-level, this table needs a minimum of 5 countries. Do
@@ -80,10 +89,10 @@ let us load some relevant packages.
 
 ```{r load-packages}
 options(tidyverse.quiet = TRUE)
-library(tidyverse)
-library(reactable)
-library(openxlsx)
-library(RDCOMClient)
+library(tidyverse) # duh!
+library(reactable) # to display the tables interactively in this post. Not really needed for the final solution.
+library(openxlsx) # to write the data to the Excel Template.
+library(RDCOMClient) # to load and run the Excel macro post data load.
 ```
 
 ```{r read-data}
@@ -106,8 +115,8 @@ glimpse(gp)
 ```
 
 Now that we have the source data available, we must now create the
-datasets we need to create that we can write to the Excel template for
-each region.
+datasets we need that we can write to the Excel template for each
+region.
 
 The required table shows the top 4 countries (based on 2007 population)
 and all other countries clubbed into 'others' in a given region and then
@@ -120,7 +129,7 @@ pop_trend <- gp %>%
   summarise(pop = sum(pop, na.rm = TRUE),
             .groups = 'drop') %>%
   pivot_wider(names_from = year, values_from = pop, names_sort = TRUE) %>% 
-  arrange(desc(`2007`))
+  arrange(desc(`2007`)) # sort by max pop to min pop in latest year i.e. 2007
 
 reactable(pop_trend, compact=TRUE,
                      style = "font-size:12px")
@@ -153,6 +162,10 @@ others <- pop_trend %>%
 
 reactable(others, compact=TRUE, style = "font-size:12px")
 ```
+
+While we create the `top-4` and `others` datasets separately, we will
+combine them later at the very last moment before writing them to the
+Excel template.
 
 Now that we have the datasets needed for `02_chart`, let's proceed to
 the create `02_table` . This table gives you the count of countries that
@@ -187,4 +200,27 @@ pop_groups <- gp2007 %>%
   rename(`Population Category` = pop_range)
 
 reactable(pop_groups, compact=TRUE, style = "font-size:12px")
+```
+
+### Slide 3
+
+Slide 3 contains 2 strings and one chart. The data for the chart looks
+as shown below.
+
+![03_chart table for Slide 3](images/03_slide.png "Slide 3")
+
+The data for `03_chart` is the list of top 10 countries in each region
+as per latest record i.e. 2007. Let's create the `top10` table.
+
+```{r top10, layout="l-body-outset"}
+top10 <- gp %>% 
+  filter(year == 2007) %>% 
+  group_by(region) %>% 
+  slice_max(pop, n = 10, with_ties = FALSE) %>% 
+  ungroup() %>% 
+  select(-year) %>% 
+  mutate(pop = round(pop/1E6, 4)) %>% # population in millions
+  set_names(c("Region","Country","Population"))
+
+reactable(top10, compact=TRUE, style = "font-size:12px")
 ```
