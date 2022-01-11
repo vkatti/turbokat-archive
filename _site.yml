@@ -32,3 +32,6 @@ twitter:
   creator: "@vishal_katti"
 rss:
   full_content: false
+collections:
+  posts:
+    share: [twitter, linkedin, pinterest, facebook]
