@@ -1496,6 +1496,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <li><a href="#scenario-1-missing-arguments">Scenario 1: Missing Arguments</a>
 <ul>
 <li><a href="#early-exit">Early Exit</a></li>
+<li><a href="#sensible-defaults-with-warnings">Sensible defaults with warnings</a></li>
 </ul></li>
 <li><a href="#scenario-2-invalid-data-type-of-arguments">Scenario 2: Invalid Data Type of Arguments</a></li>
 <li><a href="#scenario-3-incorrect-data-size">Scenario 3: Incorrect Data Size</a></li>
@@ -1517,6 +1518,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span><span class='op'>)</span> <span class='op'>{</span>
+  
+  <span class='co'># main logic</span>
   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span>
 <span class='op'>}</span>
 
@@ -1549,10 +1552,12 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='co'># check missing arguments</span>
   <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span>
   <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `mm` is required."</span><span class='op'>)</span>
   <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `dd` is required."</span><span class='op'>)</span>
   
+  <span class='co'># main logic</span>
   <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span>
 <span class='op'>}</span>
 
@@ -1563,7 +1568,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <pre style="color: red;"><code>Error in make_date(yyyy = 2022, dd = 31): argument `mm` is required.
 </code></pre>
 </div>
-<p>Note that here, we add three <code>if</code> statements, one for each required argument. We must do this if we want to display specific error messages for each argument. If we want to display a single error message, we can do so by clubbing the <code>missing</code> functions inside an <code>any</code> which will return TRUE if any one of the arguments is missing. However, providing clear error messages becomes challenging in this method.</p>
+<p>Note that here, we add three <code>if-missing-stop</code> statements, one for each required argument. We must do this if we want to display specific error messages for each argument. There is another way to do the same but we will look at it later. If we want to display a single error message, we can do so by clubbing the <code>missing</code> functions inside an <code>any</code> which will return TRUE if any one of the arguments is missing. However, providing clear error messages becomes challenging in this method.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dummy_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span>, <span class='va'>c</span><span class='op'>)</span> <span class='op'>{</span> 
@@ -1578,7 +1583,42 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <pre style="color: red;"><code>Error in dummy_fun(a = 1): One or more required arguments missing.
 </code></pre>
 </div>
-<p>2: sensible defaults</p>
+<h3 id="sensible-defaults-with-warnings">Sensible defaults with warnings</h3>
+<p>In some cases, we may need the function to use some sensible default value for the required arguments and continue execution. Here, we display a warning message instead of an error message. This is required when the argument value is either considered to be obvious or the argument is not necessarily the most important one and is used only in extreme customization. <strong>Providing default values to arguments makes them optional arguments</strong>. An example of default argument values can be seen in the <code>paste</code> function we have used earlier. The default value of the separator argument <code>sep</code> is a single whitespace character.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/args.html'>args</a></span><span class='op'>(</span><span class='va'>paste</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>function (..., sep = &quot; &quot;, collapse = NULL, recycle0 = FALSE) 
+NULL</code></pre>
+</div>
+<p>Similarly, we can provide some sensible defaults for the <code>make_date</code> function. Let’s modify the function further to provide defaults for the <code>mm</code> and <code>dd</code> arguments only.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>dd</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='co'># check missing arguments</span>
+  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> 
+  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `mm` is missing. Using default value mm = 1 instead"</span><span class='op'>)</span> 
+  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `dd` is missing. Using default value dd = 1 instead"</span><span class='op'>)</span>
+  
+  <span class='co'># main logic</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='co'># Calling the function without `mm` and `dd` arguments</span>
+<span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span><span class='op'>)</span> <span class='co'># here, only `yyyy` is the required argument.</span>
+</code></pre>
+</div>
+<pre style="color: orange;"><code>Warning in make_date(yyyy = 2022): argument `mm` is missing. Using
+default value mm = 1 instead
+</code></pre>
+<pre style="color: orange;"><code>Warning in make_date(yyyy = 2022): argument `dd` is missing. Using
+default value dd = 1 instead
+</code></pre>
+<pre><code>[1] &quot;2022-01-01&quot;</code></pre>
+</div>
+<p>There are a few concerns about using warnings. Some are listed here in this article from RBloggers <a href="https://www.r-bloggers.com/2012/05/a-warning-about-warning/">A Warning About <code>warning</code></a>.</p>
 <h2 id="scenario-2-invalid-data-type-of-arguments">Scenario 2: Invalid Data Type of Arguments</h2>
 <p>check if char input is coersible to number? check class using inherits</p>
 <h2 id="scenario-3-incorrect-data-size">Scenario 3: Incorrect Data Size</h2>
@@ -1592,8 +1632,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <ul>
 <li><a href="https://www.lexjansen.com/phuse/2014/ts/TS03.pdf">Techniques for writing robust R programs - LexJansen</a></li>
 <li><a href="https://bookdown.org/rdpeng/rprogdatascience/functions.html">R Programming for Data Science</a></li>
+<li><a href="https://www.r-bloggers.com/2012/05/a-warning-about-warning/">A Warning About warning</a></li>
 </ul>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

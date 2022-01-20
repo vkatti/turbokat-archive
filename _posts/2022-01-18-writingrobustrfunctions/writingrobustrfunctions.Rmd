@@ -22,6 +22,9 @@ knitr::opts_chunk$set(echo = TRUE, comments = '')
 knitr::knit_hooks$set(error = function(x, options) {
   paste0("<pre style=\"color: red;\"><code>", x, "</code></pre>")
 })
+knitr::knit_hooks$set(warning = function(x, options) {
+  paste0("<pre style=\"color: orange;\"><code>", x, "</code></pre>")
+})
 ```
 
 ## Introduction
@@ -80,6 +83,8 @@ Consider the following function `make_date` that takes 3 numeric inputs
 
 ```{r}
 make_date <-  function(yyyy, mm, dd) {
+  
+  # main logic
   as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")
 }
 
@@ -124,10 +129,12 @@ arguments are missing.
 
 ```{r error=TRUE}
 make_date <-  function(yyyy, mm, dd) {
+  # check missing arguments
   if (missing(yyyy)) stop("argument `yyyy` is required.")
   if (missing(mm))   stop("argument `mm` is required.")
   if (missing(dd))   stop("argument `dd` is required.")
   
+  # main logic
   as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")
 }
 
@@ -135,10 +142,11 @@ make_date <-  function(yyyy, mm, dd) {
 make_date(yyyy = 2022, dd = 31)
 ```
 
-Note that here, we add three `if` statements, one for each required
-argument. We must do this if we want to display specific error messages
-for each argument. If we want to display a single error message, we can
-do so by clubbing the `missing` functions inside an `any` which will
+Note that here, we add three `if-missing-stop` statements, one for each
+required argument. We must do this if we want to display specific error
+messages for each argument. There is another way to do the same but we
+will look at it later. If we want to display a single error message, we
+can do so by clubbing the `missing` functions inside an `any` which will
 return TRUE if any one of the arguments is missing. However, providing
 clear error messages becomes challenging in this method.
 
@@ -152,7 +160,45 @@ dummy_fun <- function(a, b, c) {
 dummy_fun(a = 1)
 ```
 
-2: sensible defaults
+### Sensible defaults with warnings
+
+In some cases, we may need the function to use some sensible default
+value for the required arguments and continue execution. Here, we
+display a warning message instead of an error message. This is required
+when the argument value is either considered to be obvious or the
+argument is not necessarily the most important one and is used only in
+extreme customization. **Providing default values to arguments makes
+them optional arguments**. An example of default argument values can be
+seen in the `paste` function we have used earlier. The default value of
+the separator argument `sep` is a single whitespace character.
+
+```{r}
+args(paste)
+```
+
+Similarly, we can provide some sensible defaults for the `make_date`
+function. Let's modify the function further to provide defaults for the
+`mm` and `dd` arguments only.
+
+```{r warning=TRUE}
+make_date <-  function(yyyy, mm = 1, dd = 1) {
+  # check missing arguments
+  if (missing(yyyy)) stop("argument `yyyy` is required.") 
+  if (missing(mm)) warning("argument `mm` is missing. Using default value mm = 1 instead") 
+  if (missing(dd)) warning("argument `dd` is missing. Using default value dd = 1 instead")
+  
+  # main logic
+  as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")
+}
+
+# Calling the function without `mm` and `dd` arguments
+make_date(yyyy = 2022) # here, only `yyyy` is the required argument.
+
+```
+
+There are a few concerns about using warnings. Some are listed here in
+this article from RBloggers [A Warning About
+`warning`](https://www.r-bloggers.com/2012/05/a-warning-about-warning/).
 
 ## Scenario 2: Invalid Data Type of Arguments
 
@@ -176,3 +222,5 @@ Tumblr](https://64.media.tumblr.com/f6dc1e64c3d63e1f308e46445cafb6ab/tumblr_mo7k
     LexJansen](https://www.lexjansen.com/phuse/2014/ts/TS03.pdf)
 -   [R Programming for Data
     Science](https://bookdown.org/rdpeng/rprogdatascience/functions.html)
+-   [A Warning About
+    warning](https://www.r-bloggers.com/2012/05/a-warning-about-warning/)
