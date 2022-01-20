@@ -1,0 +1,68 @@
+---
+title: "Writing Robust R Functions"
+description: |
+  Best Practises for validating function arguments.
+author:
+  - name: Vishal Katti
+    url: {}
+date: 2022-01-18
+preview: https://64.media.tumblr.com/f6dc1e64c3d63e1f308e46445cafb6ab/tumblr_mo7km0eiRW1qedb29o1_500.gif
+categories:
+  - Rstats
+  - functions
+output:
+  distill::distill_article:
+    self_contained: false
+    toc: true
+draft: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Introduction
+
+Functions in R ( or any other programming language in general) allow us
+to encapsulate some lines of code that we want to run again and again.
+Functions are the natural outcome of the **DRY** (Don't Repeat
+Yourself!) principle. Functions group together a couple of lines of
+consistent logic making our code modular and consequently, easy to
+manage. However, when we write functions, we need to ensure that they
+behave exactly as we want them to and are able to handle whatever we
+throw at them. By whatever, I mean any and all kinds of inputs. The idea
+of creating unbreakable code is idealistic. I say this since creating
+robust functions requires additional code to handle the unwanted inputs
+and most developers write functions during some one-time analysis. Hence
+we need to be pragmatic about how much time and effort we spend trying
+to make our functions robust. Maybe, we need our functions to be just
+robust enough! All I am saying is, if you are creating functions that
+will be used by you and only you i.e. if you have absolute control over
+what inputs would be provided to your functions, then you can forego
+certain checks and the functions need not be unbreakable. But, if you
+intend to write functions that will be used by a larger audience, you
+need to ensure that such functions are able to handle all kinds of
+innocent and malicious intents.
+
+## What do we mean by Robust Functions?
+
+You must be familiar with the Garbage-In-Garbage-Out philosophy of
+Software engineering. We can think of it in terms of functions, that,
+given garbage or bad input, you get garbage or bad output. For a
+function to be robust, it must behave in a consistent manner for known
+and correct inputs, however, more importantly, it mustn't give us
+garbage for bad inputs. Rather, it must provide useful output which can
+be further used to inform the end-user about possible problems in the
+inputs to drive proper usage. So we shall try to implement
+Garbage-In-Useful-Info-Out by looking at some ways we can build
+well-behaved functions.
+
+![As robust as Superman! Source:
+Tumblr](https://64.media.tumblr.com/f6dc1e64c3d63e1f308e46445cafb6ab/tumblr_mo7km0eiRW1qedb29o1_500.gif)
+
+## Citations & References
+
+-   [Techniques for writing robust R programs -
+    LexJansen](https://www.lexjansen.com/phuse/2014/ts/TS03.pdf)
+-   [R Programming for Data
+    Science](https://bookdown.org/rdpeng/rprogdatascience/functions.html)
