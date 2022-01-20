@@ -46,16 +46,71 @@ innocent and malicious intents.
 
 ## What do we mean by Robust Functions?
 
-You must be familiar with the Garbage-In-Garbage-Out philosophy of
+You must be familiar with the *Garbage-In-Garbage-Out* philosophy of
 Software engineering. We can think of it in terms of functions, that,
 given garbage or bad input, you get garbage or bad output. For a
 function to be robust, it must behave in a consistent manner for known
 and correct inputs, however, more importantly, it mustn't give us
 garbage for bad inputs. Rather, it must provide useful output which can
 be further used to inform the end-user about possible problems in the
-inputs to drive proper usage. So we shall try to implement
-Garbage-In-Useful-Info-Out by looking at some ways we can build
-well-behaved functions.
+inputs to drive proper usage. The useful output/s in case of bad inputs
+would ideally be a combination of clean early exit with some clean-up
+code and easy-to-understand error messages. So we shall try to implement
+*Garbage-In-Useful-Info-Out* by looking at some ways we can build
+well-behaved and reliable functions.
+
+Input values passed to a function are more popularly known as arguments
+or parameters. A robust function must validate the function arguments
+before proceeding to implement the function logic. If this is not done,
+then the bad arguments will cause some errors in the logic and display
+error messages that the end-user may not be familiar with. Worst-case
+scenario is when the function doesn't encounter any errors and just
+gives bad results!! Surely, we do not want this unpredictable behavior.
+
+![Enough Talk, Let's Fight! - Kungfu Panda
+\@imgflip.com](https://i.imgflip.com/28bxz3.jpg){style="float:left;"
+width="300"}
+
+## Missing Arguments
+
+The most basic check we should perform before running the function logic is to confirm if all the required arguments are available.
+
+Consider the following function. Function `make_date` takes 3 numeric inputs `yyyy`, `mm` and `dd` and returns a 'Date` object.
+
+```{r}
+make_date <-  function(yyyy, mm, dd) {
+  out_date <- as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")
+  return(out_date)
+}
+
+make_date(yyyy = 2022, mm = 1, dd = 31)
+```
+
+We will use `make_date` to demonstrate a couple of scenarios where this function can fail.
+
+
+## Scenario 1: Missing Arguments
+
+2 ways to handle missing inputs: 1. early break 2: sensible defaults
+
+## Scenario 2: Invalid Data Type of Arguments
+check if char input is coersible to number?
+check class using inherits
+
+## Scenario 3: Incorrect Data Size
+Check length, unintended behavior of vectorization
+make_date(2021, 1:12, 1) works
+make_date(2021, 1:12, 31) returns NA for invalid dates.
+
+## Scenario 4: Invalid Values of Arguments
+
+implement try-catch
+
+
+
+
+
+
 
 ![As robust as Superman! Source:
 Tumblr](https://64.media.tumblr.com/f6dc1e64c3d63e1f308e46445cafb6ab/tumblr_mo7km0eiRW1qedb29o1_500.gif)
