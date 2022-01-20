@@ -18,7 +18,10 @@ draft: true
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = TRUE, comments = '')
+knitr::knit_hooks$set(error = function(x, options) {
+  paste0("<pre style=\"color: red;\"><code>", x, "</code></pre>")
+})
 ```
 
 ## Introduction
@@ -68,49 +71,101 @@ scenario is when the function doesn't encounter any errors and just
 gives bad results!! Surely, we do not want this unpredictable behavior.
 
 ![Enough Talk, Let's Fight! - Kungfu Panda
-\@imgflip.com](https://i.imgflip.com/28bxz3.jpg){style="float:left;"
-width="300"}
+\@imgflip.com](https://i.imgflip.com/28bxz3.jpg){width="60%"}
 
-## Missing Arguments
+## Our sweet, innocent and naive Function
 
-The most basic check we should perform before running the function logic is to confirm if all the required arguments are available.
-
-Consider the following function. Function `make_date` takes 3 numeric inputs `yyyy`, `mm` and `dd` and returns a 'Date` object.
+Consider the following function `make_date` that takes 3 numeric inputs
+`yyyy`, `mm` and `dd` and returns a single 'Date\` object.
 
 ```{r}
 make_date <-  function(yyyy, mm, dd) {
-  out_date <- as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")
-  return(out_date)
+  as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")
 }
 
-make_date(yyyy = 2022, mm = 1, dd = 31)
+my_date <- make_date(yyyy = 2022, mm = 1, dd = 31)
+my_date
+class(my_date)
 ```
 
-We will use `make_date` to demonstrate a couple of scenarios where this function can fail.
-
+We will use `make_date` to demonstrate a couple of scenarios where this
+function can fail and the methods to safeguard against such scenarios.
 
 ## Scenario 1: Missing Arguments
 
-2 ways to handle missing inputs: 1. early break 2: sensible defaults
+The most basic check we should perform before running the function logic
+is to confirm if all the required arguments are available. Think about
+how your function should behave if one of the arguments, suppose `mm` is
+missing.
+
+```{r error=TRUE}
+make_date(yyyy = 2022, dd = 31)
+```
+
+Note that the error message shown to the user, is triggered, not from
+our function `make_date` but from the internal `paste` function. We do
+not have any control over what error messages are shown when errors
+occur. In this case, we know specifically that this error is due to a
+missing argument.
+
+There are two ways to handle missing arguments:
+
+### Early Exit
+
+If a certain required argument is missing, we can stop the execution of
+the function and show informative error message about which argument is
+missing. Your friends here are the `missing` and `stop` functions. The
+`missing` function checks if the given argument is missing or is set to
+NULL and returns TRUE, else it returns FALSE. The `stop` function stops
+the execution and displays the custom error message we provide. Using
+these functions inside an `if` condition will let us check for missing
+arguments. Let us modify our naive function to stop early when required
+arguments are missing.
+
+```{r error=TRUE}
+make_date <-  function(yyyy, mm, dd) {
+  if (missing(yyyy)) stop("argument `yyyy` is required.")
+  if (missing(mm))   stop("argument `mm` is required.")
+  if (missing(dd))   stop("argument `dd` is required.")
+  
+  as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")
+}
+
+# Calling the function without `mm` argument
+make_date(yyyy = 2022, dd = 31)
+```
+
+Note that here, we add three `if` statements, one for each required
+argument. We must do this if we want to display specific error messages
+for each argument. If we want to display a single error message, we can
+do so by clubbing the `missing` functions inside an `any` which will
+return TRUE if any one of the arguments is missing. However, providing
+clear error messages becomes challenging in this method.
+
+```{r error=TRUE}
+dummy_fun <- function(a, b, c) { 
+  if(any(missing(a), missing(b), missing(c))) {
+    stop("One or more required arguments missing.")
+  }
+  # Do something...
+}
+dummy_fun(a = 1)
+```
+
+2: sensible defaults
 
 ## Scenario 2: Invalid Data Type of Arguments
-check if char input is coersible to number?
-check class using inherits
+
+check if char input is coersible to number? check class using inherits
 
 ## Scenario 3: Incorrect Data Size
-Check length, unintended behavior of vectorization
-make_date(2021, 1:12, 1) works
-make_date(2021, 1:12, 31) returns NA for invalid dates.
 
-## Scenario 4: Invalid Values of Arguments
+Check length, unintended behavior of vectorization make_date(2021, 1:12,
+1) works make_date(2021, 1:12, 31) returns NA for invalid dates.
+
+## Scenario 4: Values of Arguments that result in invalid outputs
 
 implement try-catch
-
-
-
-
-
-
 
 ![As robust as Superman! Source:
 Tumblr](https://64.media.tumblr.com/f6dc1e64c3d63e1f308e46445cafb6ab/tumblr_mo7km0eiRW1qedb29o1_500.gif)

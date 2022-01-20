@@ -1492,6 +1492,14 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <ul>
 <li><a href="#introduction">Introduction</a></li>
 <li><a href="#what-do-we-mean-by-robust-functions">What do we mean by Robust Functions?</a></li>
+<li><a href="#our-sweet-innocent-and-naive-function">Our sweet, innocent and naive Function</a></li>
+<li><a href="#scenario-1-missing-arguments">Scenario 1: Missing Arguments</a>
+<ul>
+<li><a href="#early-exit">Early Exit</a></li>
+</ul></li>
+<li><a href="#scenario-2-invalid-data-type-of-arguments">Scenario 2: Invalid Data Type of Arguments</a></li>
+<li><a href="#scenario-3-incorrect-data-size">Scenario 3: Incorrect Data Size</a></li>
+<li><a href="#scenario-4-values-of-arguments-that-result-in-invalid-outputs">Scenario 4: Values of Arguments that result in invalid outputs</a></li>
 <li><a href="#citations-references">Citations &amp; References</a></li>
 </ul>
 </nav>
@@ -1499,7 +1507,84 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h2 id="introduction">Introduction</h2>
 <p>Functions in R ( or any other programming language in general) allow us to encapsulate some lines of code that we want to run again and again. Functions are the natural outcome of the <strong>DRY</strong> (Don’t Repeat Yourself!) principle. Functions group together a couple of lines of consistent logic making our code modular and consequently, easy to manage. However, when we write functions, we need to ensure that they behave exactly as we want them to and are able to handle whatever we throw at them. By whatever, I mean any and all kinds of inputs. The idea of creating unbreakable code is idealistic. I say this since creating robust functions requires additional code to handle the unwanted inputs and most developers write functions during some one-time analysis. Hence we need to be pragmatic about how much time and effort we spend trying to make our functions robust. Maybe, we need our functions to be just robust enough! All I am saying is, if you are creating functions that will be used by you and only you i.e. if you have absolute control over what inputs would be provided to your functions, then you can forego certain checks and the functions need not be unbreakable. But, if you intend to write functions that will be used by a larger audience, you need to ensure that such functions are able to handle all kinds of innocent and malicious intents.</p>
 <h2 id="what-do-we-mean-by-robust-functions">What do we mean by Robust Functions?</h2>
-<p>You must be familiar with the Garbage-In-Garbage-Out philosophy of Software engineering. We can think of it in terms of functions, that, given garbage or bad input, you get garbage or bad output. For a function to be robust, it must behave in a consistent manner for known and correct inputs, however, more importantly, it mustn’t give us garbage for bad inputs. Rather, it must provide useful output which can be further used to inform the end-user about possible problems in the inputs to drive proper usage. So we shall try to implement Garbage-In-Useful-Info-Out by looking at some ways we can build well-behaved functions.</p>
+<p>You must be familiar with the <em>Garbage-In-Garbage-Out</em> philosophy of Software engineering. We can think of it in terms of functions, that, given garbage or bad input, you get garbage or bad output. For a function to be robust, it must behave in a consistent manner for known and correct inputs, however, more importantly, it mustn’t give us garbage for bad inputs. Rather, it must provide useful output which can be further used to inform the end-user about possible problems in the inputs to drive proper usage. The useful output/s in case of bad inputs would ideally be a combination of clean early exit with some clean-up code and easy-to-understand error messages. So we shall try to implement <em>Garbage-In-Useful-Info-Out</em> by looking at some ways we can build well-behaved and reliable functions.</p>
+<p>Input values passed to a function are more popularly known as arguments or parameters. A robust function must validate the function arguments before proceeding to implement the function logic. If this is not done, then the bad arguments will cause some errors in the logic and display error messages that the end-user may not be familiar with. Worst-case scenario is when the function doesn’t encounter any errors and just gives bad results!! Surely, we do not want this unpredictable behavior.</p>
+<figure>
+<img src="https://i.imgflip.com/28bxz3.jpg" style="width:60.0%" alt="Enough Talk, Let’s Fight! - Kungfu Panda @imgflip.com" /><figcaption aria-hidden="true">Enough Talk, Let’s Fight! - Kungfu Panda @imgflip.com</figcaption>
+</figure>
+<h2 id="our-sweet-innocent-and-naive-function">Our sweet, innocent and naive Function</h2>
+<p>Consider the following function <code>make_date</code> that takes 3 numeric inputs <code>yyyy</code>, <code>mm</code> and <code>dd</code> and returns a single ’Date` object.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='va'>my_date</span> <span class='op'>&lt;-</span> <span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>1</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span>
+<span class='va'>my_date</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;2022-01-31&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>my_date</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;Date&quot;</code></pre>
+</div>
+<p>We will use <code>make_date</code> to demonstrate a couple of scenarios where this function can fail and the methods to safeguard against such scenarios.</p>
+<h2 id="scenario-1-missing-arguments">Scenario 1: Missing Arguments</h2>
+<p>The most basic check we should perform before running the function logic is to confirm if all the required arguments are available. Think about how your function should behave if one of the arguments, suppose <code>mm</code> is missing.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre style="color: red;"><code>Error in paste(yyyy, mm, dd, sep = "-"): argument "mm" is missing, with no default
+</code></pre>
+</div>
+<p>Note that the error message shown to the user, is triggered, not from our function <code>make_date</code> but from the internal <code>paste</code> function. We do not have any control over what error messages are shown when errors occur. In this case, we know specifically that this error is due to a missing argument.</p>
+<p>There are two ways to handle missing arguments:</p>
+<h3 id="early-exit">Early Exit</h3>
+<p>If a certain required argument is missing, we can stop the execution of the function and show informative error message about which argument is missing. Your friends here are the <code>missing</code> and <code>stop</code> functions. The <code>missing</code> function checks if the given argument is missing or is set to NULL and returns TRUE, else it returns FALSE. The <code>stop</code> function stops the execution and displays the custom error message we provide. Using these functions inside an <code>if</code> condition will let us check for missing arguments. Let us modify our naive function to stop early when required arguments are missing.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span>
+  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `mm` is required."</span><span class='op'>)</span>
+  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `dd` is required."</span><span class='op'>)</span>
+  
+  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='co'># Calling the function without `mm` argument</span>
+<span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre style="color: red;"><code>Error in make_date(yyyy = 2022, dd = 31): argument `mm` is required.
+</code></pre>
+</div>
+<p>Note that here, we add three <code>if</code> statements, one for each required argument. We must do this if we want to display specific error messages for each argument. If we want to display a single error message, we can do so by clubbing the <code>missing</code> functions inside an <code>any</code> which will return TRUE if any one of the arguments is missing. However, providing clear error messages becomes challenging in this method.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dummy_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span>, <span class='va'>c</span><span class='op'>)</span> <span class='op'>{</span> 
+  <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/any.html'>any</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"One or more required arguments missing."</span><span class='op'>)</span>
+  <span class='op'>}</span>
+  <span class='co'># Do something...</span>
+<span class='op'>}</span>
+<span class='fu'>dummy_fun</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre style="color: red;"><code>Error in dummy_fun(a = 1): One or more required arguments missing.
+</code></pre>
+</div>
+<p>2: sensible defaults</p>
+<h2 id="scenario-2-invalid-data-type-of-arguments">Scenario 2: Invalid Data Type of Arguments</h2>
+<p>check if char input is coersible to number? check class using inherits</p>
+<h2 id="scenario-3-incorrect-data-size">Scenario 3: Incorrect Data Size</h2>
+<p>Check length, unintended behavior of vectorization make_date(2021, 1:12, 1) works make_date(2021, 1:12, 31) returns NA for invalid dates.</p>
+<h2 id="scenario-4-values-of-arguments-that-result-in-invalid-outputs">Scenario 4: Values of Arguments that result in invalid outputs</h2>
+<p>implement try-catch</p>
 <figure>
 <img src="https://64.media.tumblr.com/f6dc1e64c3d63e1f308e46445cafb6ab/tumblr_mo7km0eiRW1qedb29o1_500.gif" alt="As robust as Superman! Source: Tumblr" /><figcaption aria-hidden="true">As robust as Superman! Source: Tumblr</figcaption>
 </figure>
@@ -1508,7 +1593,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <li><a href="https://www.lexjansen.com/phuse/2014/ts/TS03.pdf">Techniques for writing robust R programs - LexJansen</a></li>
 <li><a href="https://bookdown.org/rdpeng/rprogdatascience/functions.html">R Programming for Data Science</a></li>
 </ul>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
