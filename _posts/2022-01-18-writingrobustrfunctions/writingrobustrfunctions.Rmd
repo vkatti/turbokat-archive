@@ -15,6 +15,8 @@ output:
     self_contained: false
     toc: true
 draft: true
+editor_options: 
+  chunk_output_type: inline
 ---
 
 ```{r setup, include=FALSE}
@@ -196,11 +198,35 @@ make_date(yyyy = 2022) # here, only `yyyy` is the required argument.
 
 ```
 
-There are a few concerns about using warnings. Some are listed here in
-this article from RBloggers [A Warning About
+There are a few concerns about using warnings instead of error messages.
+Some are listed here in this article from RBloggers [A Warning About
 `warning`](https://www.r-bloggers.com/2012/05/a-warning-about-warning/).
 
 ## Scenario 2: Invalid Data Type of Arguments
+
+We have defined `make_date` to accept 3 numeric arguments i.e. all 3
+must be numbers. What would happen if someone tried to call `make_date`
+with character or boolean inputs?
+
+```{r}
+make_date(yyyy = "2022", mm = "5", dd = "20") # works!!
+```
+
+In this case, the function works because the arguments when combined
+into a single string using `paste` matches the `format` argument of the
+`as.Date` function in the main logic of `make_date` which is
+`as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")`
+
+```{r}
+make_date(yyyy = "2022", mm = "May", dd = "1") # works but shows NA !!!
+```
+
+In this case, all the arguments pass the checks but the output is `NA`
+since we pass `2022-May-1` to `as.Date` which doesn't match the
+`format = '%Y-%m-%d'`.
+
+We can see that the function works with character inputs. In the first
+instance above, it gives correct result but gives `NA` for the second.
 
 check if char input is coersible to number? check class using inherits
 
