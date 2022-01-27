@@ -226,10 +226,51 @@ since we pass `2022-May-1` to `as.Date` which doesn't match the
 `format = '%Y-%m-%d'`.
 
 How do we check if the values provided to the arguments are numbers or
-number-like? By number-like, I mean, will coercing the value using
-`as.numeric` give us a numeric value or `NA` ? You guessed it right, we
-will pass the values through `as.numeric` and check if the output is
-`NA` or not. Modifying our `make_date` function to include data type
+number-like? If the values are numbers, we let them pass. But if they
+are non-numeric, we must check if they can be converted to numbers i.e.
+we must check if they are number-like. By number-like, I mean, will
+coercing the value using `as.numeric` give us a numeric value or `NA` ?
+You guessed it right, we will pass the values through `as.numeric` and
+check if the output is `NA` or not.
+
+What are the various data types in R that are not `numeric` but can look
+like numbers? We have `character`, `factor` and `boolean` data types
+which can behave like numbers sometimes. Let's see a few scenarios.
+
+### Character arguments
+
+```{r}
+Year <- c("2022", "TwentyTwo")
+Year_num <- as.numeric(Year) # this should show a warning about NAs introduced by coercion
+Year_num # must show the number 2022 without quotes and one NA
+```
+
+As you can see in above example, when passed through `as.numeric`, the
+value "2022" gets converted to the number 2022 but the value "TwentyTwo"
+does not. Hence we can say "2022" is number-like but "TwentyTwo" is not.
+
+### Factor arguments
+
+```{r}
+Year <- factor(c("2022","2021","TwentyTwo"))
+as.numeric(Year)
+
+YearX <- factor(c("2022", "X"))
+as.numeric(YearX)
+
+YearY <- factor("2022")
+as.numeric(YearY)
+```
+
+As you can see from above examples, `factor` do get converted to numeric
+but do not give the right results. So we can safely say that factors are
+not number-like.
+
+### Dataypes check continued...
+
+From the above examples, we can conclude that `numeric` values and
+number-like `character` values are the only valid data types that should
+be allowed. Modifying our `make_date` function to include data type
 checks.
 
 ```{r error=TRUE}
@@ -240,9 +281,22 @@ make_date <-  function(yyyy, mm = 1, dd = 1) {
   if (missing(dd)) warning("argument `dd` is missing. Using default value dd = 1 instead")
   
   # Check data types
-  if (is.na(as.numeric(yyyy))) stop("argument `yyyy` must be numeric.")
-  if (is.na(as.numeric(mm)))   stop("argument `mm` must be numeric.")
-  if (is.na(as.numeric(dd)))   stop("argument `dd` must be numeric.")
+  if (!inherits(yyyy, c("numeric","character"))) {
+    stop("argument `yyyy` must be numeric")
+  } else if (inherits(yyyy, "character") & is.na(as.numeric(yyyy))) {
+    stop("argument `yyyy` must be numeric")
+  }
+  if (!inherits(mm, c("numeric","character"))) {
+    stop("argument `mm` must be numeric")
+  } else if (inherits(mm, "character") & is.na(as.numeric(mm))) {
+    stop("argument `mm` must be numeric")
+  }
+  if (!inherits(dd, c("numeric","character"))) {
+    stop("argument `dd` must be numeric")
+  } else if (inherits(dd, "character") & is.na(as.numeric(dd))) {
+    stop("argument `dd` must be numeric")
+  }
+  
   
   # main logic
   as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")
@@ -250,21 +304,29 @@ make_date <-  function(yyyy, mm = 1, dd = 1) {
 
 # Calling the function with new datatype checks
 make_date(yyyy = "2022", mm = "May", dd = "1")
-make_date(yyyy = "2022", mm = "5", dd = "1")
+make_date(yyyy = "2022", mm = factor("5"), dd = "1")
 ```
 
-A special scenario here is when input type is `factor` or `boolean`. Let's look at how our function behaves with `factor` data type.
+A special scenario here is when input type is `factor` or `boolean`.
+Let's look at how our function behaves with `factor` data type.
 
 ```{r}
 Year <- factor("2022")
-Month <- factor("12")
+Month <- factor(12)
 Day <- factor("31")
 
 make_date(yyyy = Year, mm = Month, dd = Day)
 
 ```
 
+The function works with `factor` data type because the `factor` function
+converts the input into `character` type internally.
 
+```{r}
+factor("2022")
+paste(factor("2022"))
+as.numeric(factor("2022"))
+```
 
 One of the most interesting features of R is vectorization! Due to this
 feature, our function `make_date` behaves in interesting ways. In some
@@ -283,12 +345,15 @@ boolean vector of length 12.
 mm <- 1:12
 is.na(as.numeric(mm))
 ```
-What do we do if we want `make_date` to return just one date? 
 
+What do we do if we want `make_date` to return just one date?
 
 ## Scenario 3: Incorrect Data Size
 
-To ensure `make_date` gives you just one date, we must ensure that the arguments have just value and is not a vector of multiple values i.e. `length(arg)==1`. Let's further add a few checks for the data size of the arguments and rearrange the checks.
+To ensure `make_date` gives you just one date, we must ensure that the
+arguments have just value and is not a vector of multiple values i.e.
+`length(arg)==1`. Let's further add a few checks for the data size of
+the arguments and rearrange the checks.
 
 ```{r error=TRUE}
 make_date <-  function(yyyy, mm = 1, dd = 1) {
@@ -319,7 +384,8 @@ make_date(yyyy = 2022, mm = 1, dd = c("1","2"))
 
 ## A little detour...
 
-So far we checked for missing arguments, arguments with bad data types and for arguments with incorrect sizes.
+So far we checked for missing arguments, arguments with bad data types
+and for arguments with incorrect sizes.
 
 ## Scenario 4: Values of Arguments that result in invalid outputs
 
