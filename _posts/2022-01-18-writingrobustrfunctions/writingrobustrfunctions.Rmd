@@ -307,6 +307,47 @@ make_date(yyyy = "2022", mm = "May", dd = "1")
 make_date(yyyy = "2022", mm = factor("5"), dd = "1")
 ```
 
+Notice that the datatype check is lengthy and similar for all 3
+arguments. We can apply **DRY** principle again and encapsulate that
+code into a small function `is_numberlike` which will return `TRUE` or
+`FALSE` .
+
+```{r}
+# This function check if value is number or number-like.
+is_numberlike <- function(x){
+  if (!inherits(x, c("numeric","character"))) {
+    return(FALSE) # Early Exit 1 if value is neither numeric nor character
+  } else if (inherits(x, "character") & is.na(as.numeric(x))) {
+    return(FALSE) # Early Exit 2 if character value is not number-like.
+  }
+  return(TRUE)
+}
+```
+
+Thus our `make_date` function with data types check will look as below.
+
+```{r error=TRUE}
+make_date <-  function(yyyy, mm = 1, dd = 1) {
+  # check missing arguments
+  if (missing(yyyy))  stop("argument `yyyy` is required.") 
+  if (missing(mm)) warning("argument `mm` is missing. Using default value mm = 1 instead") 
+  if (missing(dd)) warning("argument `dd` is missing. Using default value dd = 1 instead")
+  
+  # Check data types
+  if (!is_numberlike(yyyy)) stop("argument `yyyy` must be numeric")
+  if (!is_numberlike(mm))   stop("argument `mm` must be numeric")
+  if (!is_numberlike(dd))   stop("argument `dd` must be numeric")
+  
+  # main logic
+  as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")
+}
+
+# Calling the function with new datatype checks
+make_date(yyyy = "2022", mm = "May", dd = 1)
+make_date(yyyy = "2022", mm = factor("5"), dd = "1")
+
+```
+
 A special scenario here is when input type is `factor` or `boolean`.
 Let's look at how our function behaves with `factor` data type.
 
