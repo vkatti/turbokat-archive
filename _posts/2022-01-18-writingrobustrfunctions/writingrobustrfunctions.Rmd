@@ -117,7 +117,7 @@ missing argument.
 
 There are two ways to handle missing arguments:
 
-### Early Exit
+### 1.1 Early Exit
 
 If a certain required argument is missing, we can stop the execution of
 the function and show informative error message about which argument is
@@ -162,7 +162,7 @@ dummy_fun <- function(a, b, c) {
 dummy_fun(a = 1)
 ```
 
-### Sensible defaults with warnings
+### 1.2 Sensible defaults with warnings
 
 In some cases, we may need the function to use some sensible default
 value for the required arguments and continue execution. Here, we
@@ -185,7 +185,7 @@ function. Let's modify the function further to provide defaults for the
 ```{r warning=TRUE}
 make_date <-  function(yyyy, mm = 1, dd = 1) {
   # check missing arguments
-  if (missing(yyyy)) stop("argument `yyyy` is required.") 
+  if (missing(yyyy))  stop("argument `yyyy` is required.") 
   if (missing(mm)) warning("argument `mm` is missing. Using default value mm = 1 instead") 
   if (missing(dd)) warning("argument `dd` is missing. Using default value dd = 1 instead")
   
@@ -212,9 +212,9 @@ with character or boolean inputs?
 make_date(yyyy = "2022", mm = "5", dd = "20") # works!!
 ```
 
-In this case, the function works because the arguments when combined
-into a single string using `paste` matches the `format` argument of the
-`as.Date` function in the main logic of `make_date` which is
+In this case, the function works because when the arguments are combined
+into a single string using `paste` , it matches the `format` argument of
+the `as.Date` function in the main logic of `make_date` which is
 `as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")`
 
 ```{r}
@@ -225,15 +225,101 @@ In this case, all the arguments pass the checks but the output is `NA`
 since we pass `2022-May-1` to `as.Date` which doesn't match the
 `format = '%Y-%m-%d'`.
 
-We can see that the function works with character inputs. In the first
-instance above, it gives correct result but gives `NA` for the second.
+How do we check if the values provided to the arguments are numbers or
+number-like? By number-like, I mean, will coercing the value using
+`as.numeric` give us a numeric value or `NA` ? You guessed it right, we
+will pass the values through `as.numeric` and check if the output is
+`NA` or not. Modifying our `make_date` function to include data type
+checks.
 
-check if char input is coersible to number? check class using inherits
+```{r error=TRUE}
+make_date <-  function(yyyy, mm = 1, dd = 1) {
+  # check missing arguments
+  if (missing(yyyy))  stop("argument `yyyy` is required.") 
+  if (missing(mm)) warning("argument `mm` is missing. Using default value mm = 1 instead") 
+  if (missing(dd)) warning("argument `dd` is missing. Using default value dd = 1 instead")
+  
+  # Check data types
+  if (is.na(as.numeric(yyyy))) stop("argument `yyyy` must be numeric.")
+  if (is.na(as.numeric(mm)))   stop("argument `mm` must be numeric.")
+  if (is.na(as.numeric(dd)))   stop("argument `dd` must be numeric.")
+  
+  # main logic
+  as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")
+}
+
+# Calling the function with new datatype checks
+make_date(yyyy = "2022", mm = "May", dd = "1")
+make_date(yyyy = "2022", mm = "5", dd = "1")
+```
+
+A special scenario here is when input type is `factor` or `boolean`. Let's look at how our function behaves with `factor` data type.
+
+```{r}
+Year <- factor("2022")
+Month <- factor("12")
+Day <- factor("31")
+
+make_date(yyyy = Year, mm = Month, dd = Day)
+
+```
+
+
+
+One of the most interesting features of R is vectorization! Due to this
+feature, our function `make_date` behaves in interesting ways. In some
+cases, it is desirable and sometimes it is not.
+
+```{r warning=TRUE}
+make_date(yyyy = 2022, mm = 1:12, dd = 1)
+```
+
+Note the above warnings. These warnings appear because the `if`
+statement checks if the condition provided results in a single `TRUE` or
+`FALSE`. However, the output of the check `is.na(as.numeric(mm))` is a
+boolean vector of length 12.
+
+```{r}
+mm <- 1:12
+is.na(as.numeric(mm))
+```
+What do we do if we want `make_date` to return just one date? 
+
 
 ## Scenario 3: Incorrect Data Size
 
-Check length, unintended behavior of vectorization make_date(2021, 1:12,
-1) works make_date(2021, 1:12, 31) returns NA for invalid dates.
+To ensure `make_date` gives you just one date, we must ensure that the arguments have just value and is not a vector of multiple values i.e. `length(arg)==1`. Let's further add a few checks for the data size of the arguments and rearrange the checks.
+
+```{r error=TRUE}
+make_date <-  function(yyyy, mm = 1, dd = 1) {
+  # check missing arguments
+  if (missing(yyyy))  stop("argument `yyyy` is required.") 
+  if (missing(mm)) warning("argument `mm` is missing. Using default value mm = 1 instead") 
+  if (missing(dd)) warning("argument `dd` is missing. Using default value dd = 1 instead")
+  
+  # Check argument lengths
+  if (length(yyyy)!=1) stop(paste0("Length of argument `yyyy` is ", length(yyyy),". Must be only 1."))
+  if (length(mm)!=1)   stop(paste0("Length of argument `mm` is ", length(mm),". Must be only 1."))
+  if (length(dd)!=1)   stop(paste0("Length of argument `dd` is ", length(dd),". Must be only 1."))
+  
+  # Check data types
+  if (is.na(as.numeric(yyyy))) stop("argument `yyyy` must be numeric.")
+  if (is.na(as.numeric(mm)))   stop("argument `mm` must be numeric.")
+  if (is.na(as.numeric(dd)))   stop("argument `dd` must be numeric.")
+  
+  # main logic
+  as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")
+}
+
+# Calling function with new data size checks
+make_date(yyyy = 2022, mm = 1:12, dd = "01")
+make_date(yyyy = c("2021","2022"), mm = "1", dd = 1)
+make_date(yyyy = 2022, mm = 1, dd = c("1","2"))
+```
+
+## A little detour...
+
+So far we checked for missing arguments, arguments with bad data types and for arguments with incorrect sizes.
 
 ## Scenario 4: Values of Arguments that result in invalid outputs
 

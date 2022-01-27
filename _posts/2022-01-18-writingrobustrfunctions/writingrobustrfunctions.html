@@ -1495,8 +1495,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <li><a href="#our-sweet-innocent-and-naive-function">Our sweet, innocent and naive Function</a></li>
 <li><a href="#scenario-1-missing-arguments">Scenario 1: Missing Arguments</a>
 <ul>
-<li><a href="#early-exit">Early Exit</a></li>
-<li><a href="#sensible-defaults-with-warnings">Sensible defaults with warnings</a></li>
+<li><a href="#early-exit">1.1 Early Exit</a></li>
+<li><a href="#sensible-defaults-with-warnings">1.2 Sensible defaults with warnings</a></li>
 </ul></li>
 <li><a href="#scenario-2-invalid-data-type-of-arguments">Scenario 2: Invalid Data Type of Arguments</a></li>
 <li><a href="#scenario-3-incorrect-data-size">Scenario 3: Incorrect Data Size</a></li>
@@ -1547,7 +1547,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <p>Note that the error message shown to the user, is triggered, not from our function <code>make_date</code> but from the internal <code>paste</code> function. We do not have any control over what error messages are shown when errors occur. In this case, we know specifically that this error is due to a missing argument.</p>
 <p>There are two ways to handle missing arguments:</p>
-<h3 id="early-exit">Early Exit</h3>
+<h3 id="early-exit">1.1 Early Exit</h3>
 <p>If a certain required argument is missing, we can stop the execution of the function and show informative error message about which argument is missing. Your friends here are the <code>missing</code> and <code>stop</code> functions. The <code>missing</code> function checks if the given argument is missing or is set to NULL and returns TRUE, else it returns FALSE. The <code>stop</code> function stops the execution and displays the custom error message we provide. Using these functions inside an <code>if</code> condition will let us check for missing arguments. Let us modify our naive function to stop early when required arguments are missing.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -1583,7 +1583,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <pre style="color: red;"><code>Error in dummy_fun(a = 1): One or more required arguments missing.
 </code></pre>
 </div>
-<h3 id="sensible-defaults-with-warnings">Sensible defaults with warnings</h3>
+<h3 id="sensible-defaults-with-warnings">1.2 Sensible defaults with warnings</h3>
 <p>In some cases, we may need the function to use some sensible default value for the required arguments and continue execution. Here, we display a warning message instead of an error message. This is required when the argument value is either considered to be obvious or the argument is not necessarily the most important one and is used only in extreme customization. <strong>Providing default values to arguments makes them optional arguments</strong>. An example of default argument values can be seen in the <code>paste</code> function we have used earlier. The default value of the separator argument <code>sep</code> is a single whitespace character.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -1598,7 +1598,7 @@ NULL</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>dd</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='co'># check missing arguments</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> 
+  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span>  <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> 
   <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `mm` is missing. Using default value mm = 1 instead"</span><span class='op'>)</span> 
   <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `dd` is missing. Using default value dd = 1 instead"</span><span class='op'>)</span>
   
@@ -1628,7 +1628,7 @@ default value dd = 1 instead
 </div>
 <pre><code>[1] &quot;2022-05-20&quot;</code></pre>
 </div>
-<p>In this case, the function works because the arguments when combined into a single string using <code>paste</code> matches the <code>format</code> argument of the <code>as.Date</code> function in the main logic of <code>make_date</code> which is <code>as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")</code></p>
+<p>In this case, the function works because when the arguments are combined into a single string using <code>paste</code> , it matches the <code>format</code> argument of the <code>as.Date</code> function in the main logic of <code>make_date</code> which is <code>as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")</code></p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='st'>"2022"</span>, mm <span class='op'>=</span> <span class='st'>"May"</span>, dd <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span> <span class='co'># works but shows NA !!!</span>
@@ -1637,10 +1637,63 @@ default value dd = 1 instead
 <pre><code>[1] NA</code></pre>
 </div>
 <p>In this case, all the arguments pass the checks but the output is <code>NA</code> since we pass <code>2022-May-1</code> to <code>as.Date</code> which doesn’t match the <code>format = '%Y-%m-%d'</code>.</p>
-<p>We can see that the function works with character inputs. In the first instance above, it gives correct result but gives <code>NA</code> for the second.</p>
-<p>check if char input is coersible to number? check class using inherits</p>
+<p>How do we check if the values provided to the arguments are numbers or number-like? By number-like, I mean, will coercing the value using <code>as.numeric</code> give us a numeric value or <code>NA</code> ? You guessed it right, we will pass the values through <code>as.numeric</code> and check if the output is <code>NA</code> or not. Modifying our <code>make_date</code> function to include data type checks.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>dd</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='co'># check missing arguments</span>
+  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span>  <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> 
+  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `mm` is missing. Using default value mm = 1 instead"</span><span class='op'>)</span> 
+  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `dd` is missing. Using default value dd = 1 instead"</span><span class='op'>)</span>
+  
+  <span class='co'># Check data types</span>
+  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` must be numeric."</span><span class='op'>)</span>
+  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `mm` must be numeric."</span><span class='op'>)</span>
+  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `dd` must be numeric."</span><span class='op'>)</span>
+  
+  <span class='co'># main logic</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='co'># Calling the function with new datatype checks</span>
+<span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='st'>"2022"</span>, mm <span class='op'>=</span> <span class='st'>"May"</span>, dd <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre style="color: red;"><code>Error in make_date(yyyy = "2022", mm = "May", dd = "1"): argument `mm` must be numeric.
+</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='st'>"2022"</span>, mm <span class='op'>=</span> <span class='st'>"5"</span>, dd <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>[1] &quot;2022-05-01&quot;</code></pre>
+</div>
+<p>One of the most interesting features of R is vectorization! Due to this feature, our function <code>make_date</code> behaves in interesting ways. In some cases, it is desirable and sometimes it is not.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>, dd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre style="color: orange;"><code>Warning in if (is.na(as.numeric(mm))) stop("argument `mm` must be
+numeric."): the condition has length > 1 and only the first element
+will be used
+</code></pre>
+<pre><code> [1] &quot;2022-01-01&quot; &quot;2022-02-01&quot; &quot;2022-03-01&quot; &quot;2022-04-01&quot; &quot;2022-05-01&quot;
+ [6] &quot;2022-06-01&quot; &quot;2022-07-01&quot; &quot;2022-08-01&quot; &quot;2022-09-01&quot; &quot;2022-10-01&quot;
+[11] &quot;2022-11-01&quot; &quot;2022-12-01&quot;</code></pre>
+</div>
+<p>Note the above warnings. These warnings appear because the <code>if</code> statement checks if the condition provided results in a single <code>TRUE</code> or <code>FALSE</code>. However, the output of the check <code>is.na(as.numeric(mm))</code> is a boolean vector of length 12.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mm</span> <span class='op'>&lt;-</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>
+<span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code> [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[12] FALSE</code></pre>
+</div>
+<p>What do we do if we want <code>make_date</code> to return just one date?</p>
 <h2 id="scenario-3-incorrect-data-size">Scenario 3: Incorrect Data Size</h2>
-<p>Check length, unintended behavior of vectorization make_date(2021, 1:12, 1) works make_date(2021, 1:12, 31) returns NA for invalid dates.</p>
+<p>To ensure <code>make_date</code> gives you just one date, we must restrict the length of the arguments to have just 1 values. Check length, unintended behavior of vectorization make_date(2021, 1:12, 1) works make_date(2021, 1:12, 31) returns NA for invalid dates.</p>
 <h2 id="scenario-4-values-of-arguments-that-result-in-invalid-outputs">Scenario 4: Values of Arguments that result in invalid outputs</h2>
 <p>implement try-catch</p>
 <figure>
@@ -1652,7 +1705,7 @@ default value dd = 1 instead
 <li><a href="https://bookdown.org/rdpeng/rprogdatascience/functions.html">R Programming for Data Science</a></li>
 <li><a href="https://www.r-bloggers.com/2012/05/a-warning-about-warning/">A Warning About warning</a></li>
 </ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
