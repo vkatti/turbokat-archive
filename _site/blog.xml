@@ -7,7 +7,18 @@
     <description>Welcome to Vishal Katti's website
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Wed, 29 Dec 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 18 Jan 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Writing Robust R Functions</title>
+      <dc:creator>Vishal Katti</dc:creator>
+      <link>https://vishalkatti.com/posts/2022-01-18-writingrobustrfunctions</link>
+      <description>Some designs to validate function arguments.</description>
+      <category>Rstats</category>
+      <category>functions</category>
+      <guid>https://vishalkatti.com/posts/2022-01-18-writingrobustrfunctions</guid>
+      <pubDate>Tue, 18 Jan 2022 00:00:00 +0000</pubDate>
+      <media:content url="https://64.media.tumblr.com/f6dc1e64c3d63e1f308e46445cafb6ab/tumblr_mo7km0eiRW1qedb29o1_500.gif" medium="image" type="image/gif"/>
+    </item>
     <item>
       <title>Unholy Trinity of R, Excel VBA and Powerpoint - Part 2 of 2</title>
       <dc:creator>Vishal Katti</dc:creator>
