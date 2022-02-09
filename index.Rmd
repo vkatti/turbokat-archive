@@ -1,6 +1,6 @@
 ---
 title: "Vishal Katti"
-image: "images/profile.jpg"
+image: "images/profile-pic-new1.png"
 description: |
   This site, just like me, is under development!
 site: distill::distill_website
