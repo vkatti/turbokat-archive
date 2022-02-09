@@ -2234,7 +2234,7 @@ d-article pre code {
     margin-bottom: 24px;
     position: relative;
     max-width: 500px;
-    filter: drop-shadow(4px 4px 4px black);
+    filter: drop-shadow(4px 4px 4px #5F719E);
     /*box-shadow: 4px 4px 4px 4px rgb(0 0 0 / 20%);*/
 }</style>
 <style type="text/css">
@@ -2392,8 +2392,8 @@ d-appendix d-footnote-list a.footnote-backlink {
   color: var(--hover-color, white);
 }</style>
 <!--/radix_placeholder_distill-->
-  <script src="../../site_libs/header-attrs-2.9/header-attrs.js"></script>
-  <script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
+  <script src="../../site_libs/header-attrs-2.11/header-attrs.js"></script>
+  <script src="../../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <script src="../../site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="../../site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="../../site_libs/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -2548,12 +2548,6 @@ d-appendix d-footnote-list a.footnote-backlink {
 </ul>
 </nav>
 </div>
-<style>
-d-article div.sourceCode code,
-d-article pre code {
-    font-family: "Fira Code", monospace;
-}
-</style>
 <h1 id="introduction">Introduction</h1>
 <p>The purpose of this document is to act as a quick guide for myself and others to understand how to use <code>dplyr</code> effectively to create dynamic functions. The general assumption is that the reader is familiar with the <code>{dplyr}</code> package and how to use it for data wrangling.</p>
 <p>In this document, we will explore how to create functions using the popular <code>dplyr</code> verbs like <code>select</code>, <code>filter</code>, <code>mutate</code>, <code>arrange</code> and finally <code>group_by</code> with <code>summarise</code>.</p>
@@ -2587,7 +2581,7 @@ $ date      &lt;dbl&gt; 2000.000, 2000.083, 2000.167, 2000.250, 2000.333, ~</cod
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>select_raw</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>var</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='op'>{</span><span class='op'>{</span><span class='va'>var</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span> <span class='op'>%&gt;%</span>     <span class='co'># embrace of curly-curly {{}} brackets</span>
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='op'>{</span><span class='op'>{</span><span class='va'>var</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>     <span class='co'># embrace of curly-curly {{}} brackets</span>
     <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>                                   <span class='co'># to limit the number of output rows in this example.</span>
 <span class='op'>}</span>
 <span class='fu'>select_raw</span><span class='op'>(</span><span class='va'>txhousing</span>, <span class='va'>sales</span><span class='op'>)</span>                 <span class='co'># pass single raw name</span>
@@ -2622,7 +2616,7 @@ $ date      &lt;dbl&gt; 2000.000, 2000.083, 2000.167, 2000.250, 2000.333, ~</cod
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>my_select</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
     <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>}</span>
 
@@ -2644,7 +2638,7 @@ $ date      &lt;dbl&gt; 2000.000, 2000.083, 2000.167, 2000.250, 2000.333, ~</cod
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>my_select_char</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>cols</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/all_of.html'>all_of</a></span><span class='op'>(</span><span class='va'>cols</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/all_of.html'>all_of</a></span><span class='op'>(</span><span class='va'>cols</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
     <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>}</span>
 
@@ -2827,12 +2821,12 @@ x Input `..1` must be a logical vector, not a character.
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mutate_raw</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>new_col_raw</span>, <span class='va'>old_col_raw</span>, <span class='va'>num</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span> 
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='op'>{</span><span class='op'>{</span><span class='va'>new_col_raw</span><span class='op'>}</span><span class='op'>}</span> <span class='op'>:=</span> <span class='op'>{</span><span class='op'>{</span><span class='va'>old_col_raw</span><span class='op'>}</span><span class='op'>}</span><span class='op'>/</span><span class='va'>num</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='op'>{</span><span class='op'>{</span><span class='va'>new_col_raw</span><span class='op'>}</span><span class='op'>}</span> <span class='op'>:=</span> <span class='op'>{</span><span class='op'>{</span><span class='va'>old_col_raw</span><span class='op'>}</span><span class='op'>}</span><span class='op'>/</span><span class='va'>num</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
     <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>}</span>
 
-<span class='va'>txhousing</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>select</span><span class='op'>(</span><span class='va'>city</span>, <span class='va'>year</span>, <span class='va'>month</span>, <span class='va'>volume</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+<span class='va'>txhousing</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>city</span>, <span class='va'>year</span>, <span class='va'>month</span>, <span class='va'>volume</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
   <span class='fu'>mutate_raw</span><span class='op'>(</span><span class='va'>vol_in_millions</span>, <span class='va'>volume</span>, <span class='fl'>1E6</span><span class='op'>)</span> <span class='co'># pass raw column names w/o quotes</span>
 </code></pre>
 </div>
@@ -2850,12 +2844,12 @@ x Input `..1` must be a logical vector, not a character.
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mutate_text</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>new_col_str</span>, <span class='va'>old_col_str</span>, <span class='va'>num</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span> 
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='op'>{</span><span class='op'>{</span><span class='va'>new_col_str</span><span class='op'>}</span><span class='op'>}</span> <span class='op'>:=</span> <span class='va'>df</span><span class='op'>[[</span><span class='va'>old_col_str</span><span class='op'>]</span><span class='op'>]</span><span class='op'>/</span><span class='va'>num</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='op'>{</span><span class='op'>{</span><span class='va'>new_col_str</span><span class='op'>}</span><span class='op'>}</span> <span class='op'>:=</span> <span class='va'>df</span><span class='op'>[[</span><span class='va'>old_col_str</span><span class='op'>]</span><span class='op'>]</span><span class='op'>/</span><span class='va'>num</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
     <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>}</span>
 
-<span class='va'>txhousing</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>select</span><span class='op'>(</span><span class='va'>city</span>, <span class='va'>year</span>, <span class='va'>month</span>, <span class='va'>volume</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+<span class='va'>txhousing</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>city</span>, <span class='va'>year</span>, <span class='va'>month</span>, <span class='va'>volume</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'>mutate_text</span><span class='op'>(</span><span class='st'>"vol_in_millions"</span>, <span class='st'>"volume"</span>, <span class='fl'>1E6</span><span class='op'>)</span> <span class='co'># pass column names as strings</span>
 </code></pre>
 </div>
@@ -2874,15 +2868,15 @@ x Input `..1` must be a logical vector, not a character.
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mutate_var</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>new_col_var</span>, <span class='va'>old_col_var</span>, <span class='va'>num</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='st'>"{new_col_var}"</span> <span class='op'>:=</span> <span class='va'>df</span><span class='op'>[[</span><span class='va'>old_col_var</span><span class='op'>]</span><span class='op'>]</span><span class='op'>/</span><span class='va'>num</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='st'>"{new_col_var}"</span> <span class='op'>:=</span> <span class='va'>df</span><span class='op'>[[</span><span class='va'>old_col_var</span><span class='op'>]</span><span class='op'>]</span><span class='op'>/</span><span class='va'>num</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
     <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>}</span>
 
 <span class='va'>new_var</span> <span class='op'>&lt;-</span> <span class='st'>"vol_in_millions"</span>
 <span class='va'>old_var</span> <span class='op'>&lt;-</span> <span class='st'>"volume"</span>
 
-<span class='va'>txhousing</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>select</span><span class='op'>(</span><span class='va'>city</span>, <span class='va'>year</span>, <span class='va'>month</span>, <span class='va'>volume</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+<span class='va'>txhousing</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>city</span>, <span class='va'>year</span>, <span class='va'>month</span>, <span class='va'>volume</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>
   <span class='fu'>mutate_var</span><span class='op'>(</span><span class='va'>new_var</span>, <span class='va'>old_var</span>, <span class='fl'>1E6</span><span class='op'>)</span>  <span class='co'># pass column names as variables</span>
 </code></pre>
 </div>
@@ -2902,7 +2896,7 @@ x Input `..1` must be a logical vector, not a character.
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>arrange_raw</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>var</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='op'>{</span><span class='op'>{</span><span class='va'>var</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span> <span class='op'>%&gt;%</span>    <span class='co'># embrace of curly-curly {{}} brackets</span>
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='op'>{</span><span class='op'>{</span><span class='va'>var</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span>    <span class='co'># embrace of curly-curly {{}} brackets</span>
     <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>}</span>
 
@@ -2919,7 +2913,7 @@ x Input `..1` must be a logical vector, not a character.
 5 San Marcos   2011    12    10 1.56e6 140000      148       8   2012.
 6 San Marcos   2014    11    10 1.51e6 146700       96       4   2015.</code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>arrange_raw</span><span class='op'>(</span><span class='va'>txhousing</span>, <span class='fu'>desc</span><span class='op'>(</span><span class='va'>sales</span><span class='op'>)</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>arrange_raw</span><span class='op'>(</span><span class='va'>txhousing</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span><span class='op'>(</span><span class='va'>sales</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 <pre><code># A tibble: 6 x 9
@@ -2949,7 +2943,7 @@ i `..1` must be size 8602 or 1, not 17204.
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>arrange_raw_multiple</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
     <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
 <span class='op'>}</span>
 
@@ -2966,7 +2960,7 @@ i `..1` must be size 8602 or 1, not 17204.
 5 Abilene  2010     1    73 9130783 112200      868       6.4  2010
 6 Abilene  2001     1    75 5730000  64500      779       6.8  2001</code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>arrange_raw_multiple</span><span class='op'>(</span><span class='va'>txhousing</span>, <span class='va'>city</span>, <span class='fu'>desc</span><span class='op'>(</span><span class='va'>sales</span><span class='op'>)</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>arrange_raw_multiple</span><span class='op'>(</span><span class='va'>txhousing</span>, <span class='va'>city</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span><span class='op'>(</span><span class='va'>sales</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
 <pre><code># A tibble: 6 x 9
@@ -2984,9 +2978,9 @@ i `..1` must be size 8602 or 1, not 17204.
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>arrange_str</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>var</span>, <span class='va'>.desc</span> <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='kw'>if</span> <span class='op'>(</span><span class='va'>.desc</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='fu'>desc</span><span class='op'>(</span><span class='va'>df</span><span class='op'>[[</span><span class='va'>var</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>[[</span><span class='va'>var</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
   <span class='op'>}</span> <span class='kw'>else</span> <span class='op'>{</span>
-    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='va'>df</span><span class='op'>[[</span><span class='va'>var</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='va'>df</span><span class='op'>[[</span><span class='va'>var</span><span class='op'>]</span><span class='op'>]</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
   <span class='op'>}</span>
 <span class='op'>}</span>
 
@@ -3021,9 +3015,9 @@ i `..1` must be size 8602 or 1, not 17204.
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>arrange_str_multiple</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>var</span>, <span class='va'>desc</span> <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='kw'>if</span> <span class='op'>(</span><span class='va'>desc</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='fu'>desc</span><span class='op'>(</span><span class='va'>df</span><span class='op'>[</span><span class='va'>var</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='fu'><a href='https://dplyr.tidyverse.org/reference/desc.html'>desc</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>[</span><span class='va'>var</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
   <span class='op'>}</span> <span class='kw'>else</span> <span class='op'>{</span>
-    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='va'>df</span><span class='op'>[</span><span class='va'>var</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
+    <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span>.data <span class='op'>=</span> <span class='va'>df</span>, <span class='va'>df</span><span class='op'>[</span><span class='va'>var</span><span class='op'>]</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='op'>)</span>
   <span class='op'>}</span>
 <span class='op'>}</span>
 
@@ -3063,10 +3057,10 @@ i `..1` must be size 8602 or 1, not 17204.
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>group_raw</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>grp</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>df</span> <span class='op'>%&gt;%</span> 
-    <span class='fu'>group_by</span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>grp</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-    <span class='fu'>summarise</span><span class='op'>(</span>total_sales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>sales</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
-              .groups <span class='op'>=</span> <span class='st'>'drop'</span><span class='op'>)</span>  <span class='op'>%&gt;%</span> 
+  <span class='va'>df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>grp</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='op'>(</span>total_sales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>sales</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+              .groups <span class='op'>=</span> <span class='st'>'drop'</span><span class='op'>)</span>  <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
     <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n<span class='op'>=</span><span class='fl'>5</span><span class='op'>)</span>
 <span class='op'>}</span>
 
@@ -3098,10 +3092,10 @@ i `..1` must be size 8602 or 1, not 17204.
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>group_raw_multiple</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>df</span> <span class='op'>%&gt;%</span> 
-    <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-    <span class='fu'>summarise</span><span class='op'>(</span>total_sales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>sales</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
-              .groups <span class='op'>=</span> <span class='st'>'drop'</span><span class='op'>)</span>  <span class='op'>%&gt;%</span> 
+  <span class='va'>df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>...</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='op'>(</span>total_sales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>sales</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+              .groups <span class='op'>=</span> <span class='st'>'drop'</span><span class='op'>)</span>  <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
     <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
 <span class='op'>}</span>
 
@@ -3133,10 +3127,10 @@ i `..1` must be size 8602 or 1, not 17204.
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>group_str</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>grp</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>df</span> <span class='op'>%&gt;%</span> 
-    <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>df</span><span class='op'>[</span><span class='va'>grp</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-    <span class='fu'>summarise</span><span class='op'>(</span>total_sales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>sales</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
-              .groups <span class='op'>=</span> <span class='st'>'drop'</span><span class='op'>)</span>  <span class='op'>%&gt;%</span> 
+  <span class='va'>df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>[</span><span class='va'>grp</span><span class='op'>]</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='op'>(</span>total_sales <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>sales</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+              .groups <span class='op'>=</span> <span class='st'>'drop'</span><span class='op'>)</span>  <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
     <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n<span class='op'>=</span><span class='fl'>5</span><span class='op'>)</span>
 <span class='op'>}</span>
 
@@ -3195,10 +3189,10 @@ i `..1` must be size 8602 or 1, not 17204.
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>group_raw2</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>grp</span>, <span class='va'>sumvar</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>df</span> <span class='op'>%&gt;%</span> 
-    <span class='fu'>group_by</span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>grp</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-    <span class='fu'>summarise</span><span class='op'>(</span><span class='st'>"total_{{sumvar}}"</span> <span class='op'>:=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>sumvar</span><span class='op'>}</span><span class='op'>}</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
-              .groups <span class='op'>=</span> <span class='st'>'drop'</span><span class='op'>)</span>  <span class='op'>%&gt;%</span> 
+  <span class='va'>df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>grp</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='op'>(</span><span class='st'>"total_{{sumvar}}"</span> <span class='op'>:=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>sumvar</span><span class='op'>}</span><span class='op'>}</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+              .groups <span class='op'>=</span> <span class='st'>'drop'</span><span class='op'>)</span>  <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
     <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n<span class='op'>=</span><span class='fl'>5</span><span class='op'>)</span>
 <span class='op'>}</span>
 
@@ -3231,9 +3225,9 @@ i `..1` must be size 8602 or 1, not 17204.
 <p>The <code>txhousing</code> is a city-wise monthly sales and volume dataset. It has a <code>year</code> and <code>month</code> column. Let us create a <code>date</code> column and keep only those columns relevant for our custom <code>tx_summary()</code> function.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>small_df</span> <span class='op'>&lt;-</span> <span class='va'>txhousing</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>mutate</span><span class='op'>(</span>date <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/as_date.html'>as_date</a></span><span class='op'>(</span><span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"{year}-{month}-01"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>select</span><span class='op'>(</span><span class='va'>city</span>, <span class='va'>date</span>, <span class='va'>sales</span>, <span class='va'>volume</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>small_df</span> <span class='op'>&lt;-</span> <span class='va'>txhousing</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>date <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='https://lubridate.tidyverse.org/reference/as_date.html'>as_date</a></span><span class='op'>(</span><span class='fu'>glue</span><span class='fu'>::</span><span class='fu'><a href='https://glue.tidyverse.org/reference/glue.html'>glue</a></span><span class='op'>(</span><span class='st'>"{year}-{month}-01"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>city</span>, <span class='va'>date</span>, <span class='va'>sales</span>, <span class='va'>volume</span><span class='op'>)</span>
 </code></pre>
 </div>
 </div>
@@ -3243,22 +3237,22 @@ i `..1` must be size 8602 or 1, not 17204.
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>create_ymq</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>date_col</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/class.html'>inherits</a></span><span class='op'>(</span><span class='va'>df</span>, <span class='st'>"data.frame"</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>df</span> <span class='op'>%&gt;%</span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/pull.html'>pull</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>==</span> <span class='st'>'Date'</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/pull.html'>pull</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>==</span> <span class='st'>'Date'</span><span class='op'>)</span>
   <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span><span class='va'>df</span>,
-                Year <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/year.html'>year</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span>,
-                nHalf <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/quarter.html'>semester</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span>,
-                yHalf <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/quarter.html'>semester</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span>, with_year <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
-                dHalf <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/quarter.html'>semester</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span>, <span class='st'>"H"</span>, <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span>,<span class='st'>"%y"</span><span class='op'>)</span><span class='op'>)</span>,
-                nQtr <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/quarter.html'>quarter</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span>,
-                yQtr <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/quarter.html'>quarter</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span>, with_year <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
-                dQtr <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/quarter.html'>quarter</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span>,<span class='st'>"Q"</span>, <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span>,<span class='st'>"%y"</span><span class='op'>)</span><span class='op'>)</span>,
-                Month <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='http://lubridate.tidyverse.org/reference/month.html'>month</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span>,
+                Year <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='https://lubridate.tidyverse.org/reference/year.html'>year</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span>,
+                nHalf <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='https://lubridate.tidyverse.org/reference/quarter.html'>semester</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span>,
+                yHalf <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='https://lubridate.tidyverse.org/reference/quarter.html'>semester</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span>, with_year <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+                dHalf <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='https://lubridate.tidyverse.org/reference/quarter.html'>semester</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span>, <span class='st'>"H"</span>, <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span>,<span class='st'>"%y"</span><span class='op'>)</span><span class='op'>)</span>,
+                nQtr <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='https://lubridate.tidyverse.org/reference/quarter.html'>quarter</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span>,
+                yQtr <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='https://lubridate.tidyverse.org/reference/quarter.html'>quarter</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span>, with_year <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
+                dQtr <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='https://lubridate.tidyverse.org/reference/quarter.html'>quarter</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span>,<span class='st'>"Q"</span>, <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span>,<span class='st'>"%y"</span><span class='op'>)</span><span class='op'>)</span>,
+                Month <span class='op'>=</span> <span class='fu'>lubridate</span><span class='fu'>::</span><span class='fu'><a href='https://lubridate.tidyverse.org/reference/month.html'>month</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span>,
                 yMonth <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span>, <span class='st'>"%Y.%m"</span><span class='op'>)</span><span class='op'>)</span>,
                 dMonth <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>date_col</span><span class='op'>}</span><span class='op'>}</span>, <span class='st'>"%b %Y"</span><span class='op'>)</span>
                 <span class='op'>)</span>
 <span class='op'>}</span>
 
-<span class='fu'>create_ymq</span><span class='op'>(</span>df <span class='op'>=</span> <span class='va'>small_df</span>, date_col <span class='op'>=</span> <span class='va'>date</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='fu'>glimpse</span><span class='op'>(</span><span class='op'>)</span>
+<span class='fu'>create_ymq</span><span class='op'>(</span>df <span class='op'>=</span> <span class='va'>small_df</span>, date_col <span class='op'>=</span> <span class='va'>date</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='op'>(</span><span class='op'>)</span>
 </code></pre>
 </div>
 <pre><code>Rows: 8,602
@@ -3283,9 +3277,9 @@ $ dMonth &lt;chr&gt; &quot;Jan 2000&quot;, &quot;Feb 2000&quot;, &quot;Mar 2000&
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tx_summary</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>grp_col</span>, <span class='va'>sum_col</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>df</span> <span class='op'>%&gt;%</span> 
-    <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>city</span>, <span class='op'>{</span><span class='op'>{</span><span class='va'>grp_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-    <span class='fu'>summarise</span><span class='op'>(</span><span class='st'>"total_{{sum_col}}"</span> <span class='op'>:=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>sum_col</span><span class='op'>}</span><span class='op'>}</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, .groups <span class='op'>=</span> <span class='st'>'drop'</span><span class='op'>)</span>
+  <span class='va'>df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/group_by.html'>group_by</a></span><span class='op'>(</span><span class='va'>city</span>, <span class='op'>{</span><span class='op'>{</span><span class='va'>grp_col</span><span class='op'>}</span><span class='op'>}</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
+    <span class='fu'><a href='https://dplyr.tidyverse.org/reference/summarise.html'>summarise</a></span><span class='op'>(</span><span class='st'>"total_{{sum_col}}"</span> <span class='op'>:=</span> <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='op'>{</span><span class='op'>{</span><span class='va'>sum_col</span><span class='op'>}</span><span class='op'>}</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, .groups <span class='op'>=</span> <span class='st'>'drop'</span><span class='op'>)</span>
 <span class='op'>}</span>
 </code></pre>
 </div>
@@ -3293,10 +3287,10 @@ $ dMonth &lt;chr&gt; &quot;Jan 2000&quot;, &quot;Feb 2000&quot;, &quot;Mar 2000&
 <p>Using these 2 functions, we can now create multiple summary tables</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>small_df_with_date_cols</span> <span class='op'>&lt;-</span> <span class='va'>small_df</span> <span class='op'>%&gt;%</span> <span class='fu'>create_ymq</span><span class='op'>(</span>date_col <span class='op'>=</span> <span class='va'>date</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>small_df_with_date_cols</span> <span class='op'>&lt;-</span> <span class='va'>small_df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>create_ymq</span><span class='op'>(</span>date_col <span class='op'>=</span> <span class='va'>date</span><span class='op'>)</span>
 
 <span class='co'># Annual Sales per city</span>
-<span class='va'>small_df_with_date_cols</span> <span class='op'>%&gt;%</span> <span class='fu'>tx_summary</span><span class='op'>(</span>grp_col <span class='op'>=</span> <span class='va'>Year</span>, sum_col <span class='op'>=</span> <span class='va'>sales</span><span class='op'>)</span>
+<span class='va'>small_df_with_date_cols</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>tx_summary</span><span class='op'>(</span>grp_col <span class='op'>=</span> <span class='va'>Year</span>, sum_col <span class='op'>=</span> <span class='va'>sales</span><span class='op'>)</span>
 </code></pre>
 </div>
 <pre><code># A tibble: 736 x 3
@@ -3315,7 +3309,7 @@ $ dMonth &lt;chr&gt; &quot;Jan 2000&quot;, &quot;Feb 2000&quot;, &quot;Mar 2000&
 # ... with 726 more rows</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Half Yearly volumes per city</span>
-<span class='va'>small_df_with_date_cols</span> <span class='op'>%&gt;%</span> <span class='fu'>tx_summary</span><span class='op'>(</span>grp_col <span class='op'>=</span> <span class='va'>yHalf</span>, sum_col <span class='op'>=</span> <span class='va'>volume</span><span class='op'>)</span>
+<span class='va'>small_df_with_date_cols</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>tx_summary</span><span class='op'>(</span>grp_col <span class='op'>=</span> <span class='va'>yHalf</span>, sum_col <span class='op'>=</span> <span class='va'>volume</span><span class='op'>)</span>
 </code></pre>
 </div>
 <pre><code># A tibble: 1,472 x 3
@@ -3334,7 +3328,7 @@ $ dMonth &lt;chr&gt; &quot;Jan 2000&quot;, &quot;Feb 2000&quot;, &quot;Mar 2000&
 # ... with 1,462 more rows</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Quarterly Sales per city</span>
-<span class='va'>small_df_with_date_cols</span> <span class='op'>%&gt;%</span> <span class='fu'>tx_summary</span><span class='op'>(</span>grp_col <span class='op'>=</span> <span class='va'>yQtr</span>, sum_col <span class='op'>=</span> <span class='va'>sales</span><span class='op'>)</span>
+<span class='va'>small_df_with_date_cols</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>tx_summary</span><span class='op'>(</span>grp_col <span class='op'>=</span> <span class='va'>yQtr</span>, sum_col <span class='op'>=</span> <span class='va'>sales</span><span class='op'>)</span>
 </code></pre>
 </div>
 <pre><code># A tibble: 2,898 x 3
@@ -3353,7 +3347,7 @@ $ dMonth &lt;chr&gt; &quot;Jan 2000&quot;, &quot;Feb 2000&quot;, &quot;Mar 2000&
 # ... with 2,888 more rows</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Monthly Volumes per city</span>
-<span class='va'>small_df_with_date_cols</span> <span class='op'>%&gt;%</span> <span class='fu'>tx_summary</span><span class='op'>(</span>grp_col <span class='op'>=</span> <span class='va'>yMonth</span>, sum_col <span class='op'>=</span> <span class='va'>volume</span><span class='op'>)</span>
+<span class='va'>small_df_with_date_cols</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>tx_summary</span><span class='op'>(</span>grp_col <span class='op'>=</span> <span class='va'>yMonth</span>, sum_col <span class='op'>=</span> <span class='va'>volume</span><span class='op'>)</span>
 </code></pre>
 </div>
 <pre><code># A tibble: 8,602 x 3

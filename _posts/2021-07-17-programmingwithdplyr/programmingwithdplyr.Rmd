@@ -16,13 +16,6 @@ output:
     toc: true
 ---
 
-<style>
-d-article div.sourceCode code,
-d-article pre code {
-	font-family: "Fira Code", monospace;
-}
-</style>
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, comments = '')
 knitr::knit_hooks$set(error = function(x, options) {

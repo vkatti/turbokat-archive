@@ -1438,16 +1438,16 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="drilldown_files/header-attrs-2.9/header-attrs.js"></script>
+  <script src="drilldown_files/header-attrs-2.11/header-attrs.js"></script>
   <link href="drilldown_files/pagedtable-1.1/css/pagedtable.css" rel="stylesheet" />
   <script src="drilldown_files/pagedtable-1.1/js/pagedtable.js"></script>
   <script src="drilldown_files/core-js-2.5.3/shim.min.js"></script>
   <script src="drilldown_files/react-17.0.0/react.min.js"></script>
   <script src="drilldown_files/react-17.0.0/react-dom.min.js"></script>
   <script src="drilldown_files/reactwidget-1.0.0/react-tools.js"></script>
-  <script src="drilldown_files/htmlwidgets-1.5.3/htmlwidgets.js"></script>
+  <script src="drilldown_files/htmlwidgets-1.5.4/htmlwidgets.js"></script>
   <script src="drilldown_files/reactable-binding-0.2.3/reactable.js"></script>
-  <script src="drilldown_files/jquery-1.11.3/jquery.min.js"></script>
+  <script src="drilldown_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <script src="drilldown_files/popper-2.6.0/popper.min.js"></script>
   <link href="drilldown_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
   <link href="drilldown_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
@@ -1510,12 +1510,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </ul>
 </nav>
 </div>
-<style>
-d-article div.sourceCode code,
-d-article pre code {
-    font-family: "Fira Code", monospace;
-}
-</style>
 <p>We often come across denormalized data that has 2 or more levels of information. For example, top-level info like course info with data fields like course id, course name, description, start/end date and second-level info like student info with data fields like with student id, student name, age and gender. We may also have these two groups of data as separate tables with a primary-key foreign-key design, usually from a well-designed SQL database.</p>
 <p>Let us create some data.</p>
 <h2 id="top-level-data-course">Top-Level data: <strong>course</strong></h2>
@@ -1678,7 +1672,7 @@ d-article pre code {
 <p>Creating the <code>top_level</code> table using just the columns in <code>course</code>. Let’s also create a new column <code>n_students</code> depicting count of students in each course.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>top_level</span> <span class='op'>&lt;-</span> <span class='va'>combined_df</span> <span class='op'>%&gt;%</span> 
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>top_level</span> <span class='op'>&lt;-</span> <span class='va'>combined_df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
   <span class='co'># Only course info columns</span>
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/count.html'>count</a></span><span class='op'>(</span><span class='va'>course_id</span>, <span class='va'>course_name</span>, <span class='va'>start_date</span>, <span class='va'>end_date</span>, name <span class='op'>=</span> <span class='st'>"n_students"</span><span class='op'>)</span> 
 
@@ -1693,9 +1687,9 @@ d-article pre code {
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>second_level</span> <span class='op'>&lt;-</span> <span class='va'>combined_df</span> <span class='op'>%&gt;%</span> 
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>second_level</span> <span class='op'>&lt;-</span> <span class='va'>combined_df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
   <span class='co'># Only Student info columns with unique identifier for Course</span>
-  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>course_id</span>, <span class='va'>s_id</span>, <span class='va'>s_name</span>, <span class='va'>gender</span>, <span class='va'>age</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>course_id</span>, <span class='va'>s_id</span>, <span class='va'>s_name</span>, <span class='va'>gender</span>, <span class='va'>age</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
   <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>s_id</span><span class='op'>)</span>
 
 <span class='fu'><a href='https://pkgs.rstudio.com/rmarkdown/reference/paged_table.html'>paged_table</a></span><span class='op'>(</span><span class='va'>second_level</span><span class='op'>)</span>
