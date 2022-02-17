@@ -87,9 +87,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--radix_placeholder_meta_tags-->
-  <title>Deep Dive 1: readxl::read_excel</title>
+  <title>Deep Dive Series</title>
 
-  <meta property="description" itemprop="description" content="A closer look at the `read_excel` from the `readr` 📦 ."/>
+  <meta property="description" itemprop="description" content="What, Why and Why Not about a blog series featuring functions from R and Python 📦s."/>
 
 
   <!--  https://schema.org/Article -->
@@ -98,26 +98,26 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <meta name="article:author" content="Vishal Katti"/>
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="Deep Dive 1: readxl::read_excel"/>
+  <meta property="og:title" content="Deep Dive Series"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="A closer look at the `read_excel` from the `readr` 📦 ."/>
+  <meta property="og:description" content="What, Why and Why Not about a blog series featuring functions from R and Python 📦s."/>
   <meta property="og:locale" content="en_US"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="Deep Dive 1: readxl::read_excel"/>
-  <meta property="twitter:description" content="A closer look at the `read_excel` from the `readr` 📦 ."/>
+  <meta property="twitter:title" content="Deep Dive Series"/>
+  <meta property="twitter:description" content="What, Why and Why Not about a blog series featuring functions from R and Python 📦s."/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["Deep Dive 1: readxl::read_excel"]},{"type":"character","attributes":{},"value":["A closer look at the `read_excel` from the `readr` 📦 .\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Vishal Katti"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["2022-02-17"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","preview","date","categories","output","editor_options"]}},"value":[{"type":"character","attributes":{},"value":["Deep Dive Series"]},{"type":"character","attributes":{},"value":["What, Why and Why Not about a blog series featuring functions from R and Python 📦s.\n"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Vishal Katti"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["https://c.tenor.com/BDczPTBxVwAAAAAC/deepsea-dive.gif"]},{"type":"character","attributes":{},"value":["2022-02-17"]},{"type":"character","attributes":{},"value":["Rstats","Python","functions"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["chunk_output_type"]}},"value":[{"type":"character","attributes":{},"value":["inline"]}]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"NULL"}
+  {"type":"character","attributes":{},"value":["deepdiveintro_files/anchor-4.2.2/anchor.min.js","deepdiveintro_files/bowser-1.9.3/bowser.min.js","deepdiveintro_files/distill-2.2.21/template.v2.js","deepdiveintro_files/header-attrs-2.11/header-attrs.js","deepdiveintro_files/jquery-3.6.0/jquery-3.6.0.js","deepdiveintro_files/jquery-3.6.0/jquery-3.6.0.min.js","deepdiveintro_files/jquery-3.6.0/jquery-3.6.0.min.map","deepdiveintro_files/popper-2.6.0/popper.min.js","deepdiveintro_files/tippy-6.2.7/tippy-bundle.umd.min.js","deepdiveintro_files/tippy-6.2.7/tippy-light-border.css","deepdiveintro_files/tippy-6.2.7/tippy.css","deepdiveintro_files/tippy-6.2.7/tippy.umd.min.js","deepdiveintro_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1438,16 +1438,16 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="ddreadexcel_files/header-attrs-2.11/header-attrs.js"></script>
-  <script src="ddreadexcel_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-  <script src="ddreadexcel_files/popper-2.6.0/popper.min.js"></script>
-  <link href="ddreadexcel_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
-  <link href="ddreadexcel_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
-  <script src="ddreadexcel_files/tippy-6.2.7/tippy.umd.min.js"></script>
-  <script src="ddreadexcel_files/anchor-4.2.2/anchor.min.js"></script>
-  <script src="ddreadexcel_files/bowser-1.9.3/bowser.min.js"></script>
-  <script src="ddreadexcel_files/webcomponents-2.0.0/webcomponents.js"></script>
-  <script src="ddreadexcel_files/distill-2.2.21/template.v2.js"></script>
+  <script src="deepdiveintro_files/header-attrs-2.11/header-attrs.js"></script>
+  <script src="deepdiveintro_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+  <script src="deepdiveintro_files/popper-2.6.0/popper.min.js"></script>
+  <link href="deepdiveintro_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
+  <link href="deepdiveintro_files/tippy-6.2.7/tippy-light-border.css" rel="stylesheet" />
+  <script src="deepdiveintro_files/tippy-6.2.7/tippy.umd.min.js"></script>
+  <script src="deepdiveintro_files/anchor-4.2.2/anchor.min.js"></script>
+  <script src="deepdiveintro_files/bowser-1.9.3/bowser.min.js"></script>
+  <script src="deepdiveintro_files/webcomponents-2.0.0/webcomponents.js"></script>
+  <script src="deepdiveintro_files/distill-2.2.21/template.v2.js"></script>
   <!--radix_placeholder_site_in_header-->
   <!--/radix_placeholder_site_in_header-->
 
@@ -1459,7 +1459,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Deep Dive 1: readxl::read_excel","description":"A closer look at the `read_excel` from the `readr` 📦 .","authors":[{"author":"Vishal Katti","authorURL":{},"affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2022-02-17T00:00:00.000+05:30","citationText":"Katti, 2022"}
+{"title":"Deep Dive Series","description":"What, Why and Why Not about a blog series featuring functions from R and Python 📦s.","authors":[{"author":"Vishal Katti","authorURL":{},"affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2022-02-17T00:00:00.000+05:30","citationText":"Katti, 2022"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1469,10 +1469,15 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Deep Dive 1: readxl::read_excel</h1>
+<h1>Deep Dive Series</h1>
 <!--radix_placeholder_categories-->
+<div class="dt-tags">
+<div class="dt=tag">Rstats</div>
+<div class="dt=tag">Python</div>
+<div class="dt=tag">functions</div>
+</div>
 <!--/radix_placeholder_categories-->
-<p><p>A closer look at the <code>read_excel</code> from the <code>readr</code> 📦 .</p></p>
+<p><p>What, Why and Why Not about a blog series featuring functions from R and Python 📦s.</p></p>
 </div>
 
 <div class="d-byline">
@@ -1482,8 +1487,17 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 
 <div class="d-article">
-<h2 id="introduction">Introduction</h2>
-<p>This is the first of many deep-dive blogs I intend to write over the course of few months. I will cover some common (and not-so-common) functions from various R and Python packages. I choose those functions that deal with basic user actions like reading/writing files, some common data wrangling and possibly some visualizations. Some of you may say that there is enough documentation available online, why do we need this? I feel that while R, and to some extent Python, does have enough documentation, we get only code examples. Only in vignettes do we see the code outputs but when you have functions dealing with external files/systems, rarely do you get any views or screenshots. This is the base thought behind this endeavor.</p>
+<p><img src="https://c.tenor.com/BDczPTBxVwAAAAAC/deepsea-dive.gif" width="700" /></p>
+<p>This is the first of many deep-dive blogs I intend to write over the course of few months. I will cover some common (and not-so-common) functions from various R and Python packages. I choose those functions that deal with basic user actions like reading/writing files, some common data wrangling and possibly some visualizations.</p>
+<p>Some of you may say that there is enough documentation available online, why do we need this? I feel that while R, and to some extent Python, does have enough documentation, we get only code examples. Only in vignettes do we see the code outputs but when you have functions dealing with external files/systems, rarely do you get any views or screenshots of these external entities. My selective laziness prevents me from running the code examples in the documentation but pushes me to write blogs about inadequate documentation!</p>
+<blockquote>
+<p><strong>If you show code anywhere, you must show its output along with it.</strong></p>
+</blockquote>
+<p>The second thought is slightly more selfish. I am a victim of <em>Scope Creep</em>* in my previous blogs and it took ages to finish each one of them. This will prevent that to some extent. I must confess that this will push me to write consistently and not run out of material soon. Wish me luck! I definitely need it.</p>
+<figure>
+<img src="https://c.tenor.com/YctxttUmGMYAAAAC/forehead-slap-slapping-forehead.gif" width="700" alt="Possible reaction from folks reading this blog!" /><figcaption aria-hidden="true">Possible reaction from folks reading this blog!</figcaption>
+</figure>
+<p>*Scope creep in project management refers to changes, continuous or uncontrolled growth in a project’s scope, at any point after the project begins. This can occur when the scope of a project is not properly defined, documented, or controlled. It is generally considered harmful. <a href="https://en.wikipedia.org/wiki/Scope_creep">Wikipedia</a></p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

@@ -9,12 +9,16 @@
     <generator>Distill</generator>
     <lastBuildDate>Wed, 16 Feb 2022 00:00:00 +0000</lastBuildDate>
     <item>
-      <title>Deep Dive 1: readxl::read_excel</title>
+      <title>Deep Dive Series</title>
       <dc:creator>Vishal Katti</dc:creator>
-      <link>https://vishalkatti.com/posts/2022-02-17-ddreadexcel</link>
-      <description>A closer look at the `read_excel` from the `readr` 📦 .</description>
-      <guid>https://vishalkatti.com/posts/2022-02-17-ddreadexcel</guid>
+      <link>https://vishalkatti.com/posts/2022-02-17-deepdiveintro</link>
+      <description>What, Why and Why Not about a blog series featuring functions from R and Python 📦s.</description>
+      <category>Rstats</category>
+      <category>Python</category>
+      <category>functions</category>
+      <guid>https://vishalkatti.com/posts/2022-02-17-deepdiveintro</guid>
       <pubDate>Wed, 16 Feb 2022 00:00:00 +0000</pubDate>
+      <media:content url="https://c.tenor.com/BDczPTBxVwAAAAAC/deepsea-dive.gif" medium="image" type="image/gif"/>
     </item>
     <item>
       <title>Writing Robust R Functions</title>

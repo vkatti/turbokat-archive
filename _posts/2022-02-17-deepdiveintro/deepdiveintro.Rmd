@@ -1,0 +1,53 @@
+---
+title: "Deep Dive Series"
+description: |
+  What, Why and Why Not about a blog series featuring functions from R and Python 📦s.
+author:
+  - name: Vishal Katti
+    url: {}
+preview: https://c.tenor.com/BDczPTBxVwAAAAAC/deepsea-dive.gif
+date: 2022-02-17
+categories:
+  - Rstats
+  - Python
+  - functions
+output:
+  distill::distill_article:
+    self_contained: false
+editor_options: 
+  chunk_output_type: inline
+---
+
+![](https://c.tenor.com/BDczPTBxVwAAAAAC/deepsea-dive.gif){width="700"}
+
+This is the first of many deep-dive blogs I intend to write over the
+course of few months. I will cover some common (and not-so-common)
+functions from various R and Python packages. I choose those functions
+that deal with basic user actions like reading/writing files, some
+common data wrangling and possibly some visualizations.
+
+Some of you may say that there is enough documentation available online,
+why do we need this? I feel that while R, and to some extent Python,
+does have enough documentation, we get only code examples. Only in
+vignettes do we see the code outputs but when you have functions dealing
+with external files/systems, rarely do you get any views or screenshots
+of these external entities. My selective laziness prevents me from
+running the code examples in the documentation but pushes me to write
+blogs about inadequate documentation!
+
+> **If you show code anywhere, you must show its output along with it.**
+
+The second thought is slightly more selfish. I am a victim of *Scope
+Creep*\* in my previous blogs and it took ages to finish each one of
+them. This will prevent that to some extent. I must confess that this
+will push me to write consistently and not run out of material soon.
+Wish me luck! I definitely need it.
+
+![Possible reaction from folks reading this
+blog!](https://c.tenor.com/YctxttUmGMYAAAAC/forehead-slap-slapping-forehead.gif){width="700"}
+
+\*Scope creep in project management refers to changes, continuous or
+uncontrolled growth in a project's scope, at any point after the project
+begins. This can occur when the scope of a project is not properly
+defined, documented, or controlled. It is generally considered harmful.
+[Wikipedia](https://en.wikipedia.org/wiki/Scope_creep)
