@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2022-02-17-ddreadexcel/",
+    "title": "Deep Dive 1: readxl::read_excel",
+    "description": "A closer look at the `read_excel` from the `readr` 📦 .",
+    "author": [
+      {
+        "name": "Vishal Katti",
+        "url": {}
+      }
+    ],
+    "date": "2022-02-17",
+    "categories": [],
+    "contents": "\r\nIntroduction\r\nThis is the first of many deep-dive blogs I intend to write over the course of few months. I will cover some common (and not-so-common) functions from various R and Python packages. I choose those functions that deal with basic user actions like reading/writing files, some common data wrangling and possibly some visualizations. Some of you may say that there is enough documentation available online, why do we need this? I feel that while R, and to some extent Python, does have enough documentation, we get only code examples. Only in vignettes do we see the code outputs but when you have functions dealing with external files/systems, rarely do you get any views or screenshots. This is the base thought behind this endeavor.\r\n\r\n\r\n\r\n",
+    "preview": {},
+    "last_modified": "2022-02-17T19:54:48+05:30",
+    "input_file": "ddreadexcel.knit.md"
+  },
+  {
     "path": "posts/2022-01-18-writingrobustrfunctions/",
     "title": "Writing Robust R Functions",
     "description": "Some designs to validate function arguments.",
