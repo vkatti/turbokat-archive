@@ -7,7 +7,19 @@
     <description>Welcome to Vishal Katti's website
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Tue, 18 Jan 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 18 Feb 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Deep Dive Series</title>
+      <dc:creator>Vishal Katti</dc:creator>
+      <link>https://vishalkatti.com/posts/2022-02-18-deepdiveintro</link>
+      <description>What, Why and Why Not about a blog series featuring functions from R and Python packages.</description>
+      <category>Rstats</category>
+      <category>Python</category>
+      <category>functions</category>
+      <guid>https://vishalkatti.com/posts/2022-02-18-deepdiveintro</guid>
+      <pubDate>Fri, 18 Feb 2022 00:00:00 +0000</pubDate>
+      <media:content url="https://c.tenor.com/BDczPTBxVwAAAAAC/deepsea-dive.gif" medium="image" type="image/gif"/>
+    </item>
     <item>
       <title>Writing Robust R Functions</title>
       <dc:creator>Vishal Katti</dc:creator>
