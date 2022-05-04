@@ -68,20 +68,8 @@
       <category>reactable</category>
       <category>drill-down</category>
       <guid>https://vishalkatti.com/posts/2021-07-27-drilldown</guid>
-      <pubDate>Mon, 26 Jul 2021 00:00:00 +0000</pubDate>
+      <pubDate>Tue, 27 Jul 2021 00:00:00 +0000</pubDate>
       <media:content url="https://vishalkatti.com/posts/2021-07-27-drilldown/images/drilldown.gif" medium="image" type="image/gif"/>
-    </item>
-    <item>
-      <title>Programming with R {dplyr} - As I Understand It!!</title>
-      <dc:creator>Vishal Katti</dc:creator>
-      <link>https://vishalkatti.com/posts/2021-07-17-programmingwithdplyr</link>
-      <description>How to create your own functions using {dplyr}</description>
-      <category>Rstats</category>
-      <category>dplyr</category>
-      <category>functions</category>
-      <guid>https://vishalkatti.com/posts/2021-07-17-programmingwithdplyr</guid>
-      <pubDate>Sat, 17 Jul 2021 00:00:00 +0000</pubDate>
-      <media:content url="https://i.gifer.com/8inO.gif" medium="image" type="image/gif"/>
     </item>
   </channel>
 </rss>
