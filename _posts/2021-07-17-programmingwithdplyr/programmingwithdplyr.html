@@ -117,7 +117,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["programmingwithdplyr_files/anchor-4.2.2/anchor.min.js","programmingwithdplyr_files/bowser-1.9.3/bowser.min.js","programmingwithdplyr_files/distill-2.2.21/template.v2.js","programmingwithdplyr_files/header-attrs-2.9/header-attrs.js","programmingwithdplyr_files/jquery-1.11.3/jquery.min.js","programmingwithdplyr_files/popper-2.6.0/popper.min.js","programmingwithdplyr_files/tippy-6.2.7/tippy-bundle.umd.min.js","programmingwithdplyr_files/tippy-6.2.7/tippy-light-border.css","programmingwithdplyr_files/tippy-6.2.7/tippy.css","programmingwithdplyr_files/tippy-6.2.7/tippy.umd.min.js","programmingwithdplyr_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["programmingwithdplyr_files/anchor-4.2.2/anchor.min.js","programmingwithdplyr_files/bowser-1.9.3/bowser.min.js","programmingwithdplyr_files/distill-2.2.21/template.v2.js","programmingwithdplyr_files/header-attrs-2.11/header-attrs.js","programmingwithdplyr_files/header-attrs-2.9/header-attrs.js","programmingwithdplyr_files/jquery-1.11.3/jquery.min.js","programmingwithdplyr_files/jquery-3.6.0/jquery-3.6.0.js","programmingwithdplyr_files/jquery-3.6.0/jquery-3.6.0.min.js","programmingwithdplyr_files/jquery-3.6.0/jquery-3.6.0.min.map","programmingwithdplyr_files/popper-2.6.0/popper.min.js","programmingwithdplyr_files/tippy-6.2.7/tippy-bundle.umd.min.js","programmingwithdplyr_files/tippy-6.2.7/tippy-light-border.css","programmingwithdplyr_files/tippy-6.2.7/tippy.css","programmingwithdplyr_files/tippy-6.2.7/tippy.umd.min.js","programmingwithdplyr_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1438,7 +1438,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="programmingwithdplyr_files/header-attrs-2.11/header-attrs.js"></script>
+  <script src="programmingwithdplyr_files/header-attrs-2.13/header-attrs.js"></script>
   <script src="programmingwithdplyr_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <script src="programmingwithdplyr_files/popper-2.6.0/popper.min.js"></script>
   <link href="programmingwithdplyr_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
@@ -1498,35 +1498,54 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </ul></li>
 <li><a href="#select"><code>select()</code></a>
 <ul>
-<li><a href="#passing-raw-column-names">Passing raw column names</a></li>
-<li><a href="#passing-multiple-raw-column-names-using-argument">Passing multiple raw column names using … argument</a></li>
-<li><a href="#passing-a-character-vector-of-column-names">Passing a character vector of column names</a></li>
+<li><a href="#passing-raw-column-names">Passing raw column
+names</a></li>
+<li><a href="#passing-multiple-raw-column-names-using-argument">Passing
+multiple raw column names using … argument</a></li>
+<li><a href="#passing-a-character-vector-of-column-names">Passing a
+character vector of column names</a></li>
 </ul></li>
 <li><a href="#filter"><code>filter()</code></a>
 <ul>
-<li><a href="#passing-single-raw-criteria">Passing single raw criteria</a></li>
-<li><a href="#passing-multiple-raw-criteria-using-argument">Passing multiple raw criteria using … argument</a></li>
-<li><a href="#passing-single-criteria-as-a-character-string">Passing single criteria as a character string</a></li>
-<li><a href="#passing-multiple-criteria-as-character-vector">Passing multiple criteria as character vector</a></li>
+<li><a href="#passing-single-raw-criteria">Passing single raw
+criteria</a></li>
+<li><a href="#passing-multiple-raw-criteria-using-argument">Passing
+multiple raw criteria using … argument</a></li>
+<li><a href="#passing-single-criteria-as-a-character-string">Passing
+single criteria as a character string</a></li>
+<li><a href="#passing-multiple-criteria-as-character-vector">Passing
+multiple criteria as character vector</a></li>
 </ul></li>
 <li><a href="#mutate"><code>mutate()</code></a>
 <ul>
-<li><a href="#passing-the-column-name-as-raw-name">Passing the column name as raw name</a></li>
-<li><a href="#passing-the-new-variable-name-as-character-string-direct">Passing the new variable name as character string (direct)</a></li>
-<li><a href="#passing-the-new-variable-name-as-character-string-indirect">Passing the new variable name as character string (indirect)</a></li>
+<li><a href="#passing-the-column-name-as-raw-name">Passing the column
+name as raw name</a></li>
+<li><a
+href="#passing-the-new-variable-name-as-character-string-direct">Passing
+the new variable name as character string (direct)</a></li>
+<li><a
+href="#passing-the-new-variable-name-as-character-string-indirect">Passing
+the new variable name as character string (indirect)</a></li>
 </ul></li>
 <li><a href="#arrange"><code>arrange()</code></a>
 <ul>
 <li><a href="#passing-single-raw-name">Passing single raw name</a></li>
-<li><a href="#passing-multiple-raw-names-using-...-argument">Passing multiple raw names using <code>...</code> argument</a></li>
-<li><a href="#pass-single-column-name-as-string">Pass single column name as string</a></li>
-<li><a href="#pass-multiple-column-name-as-string">Pass multiple column name as string</a></li>
+<li><a href="#passing-multiple-raw-names-using-...-argument">Passing
+multiple raw names using <code>...</code> argument</a></li>
+<li><a href="#pass-single-column-name-as-string">Pass single column name
+as string</a></li>
+<li><a href="#pass-multiple-column-name-as-string">Pass multiple column
+name as string</a></li>
 </ul></li>
 <li><a href="#group_by"><code>group_by()</code></a>
 <ul>
-<li><a href="#passing-single-raw-name-1">Passing single raw name</a></li>
-<li><a href="#passing-multiple-raw-names-using-the-...-operator">Passing multiple raw names using the <code>...</code> operator</a></li>
-<li><a href="#passing-single-or-multiple-column-names-as-character-string">Passing single or multiple column names as character string</a></li>
+<li><a href="#passing-single-raw-name-1">Passing single raw
+name</a></li>
+<li><a href="#passing-multiple-raw-names-using-the-...-operator">Passing
+multiple raw names using the <code>...</code> operator</a></li>
+<li><a
+href="#passing-single-or-multiple-column-names-as-character-string">Passing
+single or multiple column names as character string</a></li>
 </ul></li>
 <li><a href="#slightly-better-examples">(Slightly Better) Examples</a>
 <ul>
@@ -1540,16 +1559,37 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </nav>
 </div>
 <h1 id="introduction">Introduction</h1>
-<p>The purpose of this document is to act as a quick guide for myself and others to understand how to use <code>dplyr</code> effectively to create dynamic functions. The general assumption is that the reader is familiar with the <code>{dplyr}</code> package and how to use it for data wrangling.</p>
-<p>In this document, we will explore how to create functions using the popular <code>dplyr</code> verbs like <code>select</code>, <code>filter</code>, <code>mutate</code>, <code>arrange</code> and finally <code>group_by</code> with <code>summarise</code>.</p>
+<p>The purpose of this document is to act as a quick guide for myself
+and others to understand how to use <code>dplyr</code> effectively to
+create dynamic functions. The general assumption is that the reader is
+familiar with the <code>{dplyr}</code> package and how to use it for
+data wrangling.</p>
+<p>In this document, we will explore how to create functions using the
+popular <code>dplyr</code> verbs like <code>select</code>,
+<code>filter</code>, <code>mutate</code>, <code>arrange</code> and
+finally <code>group_by</code> with <code>summarise</code>.</p>
 <h3 id="inspiration">Inspiration</h3>
-<p>I regularly deal with event-related information with event date and few other columns like event type, root cause etc. Most reports usually involve calculating number of events that took place on a monthly, quarterly or annual basis, sometimes split by event type, root cause and other columns. After a few reports I realized that I am basically writing the same code over and over again to calculate these KPIs. Keeping the <code>DRY (Don't Repeat Yourself)</code> principle in mind, I managed to write a few functions to calculate these KPIs with a few dynamic variables. Following is an attempt to articulate what I learnt while creating those functions.</p>
+<p>I regularly deal with event-related information with event date and
+few other columns like event type, root cause etc. Most reports usually
+involve calculating number of events that took place on a monthly,
+quarterly or annual basis, sometimes split by event type, root cause and
+other columns. After a few reports I realized that I am basically
+writing the same code over and over again to calculate these KPIs.
+Keeping the <code>DRY (Don't Repeat Yourself)</code> principle in mind,
+I managed to write a few functions to calculate these KPIs with a few
+dynamic variables. Following is an attempt to articulate what I learnt
+while creating those functions.</p>
 <h3 id="data">Data</h3>
-<p>We shall use the Texas Housing Sales data, available as a tibble in the popular <code>ggplot2</code> package as reference data. It contains monthly information about the housing market in Texas provided by the TAMU real estate center, <a href="https://www.recenter.tamu.edu/" class="uri">https://www.recenter.tamu.edu/</a>. It has 8602 observations and 9 variables.</p>
+<p>We shall use the Texas Housing Sales data, available as a tibble in
+the popular <code>ggplot2</code> package as reference data. It contains
+monthly information about the housing market in Texas provided by the
+TAMU real estate center, <a href="https://www.recenter.tamu.edu/"
+class="uri">https://www.recenter.tamu.edu/</a>. It has 8602 observations
+and 9 variables.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>txhousing</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='va'><a href='https://ggplot2.tidyverse.org/reference/txhousing.html'>txhousing</a></span>
-<span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://pillar.r-lib.org/reference/glimpse.html'>glimpse</a></span><span class='op'>(</span><span class='va'>txhousing</span><span class='op'>)</span>
+<span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/glimpse.html'>glimpse</a></span><span class='op'>(</span><span class='va'>txhousing</span><span class='op'>)</span>
 </code></pre>
 </div>
 <pre><code>Rows: 8,602
@@ -1566,9 +1606,18 @@ $ date      &lt;dbl&gt; 2000.000, 2000.083, 2000.167, 2000.250, 2000.333, ~</cod
 </div>
 <p>We shall refer the above data in all the following sections.</p>
 <h1 id="select"><code>select()</code></h1>
-<p>When using <code>dplyr</code> functions, the two most popular ways to pass column names is either as bare names i.e. column names without enclosing them in quotes like <code>sales</code> or <code>volume</code> OR pass them as a character string like “sales” or ‘volume’. You could also pass a character vector like <code>c("sales", "volume")</code>. In this section we will explore the 3 ways to dynamically select the columns we want.</p>
+<p>When using <code>dplyr</code> functions, the two most popular ways to
+pass column names is either as bare names i.e. column names without
+enclosing them in quotes like <code>sales</code> or <code>volume</code>
+OR pass them as a character string like “sales” or ‘volume’. You could
+also pass a character vector like <code>c("sales", "volume")</code>. In
+this section we will explore the 3 ways to dynamically select the
+columns we want.</p>
 <h3 id="passing-raw-column-names">Passing raw column names</h3>
-<p>In this method, we pass the raw name of the column we want to select and use the <code>embrace</code> of curly-curly brackets to pass the raw name. For multiple columns, we can pass the raw names as a single vector.</p>
+<p>In this method, we pass the raw name of the column we want to select
+and use the <code>embrace</code> of curly-curly brackets to pass the raw
+name. For multiple columns, we can pass the raw names as a single
+vector.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>select_raw</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>var</span><span class='op'>)</span> <span class='op'>{</span>
@@ -1601,9 +1650,13 @@ $ date      &lt;dbl&gt; 2000.000, 2000.083, 2000.167, 2000.250, 2000.333, ~</cod
 5   141 10590000
 6   156 13910000</code></pre>
 </div>
-<p>If passing multiple raw names as vector as in the <code>select_raw()</code> feels like an unnecessary complication, try the next method.</p>
-<h3 id="passing-multiple-raw-column-names-using-argument">Passing multiple raw column names using … argument</h3>
-<p>In this method, we use the <code>…</code> argument to pass the raw names of the columns we want to select.</p>
+<p>If passing multiple raw names as vector as in the
+<code>select_raw()</code> feels like an unnecessary complication, try
+the next method.</p>
+<h3 id="passing-multiple-raw-column-names-using-argument">Passing
+multiple raw column names using … argument</h3>
+<p>In this method, we use the <code>…</code> argument to pass the raw
+names of the columns we want to select.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>my_select</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
@@ -1624,8 +1677,11 @@ $ date      &lt;dbl&gt; 2000.000, 2000.083, 2000.167, 2000.250, 2000.333, ~</cod
 5   141 10590000
 6   156 13910000</code></pre>
 </div>
-<h3 id="passing-a-character-vector-of-column-names">Passing a character vector of column names</h3>
-<p>If we have the column names as a character vector, we use the <code>all_of</code> function to pass the character vector to the internal <code>select</code> function.</p>
+<h3 id="passing-a-character-vector-of-column-names">Passing a character
+vector of column names</h3>
+<p>If we have the column names as a character vector, we use the
+<code>all_of</code> function to pass the character vector to the
+internal <code>select</code> function.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>my_select_char</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>cols</span><span class='op'>)</span> <span class='op'>{</span>
@@ -1648,9 +1704,18 @@ $ date      &lt;dbl&gt; 2000.000, 2000.083, 2000.167, 2000.250, 2000.333, ~</cod
 6   156 13910000</code></pre>
 </div>
 <h1 id="filter"><code>filter()</code></h1>
-<p>In the previous section, we passed column names either as bare names or character strings. <code>filter()</code> takes one or more expressions/conditions that result in a logical vector, with same length as number of rows in the data.frame/tibble and returns only those rows for which the expression/condition returns <code>TRUE</code>. Following are 2 ways to pass these logical expressions/conditions. I’m using expression and condition interchangeably here. In this context, a condition is an expression that results in a boolean <code>TRUE/FALSE</code> result.</p>
+<p>In the previous section, we passed column names either as bare names
+or character strings. <code>filter()</code> takes one or more
+expressions/conditions that result in a logical vector, with same length
+as number of rows in the data.frame/tibble and returns only those rows
+for which the expression/condition returns <code>TRUE</code>. Following
+are 2 ways to pass these logical expressions/conditions. I’m using
+expression and condition interchangeably here. In this context, a
+condition is an expression that results in a boolean
+<code>TRUE/FALSE</code> result.</p>
 <h3 id="passing-single-raw-criteria">Passing single raw criteria</h3>
-<p>In this method, we pass the condition <code>sales &gt; 8000</code> as a raw/bare expression.</p>
+<p>In this method, we pass the condition <code>sales &gt; 8000</code> as
+a raw/bare expression.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>filter_raw</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>cond</span><span class='op'>)</span> <span class='op'>{</span>
@@ -1674,18 +1739,23 @@ $ date      &lt;dbl&gt; 2000.000, 2000.083, 2000.167, 2000.250, 2000.333, ~</cod
  9 Houston  2015     6  8449    2.49e9 222400    22311       3.2 2015.
 10 Houston  2015     7  8945    2.57e9 217600    23875       3.4 2016.</code></pre>
 </div>
-<p>Do you think we can pass multiple bare conditions as a vector, like we did for <code>select_raw()</code> in the previous section? Let us try passing multiple raw criteria as a vector.</p>
+<p>Do you think we can pass multiple bare conditions as a vector, like
+we did for <code>select_raw()</code> in the previous section? Let us try
+passing multiple raw criteria as a vector.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>filter_raw</span><span class='op'>(</span><span class='va'>txhousing</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>sales</span> <span class='op'>&gt;</span> <span class='fl'>8000</span>, <span class='va'>year</span> <span class='op'>&gt;</span> <span class='fl'>2010</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre style="color: red;"><code>Error: Problem with `filter()` input `..1`.
-i Input `..1` is `c(sales > 8000, year > 2010)`.
+<pre style="color: red;"><code>Error in `dplyr::filter()`:
+! Problem while computing `..1 = c(sales > 8000, year >
+  2010)`.
 x Input `..1` must be of size 8602 or 1, not size 17204.
 </code></pre>
 </div>
-<p>Passing multiple raw criteria as a vector doesn’t work like it works for <code>select_raw()</code> function. Let us understand why. Consider the following code:</p>
+<p>Passing multiple raw criteria as a vector doesn’t work like it works
+for <code>select_raw()</code> function. Let us understand why. Consider
+the following code:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>A</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>TRUE</span><span class='op'>)</span>                           <span class='co'># boolean vector of length = 2</span>
@@ -1696,9 +1766,16 @@ x Input `..1` must be of size 8602 or 1, not size 17204.
 </div>
 <pre><code>[1]  TRUE  TRUE FALSE FALSE</code></pre>
 </div>
-<p>Notice that length of X is 4. Similarly, <code>sales &gt; 8000</code> evaluates to a TRUE/FALSE boolean vector of length 8602 (equal to number of rows in <code>txhousing</code>) and so does <code>year &gt; 2010</code>. So the vector <code>c(sales &gt; 8000, year &gt; 2010)</code> becomes a TRUE/FALSE boolean vector of length 17204, which results in an error.</p>
-<h3 id="passing-multiple-raw-criteria-using-argument">Passing multiple raw criteria using … argument</h3>
-<p>To pass multiple raw criteria, we can use the <code>...</code> argument.</p>
+<p>Notice that length of X is 4. Similarly, <code>sales &gt; 8000</code>
+evaluates to a TRUE/FALSE boolean vector of length 8602 (equal to number
+of rows in <code>txhousing</code>) and so does
+<code>year &gt; 2010</code>. So the vector
+<code>c(sales &gt; 8000, year &gt; 2010)</code> becomes a TRUE/FALSE
+boolean vector of length 17204, which results in an error.</p>
+<h3 id="passing-multiple-raw-criteria-using-argument">Passing multiple
+raw criteria using … argument</h3>
+<p>To pass multiple raw criteria, we can use the <code>...</code>
+argument.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>my_filter</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span> 
@@ -1720,15 +1797,17 @@ x Input `..1` must be of size 8602 or 1, not size 17204.
 7 Houston  2015     6  8449 2490238594 222400    22311       3.2 2015.
 8 Houston  2015     7  8945 2568156780 217600    23875       3.4 2016.</code></pre>
 </div>
-<h3 id="passing-single-criteria-as-a-character-string">Passing single criteria as a character string</h3>
-<p>By default, <code>dplyr::filter()</code> does not accept conditions as character strings. Following is an example which results in error</p>
+<h3 id="passing-single-criteria-as-a-character-string">Passing single
+criteria as a character string</h3>
+<p>By default, <code>dplyr::filter()</code> does not accept conditions
+as character strings. Following is an example which results in error</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>txhousing</span>, <span class='st'>"sales &gt; 8000"</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre style="color: red;"><code>Error: Problem with `filter()` input `..1`.
-i Input `..1` is `"sales > 8000"`.
+<pre style="color: red;"><code>Error in `dplyr::filter()`:
+! Problem while computing `..1 = "sales > 8000"`.
 x Input `..1` must be a logical vector, not a character.
 </code></pre>
 </div>
@@ -1756,9 +1835,17 @@ x Input `..1` must be a logical vector, not a character.
  9 Houston  2015     6  8449    2.49e9 222400    22311       3.2 2015.
 10 Houston  2015     7  8945    2.57e9 217600    23875       3.4 2016.</code></pre>
 </div>
-<p>The special sauce here is the <code>eval(parse(text = ...))</code> combo that converts the long text criteria into a single raw criteria and passes it to the internal <code>filter()</code> function.</p>
-<h3 id="passing-multiple-criteria-as-character-vector">Passing multiple criteria as character vector</h3>
-<p>What if want to pass multiple criteria as a string vector? In such a situation, we must combine all the string conditions into a single long string condition using <code>paste0(..., collapse = " &amp; ")</code>. The <code>paste0("(", cond, ")", collapse = " &amp; ")</code> combines all the criteria into a single long criteria, but still a text string.</p>
+<p>The special sauce here is the <code>eval(parse(text = ...))</code>
+combo that converts the long text criteria into a single raw criteria
+and passes it to the internal <code>filter()</code> function.</p>
+<h3 id="passing-multiple-criteria-as-character-vector">Passing multiple
+criteria as character vector</h3>
+<p>What if want to pass multiple criteria as a string vector? In such a
+situation, we must combine all the string conditions into a single long
+string condition using <code>paste0(..., collapse = " &amp; ")</code>.
+The <code>paste0("(", cond, ")", collapse = " &amp; ")</code> combines
+all the criteria into a single long criteria, but still a text
+string.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>my_filter_strings</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>cond</span><span class='op'>)</span> <span class='op'>{</span> 
@@ -1807,8 +1894,13 @@ x Input `..1` must be a logical vector, not a character.
 # ... with 305 more rows</code></pre>
 </div>
 <h1 id="mutate"><code>mutate()</code></h1>
-<p><code>mutate()</code> allows you to add new columns or modify existing columns. In the example below, we will create a new column <code>volume_in_millions</code> from the existing column <code>volume</code>. The names of both the columns can be passed to the function either as raw names or character strings.</p>
-<h3 id="passing-the-column-name-as-raw-name">Passing the column name as raw name</h3>
+<p><code>mutate()</code> allows you to add new columns or modify
+existing columns. In the example below, we will create a new column
+<code>volume_in_millions</code> from the existing column
+<code>volume</code>. The names of both the columns can be passed to the
+function either as raw names or character strings.</p>
+<h3 id="passing-the-column-name-as-raw-name">Passing the column name as
+raw name</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mutate_raw</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>new_col_raw</span>, <span class='va'>old_col_raw</span>, <span class='va'>num</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span> 
@@ -1831,7 +1923,9 @@ x Input `..1` must be a logical vector, not a character.
 5 Abilene  2000     5 10590000           10.6 
 6 Abilene  2000     6 13910000           13.9 </code></pre>
 </div>
-<h3 id="passing-the-new-variable-name-as-character-string-direct">Passing the new variable name as character string (direct)</h3>
+<h3
+id="passing-the-new-variable-name-as-character-string-direct">Passing
+the new variable name as character string (direct)</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mutate_text</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>new_col_str</span>, <span class='va'>old_col_str</span>, <span class='va'>num</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span> 
@@ -1854,8 +1948,15 @@ x Input `..1` must be a logical vector, not a character.
 5 Abilene  2000     5 10590000           10.6 
 6 Abilene  2000     6 13910000           13.9 </code></pre>
 </div>
-<h3 id="passing-the-new-variable-name-as-character-string-indirect">Passing the new variable name as character string (indirect)</h3>
-<p>Instead of passing the name of the variable as a character string as an argument, we can pass a variable containing the name of the variable. In the below example, the name of the new variable is stored in <code>new_var</code>. Using the new <code>{glue}</code> syntax, enabled by the walrus operator <code>:=</code>, we substitute the <code>new_var</code> variable with its value.</p>
+<h3
+id="passing-the-new-variable-name-as-character-string-indirect">Passing
+the new variable name as character string (indirect)</h3>
+<p>Instead of passing the name of the variable as a character string as
+an argument, we can pass a variable containing the name of the variable.
+In the below example, the name of the new variable is stored in
+<code>new_var</code>. Using the new <code>{glue}</code> syntax, enabled
+by the walrus operator <code>:=</code>, we substitute the
+<code>new_var</code> variable with its value.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mutate_var</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>new_col_var</span>, <span class='va'>old_col_var</span>, <span class='va'>num</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span>
@@ -1882,7 +1983,10 @@ x Input `..1` must be a logical vector, not a character.
 6 Abilene  2000     6 13910000           13.9 </code></pre>
 </div>
 <h1 id="arrange"><code>arrange()</code></h1>
-<p><code>arrange()</code> sorts the rows of a data frame by the values of selected columns. By default, it sorts in Ascending order. To force a column to sort in Descending order, we must use the <code>desc()</code> function.</p>
+<p><code>arrange()</code> sorts the rows of a data frame by the values
+of selected columns. By default, it sorts in Ascending order. To force a
+column to sort in Descending order, we must use the <code>desc()</code>
+function.</p>
 <h3 id="passing-single-raw-name">Passing single raw name</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -1917,20 +2021,23 @@ x Input `..1` must be a logical vector, not a character.
 5 Houston  2013     5  8439 2121508529 186100    20526       3.3 2013.
 6 Houston  2014     6  8391 2342443127 211200    19725       2.9 2014.</code></pre>
 </div>
-<p><code>arrange_raw()</code> fails when we pass multiple raw names as a vector.</p>
+<p><code>arrange_raw()</code> fails when we pass multiple raw names as a
+vector.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>arrange_raw</span><span class='op'>(</span><span class='va'>txhousing</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>sales</span>, <span class='va'>volume</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre style="color: red;"><code>Error: arrange() failed at implicit mutate() step. 
-* Problem with `mutate()` column `..1`.
-i `..1 = c(sales, volume)`.
-i `..1` must be size 8602 or 1, not 17204.
+<pre style="color: red;"><code>Error in `dplyr::arrange()`:
+! Problem with the implicit `transmute()` step.
+x Problem while computing `..1 = c(sales, volume)`.
+x `..1` must be size 8602 or 1, not 17204.
 </code></pre>
 </div>
-<h3 id="passing-multiple-raw-names-using-...-argument">Passing multiple raw names using <code>...</code> argument</h3>
-<p>To pass multiple raw names, we must use the <code>...</code> argument.</p>
+<h3 id="passing-multiple-raw-names-using-...-argument">Passing multiple
+raw names using <code>...</code> argument</h3>
+<p>To pass multiple raw names, we must use the <code>...</code>
+argument.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>arrange_raw_multiple</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
@@ -1964,7 +2071,8 @@ i `..1` must be size 8602 or 1, not 17204.
 5 Abilene  2014     7   231 35861350 145800     1033       5.8 2014.
 6 Abilene  2005     6   230 24050000  92500      664       4.1 2005.</code></pre>
 </div>
-<h3 id="pass-single-column-name-as-string">Pass single column name as string</h3>
+<h3 id="pass-single-column-name-as-string">Pass single column name as
+string</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>arrange_str</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>var</span>, <span class='va'>.desc</span> <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
@@ -2001,7 +2109,8 @@ i `..1` must be size 8602 or 1, not 17204.
 5 Houston  2013     5  8439 2121508529 186100    20526       3.3 2013.
 6 Houston  2014     6  8391 2342443127 211200    19725       2.9 2014.</code></pre>
 </div>
-<h3 id="pass-multiple-column-name-as-string">Pass multiple column name as string</h3>
+<h3 id="pass-multiple-column-name-as-string">Pass multiple column name
+as string</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>arrange_str_multiple</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>var</span>, <span class='va'>desc</span> <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
@@ -2032,18 +2141,21 @@ i `..1` must be size 8602 or 1, not 17204.
 </code></pre>
 </div>
 <pre><code># A tibble: 6 x 9
-  city       year month sales   volume median listings inventory  date
-  &lt;chr&gt;     &lt;int&gt; &lt;int&gt; &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
-1 Houston    2015     7  8945   2.57e9 217600    23875       3.4 2016.
-2 Dallas     2015     7  7038   2.02e9 233000    12292       2.4 2016.
-3 Austin     2015     7  3466   1.15e9 264600     7913       3   2016.
-4 San Anto~  2015     7  2962   7.05e8 198100     9462       4.1 2016.
-5 Collin C~  2015     7  1861   6.14e8 292600     2809       2.1 2016.
-6 Fort Bend  2015     7  1372   4.32e8 280400     3328       3.1 2016.</code></pre>
+  city         year month sales volume median listings inventory  date
+  &lt;chr&gt;       &lt;int&gt; &lt;int&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
+1 Houston      2015     7  8945 2.57e9 217600    23875       3.4 2016.
+2 Dallas       2015     7  7038 2.02e9 233000    12292       2.4 2016.
+3 Austin       2015     7  3466 1.15e9 264600     7913       3   2016.
+4 San Antonio  2015     7  2962 7.05e8 198100     9462       4.1 2016.
+5 Collin Cou~  2015     7  1861 6.14e8 292600     2809       2.1 2016.
+6 Fort Bend    2015     7  1372 4.32e8 280400     3328       3.1 2016.</code></pre>
 </div>
 <h1 id="group_by"><code>group_by()</code></h1>
-<p>In <code>group_by()</code>, we <em>select</em> which columns to, well, group by! (Damn these well-named functions!). So one can use the same techniques as <code>select()</code> to choose the columns.</p>
-<p>In the following examples, we will create only one summarised value <code>total_sales</code> for simplicity.</p>
+<p>In <code>group_by()</code>, we <em>select</em> which columns to,
+well, group by! (Damn these well-named functions!). So one can use the
+same techniques as <code>select()</code> to choose the columns.</p>
+<p>In the following examples, we will create only one summarised value
+<code>total_sales</code> for simplicity.</p>
 <h3 id="passing-single-raw-name-1">Passing single raw name</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2079,7 +2191,8 @@ i `..1` must be size 8602 or 1, not 17204.
 4     4      397332
 5     5      448968</code></pre>
 </div>
-<h3 id="passing-multiple-raw-names-using-the-...-operator">Passing multiple raw names using the <code>...</code> operator</h3>
+<h3 id="passing-multiple-raw-names-using-the-...-operator">Passing
+multiple raw names using the <code>...</code> operator</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>group_raw_multiple</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>...</span><span class='op'>)</span> <span class='op'>{</span>
@@ -2114,7 +2227,9 @@ i `..1` must be size 8602 or 1, not 17204.
 4  2000     4       18658
 5  2000     5       22388</code></pre>
 </div>
-<h3 id="passing-single-or-multiple-column-names-as-character-string">Passing single or multiple column names as character string</h3>
+<h3
+id="passing-single-or-multiple-column-names-as-character-string">Passing
+single or multiple column names as character string</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>group_str</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>grp</span><span class='op'>)</span> <span class='op'>{</span>
@@ -2176,7 +2291,11 @@ i `..1` must be size 8602 or 1, not 17204.
 4  2000     4       18658
 5  2000     5       22388</code></pre>
 </div>
-<p>If you want the summarise column to have a custom name like <code>total_&lt;sumvar&gt;</code>, then you can wrap the value in quotes as below. This method uses the <code>glue</code> syntax enabled by the <code>:=</code> walrus operator. The walrus operator takes either a raw name or a character string on its LHS.</p>
+<p>If you want the summarise column to have a custom name like
+<code>total_&lt;sumvar&gt;</code>, then you can wrap the value in quotes
+as below. This method uses the <code>glue</code> syntax enabled by the
+<code>:=</code> walrus operator. The walrus operator takes either a raw
+name or a character string on its LHS.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>group_raw2</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>grp</span>, <span class='va'>sumvar</span><span class='op'>)</span> <span class='op'>{</span>
@@ -2211,9 +2330,15 @@ i `..1` must be size 8602 or 1, not 17204.
 4     4        1991278
 5     5        2038932</code></pre>
 </div>
-<p>After writing so many examples, I see a pattern. <code>group_by()</code> works with techniques similar to <code>select()</code> while <code>summarise()</code> works with techniques similar to <code>mutate()</code>.</p>
+<p>After writing so many examples, I see a pattern.
+<code>group_by()</code> works with techniques similar to
+<code>select()</code> while <code>summarise()</code> works with
+techniques similar to <code>mutate()</code>.</p>
 <h1 id="slightly-better-examples">(Slightly Better) Examples</h1>
-<p>The <code>txhousing</code> is a city-wise monthly sales and volume dataset. It has a <code>year</code> and <code>month</code> column. Let us create a <code>date</code> column and keep only those columns relevant for our custom <code>tx_summary()</code> function.</p>
+<p>The <code>txhousing</code> is a city-wise monthly sales and volume
+dataset. It has a <code>year</code> and <code>month</code> column. Let
+us create a <code>date</code> column and keep only those columns
+relevant for our custom <code>tx_summary()</code> function.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>small_df</span> <span class='op'>&lt;-</span> <span class='va'>txhousing</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> 
@@ -2223,7 +2348,9 @@ i `..1` must be size 8602 or 1, not 17204.
 </div>
 </div>
 <h3 id="mutate-example"><code>mutate()</code> example</h3>
-<p>Now let us create the <code>create_ymq()</code> function. This function would take 2 arguments, a data frame <code>df</code> and a raw name of a date column.</p>
+<p>Now let us create the <code>create_ymq()</code> function. This
+function would take 2 arguments, a data frame <code>df</code> and a raw
+name of a date column.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>create_ymq</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>date_col</span><span class='op'>)</span> <span class='op'>{</span>
@@ -2264,7 +2391,9 @@ $ yMonth &lt;dbl&gt; 2000.01, 2000.02, 2000.03, 2000.04, 2000.05, 2000.06,~
 $ dMonth &lt;chr&gt; &quot;Jan 2000&quot;, &quot;Feb 2000&quot;, &quot;Mar 2000&quot;, &quot;Apr 2000&quot;, &quot;May ~</code></pre>
 </div>
 <h3 id="group_by-example"><code>group_by()</code> example</h3>
-<p>Now that we have a function that creates various date-related columns, let us create a function that let’s you create summary tables like annual sales per city, quarterly volumes per city etc.</p>
+<p>Now that we have a function that creates various date-related
+columns, let us create a function that let’s you create summary tables
+like annual sales per city, quarterly volumes per city etc.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>tx_summary</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>grp_col</span>, <span class='va'>sum_col</span><span class='op'>)</span> <span class='op'>{</span>
@@ -2275,7 +2404,8 @@ $ dMonth &lt;chr&gt; &quot;Jan 2000&quot;, &quot;Feb 2000&quot;, &quot;Mar 2000&
 </code></pre>
 </div>
 </div>
-<p>Using these 2 functions, we can now create multiple summary tables</p>
+<p>Using these 2 functions, we can now create multiple summary
+tables</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>small_df_with_date_cols</span> <span class='op'>&lt;-</span> <span class='va'>small_df</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>create_ymq</span><span class='op'>(</span>date_col <span class='op'>=</span> <span class='va'>date</span><span class='op'>)</span>
@@ -2357,21 +2487,40 @@ $ dMonth &lt;chr&gt; &quot;Jan 2000&quot;, &quot;Feb 2000&quot;, &quot;Mar 2000&
 # ... with 8,592 more rows</code></pre>
 </div>
 <h3 id="more-ideas">More ideas</h3>
-<p>You could further extend this by creating a custom filtering function that gives you, say, the rows with the highest or lowest <code>total_sales</code> or <code>total_volume</code>.</p>
+<p>You could further extend this by creating a custom filtering function
+that gives you, say, the rows with the highest or lowest
+<code>total_sales</code> or <code>total_volume</code>.</p>
 <h1 id="conclusion">Conclusion</h1>
-<p>The ability to create such dynamic functions, enabled by the wonderful {dplyr} package, allows us to level-up in terms of programming with R and helps make our code neat and tidy.</p>
+<p>The ability to create such dynamic functions, enabled by the
+wonderful {dplyr} package, allows us to level-up in terms of programming
+with R and helps make our code neat and tidy.</p>
 <figure>
-<img src="https://i.gifer.com/8inO.gif" alt="How I feel while creating custom functions with {dplyr}! I can almost hear the music! Source: gifer.com" /><figcaption aria-hidden="true">How I feel while creating custom functions with {dplyr}! I can almost hear the music! Source: gifer.com</figcaption>
+<img src="https://i.gifer.com/8inO.gif"
+alt="How I feel while creating custom functions with {dplyr}! I can almost hear the music! Source: gifer.com" />
+<figcaption aria-hidden="true">How I feel while creating custom
+functions with {dplyr}! I can almost hear the music! Source:
+gifer.com</figcaption>
 </figure>
 <h1 id="references">References</h1>
 <ul>
-<li>Hadley Wickham, Romain François, Lionel Henry and Kirill Müller (2021). dplyr: A Grammar of Data Manipulation. R package version 1.0.7. <a href="https://CRAN.R-project.org/package=dplyr" class="uri">https://CRAN.R-project.org/package=dplyr</a></li>
-<li><a href="https://dplyr.tidyverse.org/articles/programming.html" class="uri">https://dplyr.tidyverse.org/articles/programming.html</a></li>
-<li>Garrett Grolemund, Hadley Wickham (2011). Dates and Times Made Easy with lubridate. Journal of Statistical Software, 40(3), 1-25. URL <a href="https://www.jstatsoft.org/v40/i03/" class="uri">https://www.jstatsoft.org/v40/i03/</a>.</li>
-<li>H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.</li>
-<li>Jim Hester (2020). glue: Interpreted String Literals. R package version 1.4.2. <a href="https://CRAN.R-project.org/package=glue" class="uri">https://CRAN.R-project.org/package=glue</a></li>
+<li>Hadley Wickham, Romain François, Lionel Henry and Kirill Müller
+(2021). dplyr: A Grammar of Data Manipulation. R package version 1.0.7.
+<a href="https://CRAN.R-project.org/package=dplyr"
+class="uri">https://CRAN.R-project.org/package=dplyr</a></li>
+<li><a href="https://dplyr.tidyverse.org/articles/programming.html"
+class="uri">https://dplyr.tidyverse.org/articles/programming.html</a></li>
+<li>Garrett Grolemund, Hadley Wickham (2011). Dates and Times Made Easy
+with lubridate. Journal of Statistical Software, 40(3), 1-25. URL <a
+href="https://www.jstatsoft.org/v40/i03/"
+class="uri">https://www.jstatsoft.org/v40/i03/</a>.</li>
+<li>H. Wickham. ggplot2: Elegant Graphics for Data Analysis.
+Springer-Verlag New York, 2016.</li>
+<li>Jim Hester (2020). glue: Interpreted String Literals. R package
+version 1.4.2. <a href="https://CRAN.R-project.org/package=glue"
+class="uri">https://CRAN.R-project.org/package=glue</a></li>
 </ul>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb38"><pre
+class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
