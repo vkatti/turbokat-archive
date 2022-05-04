@@ -12,7 +12,6 @@ categories:
 preview: https://i.gifer.com/8inO.gif
 output:
   distill::distill_article:
-    self_contained: false
     toc: true
 ---
 
@@ -63,12 +62,11 @@ select_raw(txhousing, sales)                 # pass single raw name
 select_raw(txhousing, c(sales, volume))      # pass a vector of raw names for multiple columns
 ```
 
-
 If passing multiple raw names as vector as in the `select_raw()` feels like an unnecessary complication, try the next method.
 
 ### Passing multiple raw column names using ... argument
 
-In this method, we use the `…` argument to pass the raw names of the columns we want to select.
+In this method, we use the `.` argument to pass the raw names of the columns we want to select.
 
 ```{r my_select}
 my_select <- function(df, ...) {
@@ -78,7 +76,6 @@ my_select <- function(df, ...) {
 
 my_select(txhousing, sales, volume)          # pass multiple raw names directly
 ```
-
 
 ### Passing a character vector of column names
 
@@ -93,7 +90,6 @@ my_select_char <- function(df, cols) {
 my_cols <- c("sales","volume")
 my_select_char(txhousing, my_cols)
 ```
-
 
 # `filter()`
 
@@ -184,9 +180,6 @@ my_filter_criteria_with_OR <- c("sales > 8000 | sales < 50", "year > 2010")
 my_filter_strings(txhousing, my_filter_criteria_with_OR)
 ```
 
-
-
-
 # `mutate()`
 
 `mutate()` allows you to add new columns or modify existing columns. In the example below, we will create a new column `volume_in_millions` from the existing column `volume`. The names of both the columns can be passed to the function either as raw names or character strings.
@@ -204,7 +197,6 @@ txhousing %>%
   mutate_raw(vol_in_millions, volume, 1E6) # pass raw column names w/o quotes
 ```
 
-
 ### Passing the new variable name as character string (direct)
 
 ```{r mutate_text}
@@ -221,7 +213,7 @@ txhousing %>%
 
 ### Passing the new variable name as character string (indirect)
 
-Instead of passing the name of the variable as a character string as an argument, we can pass a variable containing the name of the variable. In the below example, the name of the new variable is stored in `new_var`.  Using the new `{glue}` syntax, enabled by the walrus operator `:=`, we substitute the `new_var` variable with its value. 
+Instead of passing the name of the variable as a character string as an argument, we can pass a variable containing the name of the variable. In the below example, the name of the new variable is stored in `new_var`. Using the new `{glue}` syntax, enabled by the walrus operator `:=`, we substitute the `new_var` variable with its value.
 
 ```{r mutate_var}
 
@@ -274,8 +266,6 @@ arrange_raw_multiple(txhousing, city, sales)
 arrange_raw_multiple(txhousing, city, desc(sales))
 ```
 
-
-
 ### Pass single column name as string
 
 ```{r arrange_str}
@@ -308,8 +298,6 @@ arrange_str_multiple <- function(df, var, desc = FALSE) {
 arrange_str_multiple(txhousing, c("year", "month", "sales"))
 arrange_str_multiple(txhousing, c("year", "month", "sales"), desc = TRUE)
 ```
-
-
 
 # `group_by()`
 
@@ -372,7 +360,6 @@ group_str(txhousing, yrmon)
 
 ```
 
-
 If you want the summarise column to have a custom name like `total_<sumvar>`, then you can wrap the value in quotes as below. This method uses the `glue` syntax enabled by the `:=` walrus operator. The walrus operator takes either a raw name or a character string on its LHS.
 
 ```{r group_raw2}
@@ -390,7 +377,6 @@ group_raw2(txhousing, month, listings)        # Sum of listings per month
 
 After writing so many examples, I see a pattern. `group_by()` works with techniques similar to `select()` while `summarise()` works with techniques similar to `mutate()`.
 
-
 # (Slightly Better) Examples
 
 The `txhousing` is a city-wise monthly sales and volume dataset. It has a `year` and `month` column. Let us create a `date` column and keep only those columns relevant for our custom `tx_summary()` function.
@@ -402,8 +388,8 @@ small_df <- txhousing %>%
            
 ```
 
-
 ### `mutate()` example
+
 Now let us create the `create_ymq()` function. This function would take 2 arguments, a data frame `df` and a raw name of a date column.
 
 ```{r create_ymq}
@@ -429,8 +415,7 @@ create_ymq(df = small_df, date_col = date) %>% glimpse()
 
 ### `group_by()` example
 
-Now that we have a function that creates various date-related columns, let us create a function that
- let's you create summary tables like annual sales per city, quarterly volumes per city etc.
+Now that we have a function that creates various date-related columns, let us create a function that let's you create summary tables like annual sales per city, quarterly volumes per city etc.
 
 ```{r}
 tx_summary <- function(df, grp_col, sum_col) {
@@ -458,10 +443,9 @@ small_df_with_date_cols %>% tx_summary(grp_col = yQtr, sum_col = sales)
 small_df_with_date_cols %>% tx_summary(grp_col = yMonth, sum_col = volume)
 ```
 
-### More ideas  
+### More ideas
 
 You could further extend this by creating a custom filtering function that gives you, say, the rows with the highest or lowest `total_sales` or `total_volume`.
-
 
 # Conclusion
 
@@ -471,8 +455,8 @@ The ability to create such dynamic functions, enabled by the wonderful {dplyr} p
 
 # References
 
--   Hadley Wickham, Romain François, Lionel Henry and Kirill Müller (2021). dplyr: A Grammar of Data Manipulation. R package version 1.0.7. https://CRAN.R-project.org/package=dplyr
--   https://dplyr.tidyverse.org/articles/programming.html
--   Garrett Grolemund, Hadley Wickham (2011). Dates and Times Made Easy with lubridate. Journal of Statistical Software, 40(3), 1-25. URL https://www.jstatsoft.org/v40/i03/.
+-   Hadley Wickham, Romain Francois, Lionel Henry and Kirill Muller (2022). dplyr: A Grammar of Data Manipulation. R package version 1.0.8. <https://CRAN.R-project.org/package=dplyr>
+-   <https://dplyr.tidyverse.org/articles/programming.html>
+-   Garrett Grolemund, Hadley Wickham (2011). Dates and Times Made Easy with lubridate. Journal of Statistical Software, 40(3), 1-25. URL <https://www.jstatsoft.org/v40/i03/>.
 -   H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
--   Jim Hester (2020). glue: Interpreted String Literals. R package version 1.4.2. https://CRAN.R-project.org/package=glue
+-   Jim Hester (2020). glue: Interpreted String Literals. R package version 1.4.2. <https://CRAN.R-project.org/package=glue>
