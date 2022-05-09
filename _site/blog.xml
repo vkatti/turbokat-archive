@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/" version="2.0">
+  <channel>
+    <title>Vishal Katti</title>
+    <link>https://vishalkatti.com</link>
+    <atom:link href="https://vishalkatti.com/blog.xml" rel="self" type="application/rss+xml"/>
+    <description>Welcome to Vishal Katti's website
+</description>
+    <generator>Distill</generator>
+    <lastBuildDate>Tue, 18 Jan 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Writing Robust R Functions</title>
+      <dc:creator>Vishal Katti</dc:creator>
+      <link>https://vishalkatti.com/posts/2022-01-18-writingrobustrfunctions</link>
+      <description>Some designs to validate function arguments.</description>
+      <category>Rstats</category>
+      <category>functions</category>
+      <guid>https://vishalkatti.com/posts/2022-01-18-writingrobustrfunctions</guid>
+      <pubDate>Tue, 18 Jan 2022 00:00:00 +0000</pubDate>
+      <media:content url="https://64.media.tumblr.com/f6dc1e64c3d63e1f308e46445cafb6ab/tumblr_mo7km0eiRW1qedb29o1_500.gif" medium="image" type="image/gif"/>
+    </item>
+    <item>
+      <title>Unholy Trinity of R, Excel VBA and Powerpoint - Part 2 of 2</title>
+      <dc:creator>Vishal Katti</dc:creator>
+      <link>https://vishalkatti.com/posts/2021-12-29-rtovbatoppt</link>
+      <description>Using R to trigger Excel VBA macros to create PowerPoint presentations!</description>
+      <category>Rstats</category>
+      <category>Excel</category>
+      <category>VBA</category>
+      <category>PowerPoint</category>
+      <category>openxlsx</category>
+      <category>RDCOMClient</category>
+      <guid>https://vishalkatti.com/posts/2021-12-29-rtovbatoppt</guid>
+      <pubDate>Wed, 29 Dec 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://vishalkatti.com/posts/2021-12-29-rtovbatoppt/images/R2XL2PPT_logo.png" medium="image" type="image/png" width="1500" height="619"/>
+    </item>
+    <item>
+      <title>Unholy Trinity of R, Excel VBA and Powerpoint - Part 1 of 2</title>
+      <dc:creator>Vishal Katti</dc:creator>
+      <link>https://vishalkatti.com/posts/2021-08-29-rtovbatoppt</link>
+      <description>Using R to trigger Excel VBA macros to create PowerPoint presentations!</description>
+      <category>Rstats</category>
+      <category>Excel</category>
+      <category>VBA</category>
+      <category>PowerPoint</category>
+      <guid>https://vishalkatti.com/posts/2021-08-29-rtovbatoppt</guid>
+      <pubDate>Tue, 19 Oct 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://vishalkatti.com/posts/2021-08-29-rtovbatoppt/images/R2XL2PPT_logo.png" medium="image" type="image/png" width="1500" height="619"/>
+    </item>
+    <item>
+      <title>Interactive Drill-down Tables using {reactable}</title>
+      <dc:creator>Vishal Katti</dc:creator>
+      <link>https://vishalkatti.com/posts/2021-07-27-drilldown</link>
+      <description>How to create multi-level tables with hidden rows</description>
+      <category>Rstats</category>
+      <category>reactable</category>
+      <category>drill-down</category>
+      <guid>https://vishalkatti.com/posts/2021-07-27-drilldown</guid>
+      <pubDate>Tue, 27 Jul 2021 00:00:00 +0000</pubDate>
+      <media:content url="https://vishalkatti.com/posts/2021-07-27-drilldown/images/drilldown.gif" medium="image" type="image/gif"/>
+    </item>
+  </channel>
+</rss>

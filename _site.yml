@@ -1,0 +1,37 @@
+name: "website"
+title: "Vishal Katti"
+description: |
+  Welcome to Vishal Katti's website
+output_dir: "_site"
+theme: katti_theme.css
+navbar:
+  right:
+    - text: "About"
+      href: index.html
+    - text: "Blog"
+      href: blog.html
+    - text: "CV"
+      href: content/docs/VishalKatti_CV.pdf
+    - icon: fa fa-github
+      href: https://github.com/vkatti
+    - icon: fa fa-linkedin
+      href: https://www.linkedin.com/in/vishalkatti
+    - icon: fa fa-twitter
+      href: https://twitter.com/vishal_katti
+    - icon: fa fa-rss
+      href: blog.xml
+output:
+  distill::distill_article:
+    includes:
+      in_header: utterances.html
+base_url: https://vishalkatti.com
+repository_url: https://www.github.com/vkatti/turbokat
+creative_commons: CC BY
+twitter:
+  site: "@vishal_katti"
+  creator: "@vishal_katti"
+rss:
+  full_content: false
+collections:
+  posts:
+    share: [twitter, linkedin, pinterest, facebook]
