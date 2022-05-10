@@ -9,7 +9,7 @@ categories:
   - Rstats
   - dplyr
   - functions
-preview: https://i.gifer.com/8inO.gif
+preview: thor.gif
 output:
   distill::distill_article:
     toc: true
@@ -42,6 +42,7 @@ We shall use the Texas Housing Sales data, available as a tibble in the popular 
 txhousing <- ggplot2::txhousing
 dplyr::glimpse(txhousing)
 ```
+
 
 We shall refer the above data in all the following sections.
 
@@ -451,16 +452,15 @@ You could further extend this by creating a custom filtering function that gives
 
 The ability to create such dynamic functions, enabled by the wonderful {dplyr} package, allows us to level-up in terms of programming with R and helps make our code neat and tidy.
 
-![How I feel while creating custom functions with {dplyr}! I can almost hear the music! Source: gifer.com](https://i.gifer.com/8inO.gif)
+![How I feel while creating custom functions with {dplyr}! I can almost hear the music! Source: gifer.com](thor.gif)
 
 # References
 
--   Hadley Wickham, Romain Francois, Lionel Henry and Kirill Muller (2022). dplyr: A Grammar of Data Manipulation. R package version 1.0.9. <https://CRAN.R-project.org/package=dplyr>
-
--   <https://dplyr.tidyverse.org/articles/programming.html>
-
--   Garrett Grolemund, Hadley Wickham (2011). Dates and Times Made Easy with lubridate. Journal of Statistical Software, 40(3), 1-25. URL <https://www.jstatsoft.org/v40/i03/>.
-
--   H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York, 2016.
-
--   Jim Hester (2020). glue: Interpreted String Literals. R package version 1.4.2. <https://CRAN.R-project.org/package=glue>
+- Hadley Wickham, Romain François, Lionel Henry and Kirill Müller (2022).
+  dplyr: A Grammar of Data Manipulation. R package version 1.0.9.
+  https://CRAN.R-project.org/package=dplyr
+- https://dplyr.tidyverse.org/articles/programming.html
+- H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New
+  York, 2016. https://ggplot2.tidyverse.org
+- Jim Hester and Jennifer Bryan (2022). glue: Interpreted String Literals. R
+  package version 1.6.2. https://CRAN.R-project.org/package=glue
