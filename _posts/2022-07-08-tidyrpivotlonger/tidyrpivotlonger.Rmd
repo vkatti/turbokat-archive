@@ -1,0 +1,35 @@
+---
+title: "Pivoting with Tidyr: Part I"
+description: |
+  Converting "wide" to "long" format
+author:
+  - name: Vishal Katti
+    url: {}
+date: 2022-07-08
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Intro
+
+One of the primary data manipulation operations is pivoting your tabular from "wide" format to "long" format and vice-versa. The idea is to make your tabular data "tidy" i.e.
+
+* Every column is a variable. 
+* Every row is an observation. 
+* Every cell is a single value. 
+
+Interestingly, this "tidy" format is also the "long" format which is desirable for data and plotting operations using R, Python or other data processing programming languages. The {tidyr} R package has pivot_* functions that allow you to do so.
+
+
+# References
+
+- https://www.statology.org/long-vs-wide-data/  
+- Hadley Wickham and Maximilian Girlich (2022). tidyr: Tidy Messy Data. R package version 1.2.0. https://CRAN.R-project.org/package=tidyr
+- Hadley Wickham, Romain François, Lionel Henry and Kirill Müller (2022). dplyr: A Grammar of Data Manipulation. R package version 1.0.9. https://CRAN.R-project.org/package=dplyr
+

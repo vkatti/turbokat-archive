@@ -1,5 +1,22 @@
 [
   {
+    "path": "posts/2022-07-08-tidyrpivotlonger/",
+    "title": "Pivoting with Tidyr: Part I",
+    "description": "Converting \"wide\" to \"long\" format",
+    "author": [
+      {
+        "name": "Vishal Katti",
+        "url": {}
+      }
+    ],
+    "date": "2022-07-08",
+    "categories": [],
+    "contents": "\r\nIntro\r\nOne of the primary data manipulation operations is pivoting your\r\ntabular from “wide” format to “long” format and vice-versa. The idea is\r\nto make your tabular data “tidy” i.e.\r\nEvery column is a variable.\r\nEvery row is an observation.\r\nEvery cell is a single value.\r\nInterestingly, this “tidy” format is also the “long” format which is\r\ndesirable for data and plotting operations using R, Python or other data\r\nprocessing programming languages. The {tidyr} R package has pivot_*\r\nfunctions that allow you to do so.\r\nReferences\r\nhttps://www.statology.org/long-vs-wide-data/\r\nHadley Wickham and Maximilian Girlich (2022). tidyr: Tidy Messy\r\nData. R package version 1.2.0. https://CRAN.R-project.org/package=tidyr\r\nHadley Wickham, Romain François, Lionel Henry and Kirill Müller\r\n(2022). dplyr: A Grammar of Data Manipulation. R package version 1.0.9.\r\nhttps://CRAN.R-project.org/package=dplyr\r\n\r\n\r\n\r\n",
+    "preview": {},
+    "last_modified": "2022-07-08T11:13:41+05:30",
+    "input_file": "tidyrpivotlonger.knit.md"
+  },
+  {
     "path": "posts/2022-01-18-writingrobustrfunctions/",
     "title": "Writing Robust R Functions",
     "description": "Some designs to validate function arguments.",

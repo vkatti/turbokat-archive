@@ -7,7 +7,15 @@
     <description>Welcome to Vishal Katti's website
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Tue, 18 Jan 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 07 Jul 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Pivoting with Tidyr: Part I</title>
+      <dc:creator>Vishal Katti</dc:creator>
+      <link>https://vishalkatti.com/posts/2022-07-08-tidyrpivotlonger</link>
+      <description>Converting "wide" to "long" format</description>
+      <guid>https://vishalkatti.com/posts/2022-07-08-tidyrpivotlonger</guid>
+      <pubDate>Thu, 07 Jul 2022 00:00:00 +0000</pubDate>
+    </item>
     <item>
       <title>Writing Robust R Functions</title>
       <dc:creator>Vishal Katti</dc:creator>
