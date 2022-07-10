@@ -9,12 +9,17 @@
     <generator>Distill</generator>
     <lastBuildDate>Thu, 07 Jul 2022 00:00:00 +0000</lastBuildDate>
     <item>
-      <title>Pivoting with Tidyr: Part I</title>
+      <title>Pivoting your tables with Tidyr: Part I</title>
       <dc:creator>Vishal Katti</dc:creator>
       <link>https://vishalkatti.com/posts/2022-07-08-tidyrpivotlonger</link>
       <description>Converting "wide" to "long" format</description>
+      <category>Rstats</category>
+      <category>functions</category>
+      <category>tidyr</category>
+      <category>pivot</category>
       <guid>https://vishalkatti.com/posts/2022-07-08-tidyrpivotlonger</guid>
       <pubDate>Thu, 07 Jul 2022 00:00:00 +0000</pubDate>
+      <media:content url="https://vishalkatti.com/posts/2022-07-08-tidyrpivotlonger/images/pivot_longer.gif" medium="image" type="image/gif"/>
     </item>
     <item>
       <title>Writing Robust R Functions</title>
