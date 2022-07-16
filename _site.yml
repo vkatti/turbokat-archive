@@ -31,7 +31,7 @@ twitter:
   site: "@vishal_katti"
   creator: "@vishal_katti"
 rss:
-  full_content: false
+  full_content: true
 collections:
   posts:
     share: [twitter, linkedin, pinterest, facebook]
