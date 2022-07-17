@@ -50,16 +50,17 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  { color: #00769e; background-color: #f1f3f5; }
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
+code span { color: #00769e; } /* Normal */
 code span.al { color: #ad0000; } /* Alert */
 code span.an { color: #5e5e5e; } /* Annotation */
-code span.at { } /* Attribute */
+code span.at { color: #657422; } /* Attribute */
 code span.bn { color: #ad0000; } /* BaseN */
 code span.bu { } /* BuiltIn */
-code span.cf { color: #007ba5; } /* ControlFlow */
+code span.cf { color: #00769e; } /* ControlFlow */
 code span.ch { color: #20794d; } /* Char */
 code span.cn { color: #8f5902; } /* Constant */
 code span.co { color: #5e5e5e; } /* Comment */
@@ -73,9 +74,9 @@ code span.fl { color: #ad0000; } /* Float */
 code span.fu { color: #4758ab; } /* Function */
 code span.im { } /* Import */
 code span.in { color: #5e5e5e; } /* Information */
-code span.kw { color: #007ba5; } /* Keyword */
+code span.kw { color: #00769e; } /* Keyword */
 code span.op { color: #5e5e5e; } /* Operator */
-code span.ot { color: #007ba5; } /* Other */
+code span.ot { color: #00769e; } /* Other */
 code span.pp { color: #ad0000; } /* Preprocessor */
 code span.sc { color: #5e5e5e; } /* SpecialChar */
 code span.ss { color: #20794d; } /* SpecialString */
@@ -117,7 +118,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"NULL"}
+  {"type":"character","attributes":{},"value":["writingrobustrfunctions_files/anchor-4.2.2/anchor.min.js","writingrobustrfunctions_files/bowser-1.9.3/bowser.min.js","writingrobustrfunctions_files/distill-2.2.21/template.v2.js","writingrobustrfunctions_files/header-attrs-2.14/header-attrs.js","writingrobustrfunctions_files/jquery-3.6.0/jquery-3.6.0.js","writingrobustrfunctions_files/jquery-3.6.0/jquery-3.6.0.min.js","writingrobustrfunctions_files/jquery-3.6.0/jquery-3.6.0.min.map","writingrobustrfunctions_files/popper-2.6.0/popper.min.js","writingrobustrfunctions_files/tippy-6.2.7/tippy-bundle.umd.min.js","writingrobustrfunctions_files/tippy-6.2.7/tippy-light-border.css","writingrobustrfunctions_files/tippy-6.2.7/tippy.css","writingrobustrfunctions_files/tippy-6.2.7/tippy.umd.min.js","writingrobustrfunctions_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -429,10 +430,6 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     position: relative;
     margin-bottom: 2.5em;
     margin-top: 1.5em;
-  }
-
-  .figure img {
-    width: 100%;
   }
 
   .figure .caption {
@@ -1264,6 +1261,12 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
+        if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
+          var fn = $(this).children()[0]
+          $(this).html(fn.shadowRoot.querySelector("sup"))
+          $(this).id = fn.id
+          fn.remove()
+        }
         var refs = $(this).attr('data-cites').split(" ");
         var refHtml = refs.map(function(ref) {
           return "<p>" + $('#ref-' + ref).html() + "</p>";
@@ -1278,6 +1281,31 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
           placement: 'bottom-start'
         });
       });
+
+      // fix footnotes in tables (#411)
+      // replacing broken distill.pub feature
+      $('table d-footnote').each(function() {
+        // we replace internal showAtNode methode which is triggered when hovering a footnote
+        this.hoverBox.showAtNode = function(node) {
+          // ported from https://github.com/distillpub/template/pull/105/files
+          calcOffset = function(elem) {
+              let x = elem.offsetLeft;
+              let y = elem.offsetTop;
+              // Traverse upwards until an `absolute` element is found or `elem`
+              // becomes null.
+              while (elem = elem.offsetParent && elem.style.position != 'absolute') {
+                  x += elem.offsetLeft;
+                  y += elem.offsetTop;
+              }
+
+              return { left: x, top: y };
+          }
+          // https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/offsetTop
+          const bbox = node.getBoundingClientRect();
+          const offset = calcOffset(node);
+          this.show([offset.left + bbox.width, offset.top + bbox.height]);
+        }
+      })
 
       // clear polling timer
       clearInterval(tid);
@@ -1377,6 +1405,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // mark non-body figures created by knitr chunks as 100% width
     $('.layout-chunk').each(function(i, val) {
       var figures = $(this).find('img, .html-widget');
+      // ignore leaflet img layers (#106)
+      figures = figures.filter(':not(img[class*="leaflet"])')
       if ($(this).attr('data-layout') !== "l-body") {
         figures.css('width', '100%');
       } else {
@@ -1399,7 +1429,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
     // get rid of index.html references in header
     if (window.location.protocol !== "file:") {
       $('.distill-site-header a[href]').each(function(i,val) {
-        $(this).attr('href', $(this).attr('href').replace("index.html", "./"));
+        $(this).attr('href', $(this).attr('href').replace(/^index[.]html/, "./"));
       });
     }
 
@@ -1472,8 +1502,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h1>Writing Robust R Functions</h1>
 <!--radix_placeholder_categories-->
 <div class="dt-tags">
-<div class="dt=tag">Rstats</div>
-<div class="dt=tag">functions</div>
+<div class="dt-tag">Rstats</div>
+<div class="dt-tag">functions</div>
 </div>
 <!--/radix_placeholder_categories-->
 <p><p>Some designs to validate function arguments.</p></p>
@@ -1490,32 +1520,42 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <nav class="l-text toc figcaption" id="TOC">
 <h3>Contents</h3>
 <ul>
-<li><a href="#introduction">Introduction</a></li>
-<li><a href="#what-do-we-mean-by-robust-functions">What do we mean by
-Robust Functions?</a></li>
-<li><a href="#our-sweet-innocent-and-naive-function">Our sweet, innocent
-and naive Function</a></li>
-<li><a href="#scenario-1-missing-arguments">Scenario 1: Missing
-Arguments</a>
+<li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+<li><a href="#what-do-we-mean-by-robust-functions"
+id="toc-what-do-we-mean-by-robust-functions">What do we mean by Robust
+Functions?</a></li>
+<li><a href="#our-sweet-innocent-and-naive-function"
+id="toc-our-sweet-innocent-and-naive-function">Our sweet, innocent and
+naive Function</a></li>
+<li><a href="#scenario-1-missing-arguments"
+id="toc-scenario-1-missing-arguments">Scenario 1: Missing Arguments</a>
 <ul>
-<li><a href="#early-exit">1.1 Early Exit</a></li>
-<li><a href="#sensible-defaults-with-warnings">1.2 Sensible defaults
-with warnings</a></li>
+<li><a href="#early-exit" id="toc-early-exit">1.1 Early Exit</a></li>
+<li><a href="#sensible-defaults-with-warnings"
+id="toc-sensible-defaults-with-warnings">1.2 Sensible defaults with
+warnings</a></li>
 </ul></li>
-<li><a href="#scenario-2-invalid-argument-data-type">Scenario 2: Invalid
+<li><a href="#scenario-2-invalid-argument-data-type"
+id="toc-scenario-2-invalid-argument-data-type">Scenario 2: Invalid
 Argument Data Type</a>
 <ul>
-<li><a href="#character-arguments">Character arguments</a></li>
-<li><a href="#factor-arguments">Factor arguments</a></li>
+<li><a href="#character-arguments"
+id="toc-character-arguments">Character arguments</a></li>
+<li><a href="#factor-arguments" id="toc-factor-arguments">Factor
+arguments</a></li>
 </ul></li>
-<li><a href="#scenario-3-incorrect-argument-size">Scenario 3: Incorrect
+<li><a href="#scenario-3-incorrect-argument-size"
+id="toc-scenario-3-incorrect-argument-size">Scenario 3: Incorrect
 Argument Size</a></li>
-<li><a href="#a-little-detour">A little detour…</a></li>
+<li><a href="#a-little-detour" id="toc-a-little-detour">A little
+detour…</a></li>
 <li><a
-href="#scenario-4-values-of-arguments-that-result-in-invalid-outputs">Scenario
+href="#scenario-4-values-of-arguments-that-result-in-invalid-outputs"
+id="toc-scenario-4-values-of-arguments-that-result-in-invalid-outputs">Scenario
 4: Values of Arguments that result in invalid outputs</a></li>
-<li><a href="#conclusion">Conclusion</a></li>
-<li><a href="#citations-references">Citations &amp; References</a></li>
+<li><a href="#conclusion" id="toc-conclusion">Conclusion</a></li>
+<li><a href="#citations-references"
+id="toc-citations-references">Citations &amp; References</a></li>
 </ul>
 </nav>
 </div>
@@ -1576,20 +1616,18 @@ numeric inputs <code>yyyy</code>, <code>mm</code> and <code>dd</code>
 and returns a single ’Date` object.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span><span class='op'>)</span> <span class='op'>{</span>
-  
-  <span class='co'># main logic</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='va'>my_date</span> <span class='op'>&lt;-</span> <span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>1</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span>
-<span class='va'>my_date</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  </span>
+<span>  <span class='co'># main logic</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='va'>my_date</span> <span class='op'>&lt;-</span> <span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>1</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span></span>
+<span><span class='va'>my_date</span></span></code></pre>
 </div>
 <pre><code>[1] &quot;2022-01-31&quot;</code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>my_date</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span><span class='op'>(</span><span class='va'>my_date</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code>[1] &quot;Date&quot;</code></pre>
 </div>
@@ -1603,8 +1641,7 @@ about how your function should behave if one of the arguments, suppose
 <code>mm</code> is missing.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in paste(yyyy, mm, dd, sep = "-"): argument "mm" is missing, with no default
 </code></pre>
@@ -1628,20 +1665,19 @@ arguments. Let us modify our naive function to stop early when required
 arguments are missing.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span><span class='op'>)</span> <span class='op'>{</span>
-  
-  <span class='co'># check missing arguments</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `mm` is required."</span><span class='op'>)</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `dd` is required."</span><span class='op'>)</span>
-  
-  <span class='co'># main logic</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'># Calling the function without `mm` argument</span>
-<span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  </span>
+<span>  <span class='co'># check missing arguments</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `mm` is required."</span><span class='op'>)</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `dd` is required."</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='co'># main logic</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='co'># Calling the function without `mm` argument</span></span>
+<span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in make_date(yyyy = 2022, dd = 31): argument `mm` is required.
 </code></pre>
@@ -1656,14 +1692,13 @@ of the arguments is missing. However, providing clear error messages
 becomes challenging in this method.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dummy_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span>, <span class='va'>c</span><span class='op'>)</span> <span class='op'>{</span> 
-  <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/any.html'>any</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"One or more required arguments missing."</span><span class='op'>)</span>
-  <span class='op'>}</span>
-  <span class='co'># Do something...</span>
-<span class='op'>}</span>
-<span class='fu'>dummy_fun</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>dummy_fun</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span>, <span class='va'>c</span><span class='op'>)</span> <span class='op'>{</span> </span>
+<span>  <span class='kw'>if</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/any.html'>any</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"One or more required arguments missing."</span><span class='op'>)</span></span>
+<span>  <span class='op'>}</span></span>
+<span>  <span class='co'># Do something...</span></span>
+<span><span class='op'>}</span></span>
+<span><span class='fu'>dummy_fun</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in dummy_fun(a = 1): One or more required arguments missing.
 </code></pre>
@@ -1682,8 +1717,7 @@ earlier. The default value of the separator argument <code>sep</code> is
 a single whitespace character.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/args.html'>args</a></span><span class='op'>(</span><span class='va'>paste</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/args.html'>args</a></span><span class='op'>(</span><span class='va'>paste</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code>function (..., sep = &quot; &quot;, collapse = NULL, recycle0 = FALSE) 
 NULL</code></pre>
@@ -1694,20 +1728,19 @@ provide defaults for the <code>mm</code> and <code>dd</code> arguments
 only.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>dd</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span>
-  
-  <span class='co'># check missing arguments</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span>  <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> 
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `mm` is missing. Using default value mm = 1 instead"</span><span class='op'>)</span> 
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `dd` is missing. Using default value dd = 1 instead"</span><span class='op'>)</span>
-  
-  <span class='co'># main logic</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'># Calling the function without `mm` and `dd` arguments</span>
-<span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span><span class='op'>)</span> <span class='co'># here, only `yyyy` is the required argument.</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>dd</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  </span>
+<span>  <span class='co'># check missing arguments</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span>  <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> </span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `mm` is missing. Using default value mm = 1 instead"</span><span class='op'>)</span> </span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `dd` is missing. Using default value dd = 1 instead"</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='co'># main logic</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='co'># Calling the function without `mm` and `dd` arguments</span></span>
+<span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span><span class='op'>)</span> <span class='co'># here, only `yyyy` is the required argument.</span></span></code></pre>
 </div>
 <pre style="color: orange;"><code>Warning in make_date(yyyy = 2022): argument `mm` is missing. Using
 default value mm = 1 instead
@@ -1728,8 +1761,7 @@ i.e. all 3 must be numbers. What would happen if someone tried to call
 <code>make_date</code> with character, factor or boolean inputs?</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='st'>"2022"</span>, mm <span class='op'>=</span> <span class='st'>"5"</span>, dd <span class='op'>=</span> <span class='st'>"20"</span><span class='op'>)</span> <span class='co'># works!! why?</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='st'>"2022"</span>, mm <span class='op'>=</span> <span class='st'>"5"</span>, dd <span class='op'>=</span> <span class='st'>"20"</span><span class='op'>)</span> <span class='co'># works!! why?</span></span></code></pre>
 </div>
 <pre><code>[1] &quot;2022-05-20&quot;</code></pre>
 </div>
@@ -1740,8 +1772,7 @@ main logic of <code>make_date</code> which is
 <code>as.Date(paste(yyyy, mm, dd, sep = "-"), format = "%Y-%m-%d")</code></p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='st'>"2022"</span>, mm <span class='op'>=</span> <span class='st'>"May"</span>, dd <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span> <span class='co'># works but shows NA !!!</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='st'>"2022"</span>, mm <span class='op'>=</span> <span class='st'>"May"</span>, dd <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span> <span class='co'># works but shows NA !!!</span></span></code></pre>
 </div>
 <pre><code>[1] NA</code></pre>
 </div>
@@ -1765,10 +1796,9 @@ scenarios.</p>
 <h3 id="character-arguments">Character arguments</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>Year</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"2022"</span>, <span class='st'>"TwentyTwo"</span><span class='op'>)</span>
-<span class='va'>Year_num</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>Year</span><span class='op'>)</span> <span class='co'># this should show a warning about NAs introduced by coercion</span>
-<span class='va'>Year_num</span> <span class='co'># must show the number 2022 without quotes and one NA</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>Year</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"2022"</span>, <span class='st'>"TwentyTwo"</span><span class='op'>)</span></span>
+<span><span class='va'>Year_num</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>Year</span><span class='op'>)</span> <span class='co'># this should show a warning about NAs introduced by coercion</span></span>
+<span><span class='va'>Year_num</span> <span class='co'># must show the number 2022 without quotes and one NA</span></span></code></pre>
 </div>
 <pre><code>[1] 2022   NA</code></pre>
 </div>
@@ -1779,21 +1809,18 @@ number-like but “TwentyTwo” is not.</p>
 <h3 id="factor-arguments">Factor arguments</h3>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>Year</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"2022"</span>,<span class='st'>"2021"</span>,<span class='st'>"TwentyTwo"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>Year</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>Year</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"2022"</span>,<span class='st'>"2021"</span>,<span class='st'>"TwentyTwo"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>Year</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code>[1] 2 1 3</code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>YearX</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"2022"</span>, <span class='st'>"X"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>YearX</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>YearX</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"2022"</span>, <span class='st'>"X"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>YearX</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code>[1] 1 2</code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>YearY</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fl'>2022</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>YearY</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>YearY</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='fl'>2022</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>YearY</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code>[1] 1</code></pre>
 </div>
@@ -1808,43 +1835,41 @@ data types that should be allowed. Modifying our <code>make_date</code>
 function to include data type checks.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>dd</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span>
-  
-  <span class='co'># check missing arguments</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span>  <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> 
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `mm` is missing. Using default value mm = 1 instead"</span><span class='op'>)</span> 
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `dd` is missing. Using default value dd = 1 instead"</span><span class='op'>)</span>
-  
-  <span class='co'># Check data types</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` must be numeric"</span><span class='op'>)</span>
-  <span class='op'>}</span> <span class='kw'>else</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` must be numeric"</span><span class='op'>)</span>
-  <span class='op'>}</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `mm` must be numeric"</span><span class='op'>)</span>
-  <span class='op'>}</span> <span class='kw'>else</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `mm` must be numeric"</span><span class='op'>)</span>
-  <span class='op'>}</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `dd` must be numeric"</span><span class='op'>)</span>
-  <span class='op'>}</span> <span class='kw'>else</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `dd` must be numeric"</span><span class='op'>)</span>
-  <span class='op'>}</span>
-  
-  <span class='co'># main logic</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'># Calling the function with new datatype checks</span>
-<span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='st'>"2022"</span>, mm <span class='op'>=</span> <span class='st'>"May"</span>, dd <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>dd</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  </span>
+<span>  <span class='co'># check missing arguments</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span>  <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> </span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `mm` is missing. Using default value mm = 1 instead"</span><span class='op'>)</span> </span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `dd` is missing. Using default value dd = 1 instead"</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='co'># Check data types</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` must be numeric"</span><span class='op'>)</span></span>
+<span>  <span class='op'>}</span> <span class='kw'>else</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` must be numeric"</span><span class='op'>)</span></span>
+<span>  <span class='op'>}</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `mm` must be numeric"</span><span class='op'>)</span></span>
+<span>  <span class='op'>}</span> <span class='kw'>else</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `mm` must be numeric"</span><span class='op'>)</span></span>
+<span>  <span class='op'>}</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `dd` must be numeric"</span><span class='op'>)</span></span>
+<span>  <span class='op'>}</span> <span class='kw'>else</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `dd` must be numeric"</span><span class='op'>)</span></span>
+<span>  <span class='op'>}</span></span>
+<span>  </span>
+<span>  <span class='co'># main logic</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='co'># Calling the function with new datatype checks</span></span>
+<span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='st'>"2022"</span>, mm <span class='op'>=</span> <span class='st'>"May"</span>, dd <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in make_date(yyyy = "2022", mm = "May", dd = "1"): argument `mm` must be numeric
 </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='st'>"2022"</span>, mm <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='st'>"5"</span><span class='op'>)</span>, dd <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='st'>"2022"</span>, mm <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='st'>"5"</span><span class='op'>)</span>, dd <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in make_date(yyyy = "2022", mm = factor("5"), dd = "1"): argument `mm` must be numeric
 </code></pre>
@@ -1857,55 +1882,51 @@ which will return <code>TRUE</code> or <code>FALSE</code> . Note that
 function.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># This function check if value is number or number-like.</span>
-<span class='va'>is_numberlike</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>{</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'># Early Exit 1 if value is neither numeric nor character</span>
-  <span class='op'>}</span> <span class='kw'>else</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'># Early Exit 2 if character value is not number-like.</span>
-  <span class='op'>}</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='op'>}</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># This function check if value is number or number-like.</span></span>
+<span><span class='va'>is_numberlike</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>    <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'># Early Exit 1 if value is neither numeric nor character</span></span>
+<span>  <span class='op'>}</span> <span class='kw'>else</span> <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/character.html'>is.character</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>as.numeric</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>    <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='co'># Early Exit 2 if character value is not number-like.</span></span>
+<span>  <span class='op'>}</span></span>
+<span>  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span></code></pre>
 </div>
 </div>
 <p>Thus our <code>make_date</code> function with data types check will
 look as below.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>dd</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span>
-  
-  <span class='co'># check missing arguments</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span>  <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> 
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `mm` is missing. Using default value mm = 1 instead"</span><span class='op'>)</span> 
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `dd` is missing. Using default value dd = 1 instead"</span><span class='op'>)</span>
-  
-  <span class='co'># Check data types</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` must be numeric"</span><span class='op'>)</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `mm` must be numeric"</span><span class='op'>)</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `dd` must be numeric"</span><span class='op'>)</span>
-  
-  <span class='co'># main logic</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'># Calling the function with new datatype checks</span>
-<span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='st'>"TwentyTwo"</span>, mm <span class='op'>=</span> <span class='st'>"5"</span>, dd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>dd</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  </span>
+<span>  <span class='co'># check missing arguments</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span>  <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> </span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `mm` is missing. Using default value mm = 1 instead"</span><span class='op'>)</span> </span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `dd` is missing. Using default value dd = 1 instead"</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='co'># Check data types</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` must be numeric"</span><span class='op'>)</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `mm` must be numeric"</span><span class='op'>)</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `dd` must be numeric"</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='co'># main logic</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='co'># Calling the function with new datatype checks</span></span>
+<span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='st'>"TwentyTwo"</span>, mm <span class='op'>=</span> <span class='st'>"5"</span>, dd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre style="color: orange;"><code>Warning in is_numberlike(yyyy): NAs introduced by coercion
 </code></pre>
 <pre style="color: red;"><code>Error in make_date(yyyy = "TwentyTwo", mm = "5", dd = 1): argument `yyyy` must be numeric
 </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='st'>"2022"</span>, mm <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='st'>"5"</span><span class='op'>)</span>, dd <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='st'>"2022"</span>, mm <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='st'>"5"</span><span class='op'>)</span>, dd <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in make_date(yyyy = "2022", mm = factor("5"), dd = "1"): argument `mm` must be numeric
 </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>5</span>, dd <span class='op'>=</span> <span class='st'>"one"</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>5</span>, dd <span class='op'>=</span> <span class='st'>"one"</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre style="color: orange;"><code>Warning in is_numberlike(dd): NAs introduced by coercion
 </code></pre>
@@ -1917,8 +1938,7 @@ this feature, our function <code>make_date</code> behaves in interesting
 ways. In some cases, it is desirable and sometimes it is not.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>, dd <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>, dd <span class='op'>=</span> <span class='st'>"1"</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code> [1] &quot;2022-01-01&quot; &quot;2022-02-01&quot; &quot;2022-03-01&quot; &quot;2022-04-01&quot; &quot;2022-05-01&quot;
  [6] &quot;2022-06-01&quot; &quot;2022-07-01&quot; &quot;2022-08-01&quot; &quot;2022-09-01&quot; &quot;2022-10-01&quot;
@@ -1935,9 +1955,8 @@ vectorised, it recycles the values for <code>yyyy</code> and
 <code>dd</code> to give us 12 dates!</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mm</span> <span class='op'>&lt;-</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>
-<span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Month"</span>, <span class='va'>mm</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>mm</span> <span class='op'>&lt;-</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"Month"</span>, <span class='va'>mm</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code> [1] &quot;Month 1&quot;  &quot;Month 2&quot;  &quot;Month 3&quot;  &quot;Month 4&quot;  &quot;Month 5&quot;  &quot;Month 6&quot; 
  [7] &quot;Month 7&quot;  &quot;Month 8&quot;  &quot;Month 9&quot;  &quot;Month 10&quot; &quot;Month 11&quot; &quot;Month 12&quot;</code></pre>
@@ -1953,42 +1972,39 @@ few checks for the data size of the arguments and rearrange the
 checks.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>dd</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span>
-  
-  <span class='co'># check missing arguments</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span>  <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> 
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `mm` is missing. Using default value mm = 1 instead"</span><span class='op'>)</span> 
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `dd` is missing. Using default value dd = 1 instead"</span><span class='op'>)</span>
-  
-  <span class='co'># Check argument lengths</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>!=</span><span class='fl'>1</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Length of argument `yyyy` is "</span>, <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span>,<span class='st'>". Must be only 1."</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>!=</span><span class='fl'>1</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Length of argument `mm` is "</span>, <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span>,<span class='st'>". Must be only 1."</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>!=</span><span class='fl'>1</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Length of argument `dd` is "</span>, <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span>,<span class='st'>". Must be only 1."</span><span class='op'>)</span><span class='op'>)</span>
-  
-  <span class='co'># Check data types</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` must be numeric"</span><span class='op'>)</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `mm` must be numeric"</span><span class='op'>)</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `dd` must be numeric"</span><span class='op'>)</span>
-  
-  <span class='co'># main logic</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='co'># Calling function with new data size checks</span>
-<span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>, dd <span class='op'>=</span> <span class='st'>"01"</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>dd</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  </span>
+<span>  <span class='co'># check missing arguments</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span>  <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> </span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `mm` is missing. Using default value mm = 1 instead"</span><span class='op'>)</span> </span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `dd` is missing. Using default value dd = 1 instead"</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='co'># Check argument lengths</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>!=</span><span class='fl'>1</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Length of argument `yyyy` is "</span>, <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span>,<span class='st'>". Must be only 1."</span><span class='op'>)</span><span class='op'>)</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>!=</span><span class='fl'>1</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Length of argument `mm` is "</span>, <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span>,<span class='st'>". Must be only 1."</span><span class='op'>)</span><span class='op'>)</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>!=</span><span class='fl'>1</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"Length of argument `dd` is "</span>, <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span>,<span class='st'>". Must be only 1."</span><span class='op'>)</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='co'># Check data types</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` must be numeric"</span><span class='op'>)</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `mm` must be numeric"</span><span class='op'>)</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='op'>!</span><span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span>   <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `dd` must be numeric"</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='co'># main logic</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='co'># Calling function with new data size checks</span></span>
+<span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>, dd <span class='op'>=</span> <span class='st'>"01"</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in make_date(yyyy = 2022, mm = 1:12, dd = "01"): Length of argument `mm` is 12. Must be only 1.
 </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"2021"</span>,<span class='st'>"2022"</span><span class='op'>)</span>, mm <span class='op'>=</span> <span class='st'>"1"</span>, dd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"2021"</span>,<span class='st'>"2022"</span><span class='op'>)</span>, mm <span class='op'>=</span> <span class='st'>"1"</span>, dd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in make_date(yyyy = c("2021", "2022"), mm = "1", dd = 1): Length of argument `yyyy` is 2. Must be only 1.
 </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>1</span>, dd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1"</span>,<span class='st'>"2"</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>1</span>, dd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"1"</span>,<span class='st'>"2"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in make_date(yyyy = 2022, mm = 1, dd = c("1", "2")): Length of argument `dd` is 2. Must be only 1.
 </code></pre>
@@ -2012,39 +2028,35 @@ To do this, we can use the <code>stopifnot</code> function that let’s us
 specify all the happy paths. See example below.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dummy_sum</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span>, <span class='va'>c</span><span class='op'>)</span><span class='op'>{</span>
-  
-  <span class='co'># check missing</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span><span class='op'>)</span>
-  
-  <span class='co'># check argument values</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,
-            <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,
-            <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>
-            <span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span>, <span class='va'>c</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='fu'>dummy_sum</span><span class='op'>(</span>b <span class='op'>=</span> <span class='fl'>2</span>, c <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='co'># a is missing</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>dummy_sum</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span>, <span class='va'>c</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>  </span>
+<span>  <span class='co'># check missing</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='co'># check argument values</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span><span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,</span>
+<span>            <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,</span>
+<span>            <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span></span>
+<span>            <span class='op'>)</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span>, <span class='va'>c</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='fu'>dummy_sum</span><span class='op'>(</span>b <span class='op'>=</span> <span class='fl'>2</span>, c <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='co'># a is missing</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in dummy_sum(b = 2, c = 3): !missing(a) & !missing(b) & !missing(c) is not TRUE
 </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>dummy_sum</span><span class='op'>(</span>a <span class='op'>=</span> <span class='cn'>NA_integer_</span>, b <span class='op'>=</span> <span class='fl'>2</span>, c <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='co'># a has NA value</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>dummy_sum</span><span class='op'>(</span>a <span class='op'>=</span> <span class='cn'>NA_integer_</span>, b <span class='op'>=</span> <span class='fl'>2</span>, c <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='co'># a has NA value</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in dummy_sum(a = NA_integer_, b = 2, c = 3): !is.na(a) & is.numeric(a) & length(a) == 1 is not TRUE
 </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>dummy_sum</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span>, b <span class='op'>=</span> <span class='st'>"2"</span>, c <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='co'># b has non-numeric value</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>dummy_sum</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span>, b <span class='op'>=</span> <span class='st'>"2"</span>, c <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='co'># b has non-numeric value</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in dummy_sum(a = 1, b = "2", c = 3): !is.na(b) & is.numeric(b) & length(b) == 1 is not TRUE
 </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>dummy_sum</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span>, b <span class='op'>=</span> <span class='fl'>2</span>, c <span class='op'>=</span> <span class='fl'>5</span><span class='op'>:</span><span class='fl'>7</span><span class='op'>)</span>  <span class='co'># c has length != 1</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>dummy_sum</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span>, b <span class='op'>=</span> <span class='fl'>2</span>, c <span class='op'>=</span> <span class='fl'>5</span><span class='op'>:</span><span class='fl'>7</span><span class='op'>)</span>  <span class='co'># c has length != 1</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in dummy_sum(a = 1, b = 2, c = 5:7): !is.na(c) & is.numeric(c) & length(c) == 1 are not all TRUE
 </code></pre>
@@ -2055,39 +2067,35 @@ providing the error messages as the names of the “happy path”
 conditions.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>dummy_sum</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span>, <span class='va'>c</span><span class='op'>)</span><span class='op'>{</span>
-  
-  <span class='co'># check missing</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span><span class='st'>"one or more required arguments missing"</span> <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span><span class='op'>)</span>
-  
-  <span class='co'># check argument values</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span><span class='st'>"argument `a` must not be NA, must be a number of length 1"</span> <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,
-            <span class='st'>"argument `b` must not be NA, must be a number of length 1"</span> <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,
-            <span class='st'>"argument `c` must not be NA, must be a number of length 1"</span> <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>
-            <span class='op'>)</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span>, <span class='va'>c</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='fu'>dummy_sum</span><span class='op'>(</span>b <span class='op'>=</span> <span class='fl'>2</span>, c <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='co'># a is missing</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>dummy_sum</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span>, <span class='va'>c</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>  </span>
+<span>  <span class='co'># check missing</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span><span class='st'>"one or more required arguments missing"</span> <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='co'># check argument values</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span><span class='st'>"argument `a` must not be NA, must be a number of length 1"</span> <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>a</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,</span>
+<span>            <span class='st'>"argument `b` must not be NA, must be a number of length 1"</span> <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,</span>
+<span>            <span class='st'>"argument `c` must not be NA, must be a number of length 1"</span> <span class='op'>=</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/numeric.html'>is.numeric</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>c</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span></span>
+<span>            <span class='op'>)</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/sum.html'>sum</a></span><span class='op'>(</span><span class='va'>a</span>, <span class='va'>b</span>, <span class='va'>c</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='fu'>dummy_sum</span><span class='op'>(</span>b <span class='op'>=</span> <span class='fl'>2</span>, c <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='co'># a is missing</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in dummy_sum(b = 2, c = 3): one or more required arguments missing
 </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>dummy_sum</span><span class='op'>(</span>a <span class='op'>=</span> <span class='cn'>NA_integer_</span>, b <span class='op'>=</span> <span class='fl'>2</span>, c <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='co'># a has NA value</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>dummy_sum</span><span class='op'>(</span>a <span class='op'>=</span> <span class='cn'>NA_integer_</span>, b <span class='op'>=</span> <span class='fl'>2</span>, c <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='co'># a has NA value</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in dummy_sum(a = NA_integer_, b = 2, c = 3): argument `a` must not be NA, must be a number of length 1
 </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>dummy_sum</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span>, b <span class='op'>=</span> <span class='st'>"2"</span>, c <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='co'># b has non-numeric value</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>dummy_sum</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span>, b <span class='op'>=</span> <span class='st'>"2"</span>, c <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span> <span class='co'># b has non-numeric value</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in dummy_sum(a = 1, b = "2", c = 3): argument `b` must not be NA, must be a number of length 1
 </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>dummy_sum</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span>, b <span class='op'>=</span> <span class='fl'>2</span>, c <span class='op'>=</span> <span class='fl'>5</span><span class='op'>:</span><span class='fl'>7</span><span class='op'>)</span>  <span class='co'># c has length != 1</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>dummy_sum</span><span class='op'>(</span>a <span class='op'>=</span> <span class='fl'>1</span>, b <span class='op'>=</span> <span class='fl'>2</span>, c <span class='op'>=</span> <span class='fl'>5</span><span class='op'>:</span><span class='fl'>7</span><span class='op'>)</span>  <span class='co'># c has length != 1</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in dummy_sum(a = 1, b = 2, c = 5:7): argument `c` must not be NA, must be a number of length 1
 </code></pre>
@@ -2096,33 +2104,31 @@ conditions.</p>
 to combine the datatype and length checks, we get…</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>dd</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span>
-  
-  <span class='co'># check missing arguments</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span>  <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> 
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `mm` is missing. Using default value mm = 1 instead"</span><span class='op'>)</span> 
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `dd` is missing. Using default value dd = 1 instead"</span><span class='op'>)</span>
-  
-  
-  <span class='co'># Check argument types and length</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span>
-    <span class='st'>"argument `yyyy` must be numeric with length 1"</span> <span class='op'>=</span> <span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,
-    <span class='st'>"argument `mm` must be numeric with length 1"</span>   <span class='op'>=</span> <span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span>   <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,
-    <span class='st'>"argument `dd` must be numeric with length 1"</span>   <span class='op'>=</span> <span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span>   <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>
-  <span class='op'>)</span>
-  
-  <span class='co'># main logic</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='fu'>make_date</span><span class='op'>(</span><span class='op'>)</span> <span class='co'># no arguments provided</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>dd</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  </span>
+<span>  <span class='co'># check missing arguments</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span>  <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> </span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `mm` is missing. Using default value mm = 1 instead"</span><span class='op'>)</span> </span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `dd` is missing. Using default value dd = 1 instead"</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  </span>
+<span>  <span class='co'># Check argument types and length</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span></span>
+<span>    <span class='st'>"argument `yyyy` must be numeric with length 1"</span> <span class='op'>=</span> <span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,</span>
+<span>    <span class='st'>"argument `mm` must be numeric with length 1"</span>   <span class='op'>=</span> <span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span>   <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,</span>
+<span>    <span class='st'>"argument `dd` must be numeric with length 1"</span>   <span class='op'>=</span> <span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span>   <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span></span>
+<span>  <span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='co'># main logic</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='fu'>make_date</span><span class='op'>(</span><span class='op'>)</span> <span class='co'># no arguments provided</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in make_date(): argument `yyyy` is required.
 </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span> <span class='co'># Length mm not equal to 1</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>12</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span> <span class='co'># Length mm not equal to 1</span></span></code></pre>
 </div>
 <pre style="color: orange;"><code>Warning in if (is.character(x) & is.na(as.numeric(x))) {: the
 condition has length > 1 and only the first element will be used
@@ -2130,16 +2136,14 @@ condition has length > 1 and only the first element will be used
 <pre style="color: red;"><code>Error in make_date(yyyy = 2022, mm = 1:12, dd = 31): argument `mm` must be numeric with length 1
 </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='st'>"Jan"</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span> <span class='co'># mm is not number-like</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='st'>"Jan"</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span> <span class='co'># mm is not number-like</span></span></code></pre>
 </div>
 <pre style="color: orange;"><code>Warning in is_numberlike(mm): NAs introduced by coercion
 </code></pre>
 <pre style="color: red;"><code>Error in make_date(yyyy = 2022, mm = "Jan", dd = 31): argument `mm` must be numeric with length 1
 </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span> <span class='co'># argument mm is missing but should work using default value</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span> <span class='co'># argument mm is missing but should work using default value</span></span></code></pre>
 </div>
 <pre style="color: orange;"><code>Warning in make_date(yyyy = 2022, dd = 31): argument `mm` is missing.
 Using default value mm = 1 instead
@@ -2156,8 +2160,7 @@ result in an invalid date, it will give us invalid results (remember
 <em>Garbage-In-Garbage-Out</em>?).</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>13</span>, dd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='co'># is there a 13th month?</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>13</span>, dd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='co'># is there a 13th month?</span></span></code></pre>
 </div>
 <pre><code>[1] NA</code></pre>
 </div>
@@ -2166,36 +2169,34 @@ invalid inputs with no error messages or warnings! We can check the
 output and provide a generic error message.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>dd</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='co'># check missing arguments</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span>  <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> 
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `mm` is missing. Using default value mm = 1 instead"</span><span class='op'>)</span> 
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `dd` is missing. Using default value dd = 1 instead"</span><span class='op'>)</span>
-  
-  
-  <span class='co'># Check argument types and length</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span>
-    <span class='st'>"argument `yyyy` must be numeric with length 1"</span> <span class='op'>=</span> <span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,
-    <span class='st'>"argument `mm` must be numeric with length 1"</span>   <span class='op'>=</span> <span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span>   <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,
-    <span class='st'>"argument `dd` must be numeric with length 1"</span>   <span class='op'>=</span> <span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span>   <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>
-  <span class='op'>)</span>
-  
-  <span class='co'># main logic</span>
-  <span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span>
-  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>out</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"Invalid values provided. Please check your inputs."</span><span class='op'>)</span>
-  <span class='op'>}</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>out</span><span class='op'>)</span>
-<span class='op'>}</span>
-
-<span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>13</span>, dd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='co'># is there a 13th month?</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>make_date</span> <span class='op'>&lt;-</span>  <span class='kw'>function</span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span> <span class='op'>=</span> <span class='fl'>1</span>, <span class='va'>dd</span> <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>  <span class='co'># check missing arguments</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>)</span>  <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"argument `yyyy` is required."</span><span class='op'>)</span> </span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `mm` is missing. Using default value mm = 1 instead"</span><span class='op'>)</span> </span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/missing.html'>missing</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>)</span> <span class='kw'><a href='https://rdrr.io/r/base/warning.html'>warning</a></span><span class='op'>(</span><span class='st'>"argument `dd` is missing. Using default value dd = 1 instead"</span><span class='op'>)</span></span>
+<span>  </span>
+<span>  </span>
+<span>  <span class='co'># Check argument types and length</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span><span class='op'>(</span></span>
+<span>    <span class='st'>"argument `yyyy` must be numeric with length 1"</span> <span class='op'>=</span> <span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span> <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>yyyy</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,</span>
+<span>    <span class='st'>"argument `mm` must be numeric with length 1"</span>   <span class='op'>=</span> <span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span>   <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>mm</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span>,</span>
+<span>    <span class='st'>"argument `dd` must be numeric with length 1"</span>   <span class='op'>=</span> <span class='fu'>is_numberlike</span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span>   <span class='op'>&amp;</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>dd</span><span class='op'>)</span><span class='op'>==</span><span class='fl'>1</span></span>
+<span>  <span class='op'>)</span></span>
+<span>  </span>
+<span>  <span class='co'># main logic</span></span>
+<span>  <span class='va'>out</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='va'>yyyy</span>, <span class='va'>mm</span>, <span class='va'>dd</span>, sep <span class='op'>=</span> <span class='st'>"-"</span><span class='op'>)</span>, format <span class='op'>=</span> <span class='st'>"%Y-%m-%d"</span><span class='op'>)</span></span>
+<span>  <span class='kw'>if</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>out</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span>    <span class='kw'><a href='https://rdrr.io/r/base/stop.html'>stop</a></span><span class='op'>(</span><span class='st'>"Invalid values provided. Please check your inputs."</span><span class='op'>)</span></span>
+<span>  <span class='op'>}</span></span>
+<span>  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>out</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>13</span>, dd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span> <span class='co'># is there a 13th month?</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in make_date(yyyy = 2022, mm = 13, dd = 1): Invalid values provided. Please check your inputs.
 </code></pre>
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>2</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span> <span class='co'># are there 31 days in February?</span>
-</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>make_date</span><span class='op'>(</span>yyyy <span class='op'>=</span> <span class='fl'>2022</span>, mm <span class='op'>=</span> <span class='fl'>2</span>, dd <span class='op'>=</span> <span class='fl'>31</span><span class='op'>)</span> <span class='co'># are there 31 days in February?</span></span></code></pre>
 </div>
 <pre style="color: red;"><code>Error in make_date(yyyy = 2022, mm = 2, dd = 31): Invalid values provided. Please check your inputs.
 </code></pre>

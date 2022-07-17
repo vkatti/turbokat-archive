@@ -178,7 +178,7 @@ download the `XL2PPT.xlsm` file from [here](content/XL2PPT.xlsm).
 details(
   '<script src="https://gist.github.com/vkatti/6b62c49c7dac8901b0194a758a77c0df.js"></script>',
   summary = "VBA Macro Code",
-  lang = NULL
+  lang = 'none'
 )
 
 ```
