@@ -7,7 +7,378 @@
     <description>Welcome to Vishal Katti's website
 </description>
     <generator>Distill</generator>
-    <lastBuildDate>Fri, 08 Jul 2022 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 28 Aug 2022 00:00:00 +0000</lastBuildDate>
+    <item>
+      <title>Pivoting your tables with Tidyr: Part II</title>
+      <dc:creator>Vishal Katti</dc:creator>
+      <link>https://vishalkatti.com/posts/2022-08-29-tidyrpivotwider</link>
+      <description>
+
+
+&lt;h1 id="intro"&gt;Intro&lt;/h1&gt;
+&lt;p&gt;This is part 2 of the Pivoting your tables with Tidyr series. Read
+Part 1 &lt;a
+href="https://www.vishalkatti.com/posts/2022-07-08-tidyrpivotlonger/"&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;We discussed the advantages of using the long format during data
+analysis, most users feel that the wide format is more readable by
+human. This is why most reports tend to have the data arranged in the
+wide format.&lt;/p&gt;
+&lt;p&gt;The wide format has at least one column which acts as a primary key
+i.e. it is unique and each value appears only once. It can also have
+multiple column whose unique combination acts as a primary key i.e. each
+combination appears only once.&lt;/p&gt;
+&lt;p&gt;Read more about wide vs. long formats &lt;a
+href="https://www.statology.org/long-vs-wide-data/"&gt;here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;While the long format is preferred and is desirable for data and
+plotting operations using R, Python or other data processing programming
+languages, the wide format is more human-readable. The {tidyr} R package
+has functions that allow you to transform your tabular data between the
+two formats.&lt;/p&gt;
+&lt;p&gt;In this post, we will see how to convert a long dataframe to wide
+format using the &lt;em&gt;pivot_wider()&lt;/em&gt; function from {tidyr}
+package.&lt;/p&gt;
+&lt;h1 id="the-long-one"&gt;The long one&lt;/h1&gt;
+&lt;p&gt;Consider the following data table. It has been created from the
+famous Gapminder dataset. This table shows the average life expectancy
+in each continent for 2 years. While some of you may say that Gapminder
+data contains records for a lot more number of years, here we consider
+just the latest 2 years for ease of explanation and visual purposes.&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img src="https://vishalkatti.com/posts/2022-08-29-tidyrpivotwiderimages/Step1.png" alt="" /&gt;
+&lt;p class="caption"&gt;Continent-wise Average Life Expectancy over last 2
+years&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;&lt;code&gt;my_data&lt;/code&gt; is in the long format as we have continent names
+and year in their own column and average life expectancy values for each
+unique combination of year and continent. If we want to compare life
+expectancy across years for each continent, we need to have the life
+expectancy values for each continent side-by-side for easier viewing
+i.e. we need to convert to the wide format. To convert this tibble to
+the wide format, we need to push the &lt;code&gt;year&lt;/code&gt; values into the
+headers and the &lt;code&gt;average_life_expectancy&lt;/code&gt; values under the
+corresponding year column.&lt;/p&gt;
+&lt;h1 id="the-wide-one"&gt;The wide one&lt;/h1&gt;
+&lt;p&gt;The long format of this table would ideally have only
+&lt;code&gt;year&lt;/code&gt;, &lt;code&gt;continent&lt;/code&gt; and
+&lt;code&gt;average_life_expectancy&lt;/code&gt; columns and look something like the
+table below.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://vishalkatti.com/posts/2022-08-29-tidyrpivotwiderimages/Step2.png" style="width:60.0%" /&gt;&lt;/p&gt;
+&lt;p&gt;The wide format has unique values of the column that are not pushed
+into headers. In this case, the &lt;code&gt;continent&lt;/code&gt; column becomes
+unique for each row.&lt;/p&gt;
+&lt;p&gt;Let’s recreate the above transformation in R. First, we create the
+&lt;code&gt;my_data&lt;/code&gt; table.&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;my_data &amp;lt;- data.frame(
+  id = 1:10,
+  year = c(2002L, 2002L, 2002L, 2002L, 2002L, 2007L, 2007L, 2007L, 2007L, 2007L), 
+continent = c(&amp;quot;Africa&amp;quot;, &amp;quot;Americas&amp;quot;, &amp;quot;Asia&amp;quot;, &amp;quot;Europe&amp;quot;, &amp;quot;Oceania&amp;quot;, &amp;quot;Africa&amp;quot;, &amp;quot;Americas&amp;quot;, &amp;quot;Asia&amp;quot;, &amp;quot;Europe&amp;quot;, 
+&amp;quot;Oceania&amp;quot;), 
+average_life_expectancy = c(53.33, 72.42, 69.23, 76.7, 79.74, 54.81, 73.61, 70.73, 77.65, 80.72)
+)
+
+knitr::kable(my_data)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class="header"&gt;
+&lt;th align="right"&gt;id&lt;/th&gt;
+&lt;th align="right"&gt;year&lt;/th&gt;
+&lt;th align="left"&gt;continent&lt;/th&gt;
+&lt;th align="right"&gt;average_life_expectancy&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class="odd"&gt;
+&lt;td align="right"&gt;1&lt;/td&gt;
+&lt;td align="right"&gt;2002&lt;/td&gt;
+&lt;td align="left"&gt;Africa&lt;/td&gt;
+&lt;td align="right"&gt;53.33&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td align="right"&gt;2&lt;/td&gt;
+&lt;td align="right"&gt;2002&lt;/td&gt;
+&lt;td align="left"&gt;Americas&lt;/td&gt;
+&lt;td align="right"&gt;72.42&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td align="right"&gt;3&lt;/td&gt;
+&lt;td align="right"&gt;2002&lt;/td&gt;
+&lt;td align="left"&gt;Asia&lt;/td&gt;
+&lt;td align="right"&gt;69.23&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td align="right"&gt;4&lt;/td&gt;
+&lt;td align="right"&gt;2002&lt;/td&gt;
+&lt;td align="left"&gt;Europe&lt;/td&gt;
+&lt;td align="right"&gt;76.70&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td align="right"&gt;5&lt;/td&gt;
+&lt;td align="right"&gt;2002&lt;/td&gt;
+&lt;td align="left"&gt;Oceania&lt;/td&gt;
+&lt;td align="right"&gt;79.74&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td align="right"&gt;6&lt;/td&gt;
+&lt;td align="right"&gt;2007&lt;/td&gt;
+&lt;td align="left"&gt;Africa&lt;/td&gt;
+&lt;td align="right"&gt;54.81&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td align="right"&gt;7&lt;/td&gt;
+&lt;td align="right"&gt;2007&lt;/td&gt;
+&lt;td align="left"&gt;Americas&lt;/td&gt;
+&lt;td align="right"&gt;73.61&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td align="right"&gt;8&lt;/td&gt;
+&lt;td align="right"&gt;2007&lt;/td&gt;
+&lt;td align="left"&gt;Asia&lt;/td&gt;
+&lt;td align="right"&gt;70.73&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td align="right"&gt;9&lt;/td&gt;
+&lt;td align="right"&gt;2007&lt;/td&gt;
+&lt;td align="left"&gt;Europe&lt;/td&gt;
+&lt;td align="right"&gt;77.65&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td align="right"&gt;10&lt;/td&gt;
+&lt;td align="right"&gt;2007&lt;/td&gt;
+&lt;td align="left"&gt;Oceania&lt;/td&gt;
+&lt;td align="right"&gt;80.72&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;To convert this table into wide format, we use the
+&lt;em&gt;pivot_wider()&lt;/em&gt; function from {tidyr} R package. Let us see how
+to use this function.&lt;/p&gt;
+&lt;p&gt;💡&lt;em&gt;Tip: use &lt;code&gt;formals&lt;/code&gt; to view all the formal arguments
+of a function and their default values. &lt;code&gt;formals&lt;/code&gt; returns a
+named list.&lt;/em&gt;&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;library(tidyr, quietly = TRUE, warn.conflicts = FALSE)
+
+formals(pivot_wider)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;$data
+
+
+$id_cols
+NULL
+
+$id_expand
+[1] FALSE
+
+$names_from
+name
+
+$names_prefix
+[1] &amp;quot;&amp;quot;
+
+$names_sep
+[1] &amp;quot;_&amp;quot;
+
+$names_glue
+NULL
+
+$names_sort
+[1] FALSE
+
+$names_vary
+[1] &amp;quot;fastest&amp;quot;
+
+$names_expand
+[1] FALSE
+
+$names_repair
+[1] &amp;quot;check_unique&amp;quot;
+
+$values_from
+value
+
+$values_fill
+NULL
+
+$values_fn
+NULL
+
+$unused_fn
+NULL
+
+$...&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The result of &lt;code&gt;formals(pivot_wider)&lt;/code&gt; tells us that the
+minimum information needed to use this function is to provide values to
+the &lt;code&gt;data&lt;/code&gt;,&lt;code&gt;names_from&lt;/code&gt; and
+&lt;code&gt;values_from&lt;/code&gt; arguments as all other arguments have default
+values and hence, are optional.&lt;/p&gt;
+&lt;p&gt;Using only the minimum arguments with &lt;code&gt;pivot_wider()&lt;/code&gt;, we
+get a wide formatted tibble but with missing data!&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;wide_minimal &amp;lt;- pivot_wider(
+                        data        = my_data,
+                        names_from  = year,
+                        values_from = average_life_expectancy
+                        )
+
+knitr::kable(wide_minimal)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class="header"&gt;
+&lt;th align="right"&gt;id&lt;/th&gt;
+&lt;th align="left"&gt;continent&lt;/th&gt;
+&lt;th align="right"&gt;2002&lt;/th&gt;
+&lt;th align="right"&gt;2007&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class="odd"&gt;
+&lt;td align="right"&gt;1&lt;/td&gt;
+&lt;td align="left"&gt;Africa&lt;/td&gt;
+&lt;td align="right"&gt;53.33&lt;/td&gt;
+&lt;td align="right"&gt;NA&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td align="right"&gt;2&lt;/td&gt;
+&lt;td align="left"&gt;Americas&lt;/td&gt;
+&lt;td align="right"&gt;72.42&lt;/td&gt;
+&lt;td align="right"&gt;NA&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td align="right"&gt;3&lt;/td&gt;
+&lt;td align="left"&gt;Asia&lt;/td&gt;
+&lt;td align="right"&gt;69.23&lt;/td&gt;
+&lt;td align="right"&gt;NA&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td align="right"&gt;4&lt;/td&gt;
+&lt;td align="left"&gt;Europe&lt;/td&gt;
+&lt;td align="right"&gt;76.70&lt;/td&gt;
+&lt;td align="right"&gt;NA&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td align="right"&gt;5&lt;/td&gt;
+&lt;td align="left"&gt;Oceania&lt;/td&gt;
+&lt;td align="right"&gt;79.74&lt;/td&gt;
+&lt;td align="right"&gt;NA&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td align="right"&gt;6&lt;/td&gt;
+&lt;td align="left"&gt;Africa&lt;/td&gt;
+&lt;td align="right"&gt;NA&lt;/td&gt;
+&lt;td align="right"&gt;54.81&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td align="right"&gt;7&lt;/td&gt;
+&lt;td align="left"&gt;Americas&lt;/td&gt;
+&lt;td align="right"&gt;NA&lt;/td&gt;
+&lt;td align="right"&gt;73.61&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td align="right"&gt;8&lt;/td&gt;
+&lt;td align="left"&gt;Asia&lt;/td&gt;
+&lt;td align="right"&gt;NA&lt;/td&gt;
+&lt;td align="right"&gt;70.73&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td align="right"&gt;9&lt;/td&gt;
+&lt;td align="left"&gt;Europe&lt;/td&gt;
+&lt;td align="right"&gt;NA&lt;/td&gt;
+&lt;td align="right"&gt;77.65&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td align="right"&gt;10&lt;/td&gt;
+&lt;td align="left"&gt;Oceania&lt;/td&gt;
+&lt;td align="right"&gt;NA&lt;/td&gt;
+&lt;td align="right"&gt;80.72&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;So why did &lt;code&gt;NA&lt;/code&gt;s appear in the result?
+&lt;code&gt;pivot_wider()&lt;/code&gt; creates unique combinations of all columns
+not included in &lt;code&gt;names_from&lt;/code&gt; or &lt;code&gt;values_from&lt;/code&gt;
+argument. Therefore, if your dataframe/tibble had a primary key prior to
+the transformation, the primary key of your transformed “wide” dataframe
+is your old primary key + unique combinations of all columns not
+included in &lt;code&gt;names_from&lt;/code&gt; or &lt;code&gt;values_from&lt;/code&gt;
+argument. This gives an unusable output with &lt;code&gt;NA&lt;/code&gt;s. To
+specify which column/s to be made unique, pass their name to the
+&lt;code&gt;id_cols&lt;/code&gt; argument.&lt;/p&gt;
+&lt;pre class="r"&gt;&lt;code&gt;my_data_longer &amp;lt;- pivot_wider(
+                        data        = my_data,
+                        id_cols     = continent, 
+                        names_from  = year,
+                        values_from = average_life_expectancy
+                        )
+
+knitr::kable(my_data_longer)&lt;/code&gt;&lt;/pre&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr class="header"&gt;
+&lt;th align="left"&gt;continent&lt;/th&gt;
+&lt;th align="right"&gt;2002&lt;/th&gt;
+&lt;th align="right"&gt;2007&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr class="odd"&gt;
+&lt;td align="left"&gt;Africa&lt;/td&gt;
+&lt;td align="right"&gt;53.33&lt;/td&gt;
+&lt;td align="right"&gt;54.81&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td align="left"&gt;Americas&lt;/td&gt;
+&lt;td align="right"&gt;72.42&lt;/td&gt;
+&lt;td align="right"&gt;73.61&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td align="left"&gt;Asia&lt;/td&gt;
+&lt;td align="right"&gt;69.23&lt;/td&gt;
+&lt;td align="right"&gt;70.73&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="even"&gt;
+&lt;td align="left"&gt;Europe&lt;/td&gt;
+&lt;td align="right"&gt;76.70&lt;/td&gt;
+&lt;td align="right"&gt;77.65&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="odd"&gt;
+&lt;td align="left"&gt;Oceania&lt;/td&gt;
+&lt;td align="right"&gt;79.74&lt;/td&gt;
+&lt;td align="right"&gt;80.72&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;If you are a visual person like me and wish to see this
+transformation with explanations, check out this GIF I made using good
+ol’ Powerpoint.&lt;/p&gt;
+&lt;div class="figure"&gt;
+&lt;img src="https://vishalkatti.com/posts/2022-08-29-tidyrpivotwiderimages/pivot_wider.gif" alt="" /&gt;
+&lt;p class="caption"&gt;{tidyr} pivot_wider() explained&lt;/p&gt;
+&lt;/div&gt;
+&lt;h1 id="conclusion"&gt;Conclusion&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;pivot_wider()&lt;/code&gt; is the successor for the great
+&lt;code&gt;spread()&lt;/code&gt; function and has many advantages over the latter.
+This function has many other arguments that allow some truly great
+transformations. Mastering this function (and its long counterpart) is a
+great skill upgrade while massaging your data to make it “tidy”.&lt;/p&gt;
+&lt;p&gt;Happy Spreading!&lt;/p&gt;
+&lt;h1 id="references"&gt;References&lt;/h1&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href="https://www.statology.org/long-vs-wide-data/"&gt;Long vs. Wide
+Data: What’s the Difference?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Hadley Wickham and Maximilian Girlich (2022). tidyr: Tidy Messy
+Data. R package version 1.2.0. &lt;a
+href="https://CRAN.R-project.org/package=tidyr"
+class="uri"&gt;https://CRAN.R-project.org/package=tidyr&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Yihui Xie (2022). knitr: A General-Purpose Package for Dynamic
+Report Generation in R. R package version 1.39.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre class="r distill-force-highlighting-css"&gt;&lt;code&gt;&lt;/code&gt;&lt;/pre&gt;</description>
+      <distill:md5>20e5cc552204b7b19505e435df6485ab</distill:md5>
+      <category>Rstats</category>
+      <category>functions</category>
+      <category>tidyr</category>
+      <category>pivot</category>
+      <guid>https://vishalkatti.com/posts/2022-08-29-tidyrpivotwider</guid>
+      <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
+      <media:content url="https://vishalkatti.com/posts/2022-08-29-tidyrpivotwider/images/pivot_wider.gif" medium="image" type="image/gif"/>
+    </item>
     <item>
       <title>Pivoting your tables with Tidyr: Part I</title>
       <dc:creator>Vishal Katti</dc:creator>
@@ -1991,7 +2362,7 @@ class="uri"&gt;https://CRAN.R-project.org/package=glue&lt;/a&gt;&lt;/li&gt;
       <category>dplyr</category>
       <category>functions</category>
       <guid>https://vishalkatti.com/posts/2021-07-17-programmingwithdplyr</guid>
-      <pubDate>Fri, 16 Jul 2021 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 17 Jul 2021 00:00:00 +0000</pubDate>
       <media:content url="https://vishalkatti.com/posts/2021-07-17-programmingwithdplyr/thor.gif" medium="image" type="image/gif"/>
     </item>
   </channel>
