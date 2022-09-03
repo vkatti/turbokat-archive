@@ -42,9 +42,10 @@ package.&lt;/p&gt;
 famous Gapminder dataset. This table shows the average life expectancy
 in each continent for 2 years. While some of you may say that Gapminder
 data contains records for a lot more number of years, here we consider
-just the latest 2 years for ease of explanation and visual purposes.&lt;/p&gt;
+just the latest 2 years for ease of explanation and visual purposes. We
+have added an extra &lt;code&gt;id&lt;/code&gt; column for teaching purpose.&lt;/p&gt;
 &lt;div class="figure"&gt;
-&lt;img src="https://vishalkatti.com/posts/2022-08-29-tidyrpivotwiderimages/Step1.png" alt="" /&gt;
+&lt;img src="https://vishalkatti.com/posts/2022-08-29-tidyrpivotwiderimages/Step1.png" style="width:60.0%" alt="" /&gt;
 &lt;p class="caption"&gt;Continent-wise Average Life Expectancy over last 2
 years&lt;/p&gt;
 &lt;/div&gt;
@@ -58,10 +59,10 @@ the wide format, we need to push the &lt;code&gt;year&lt;/code&gt; values into t
 headers and the &lt;code&gt;average_life_expectancy&lt;/code&gt; values under the
 corresponding year column.&lt;/p&gt;
 &lt;h1 id="the-wide-one"&gt;The wide one&lt;/h1&gt;
-&lt;p&gt;The long format of this table would ideally have only
-&lt;code&gt;year&lt;/code&gt;, &lt;code&gt;continent&lt;/code&gt; and
-&lt;code&gt;average_life_expectancy&lt;/code&gt; columns and look something like the
-table below.&lt;/p&gt;
+&lt;p&gt;The wide format of this table would ideally have only
+&lt;code&gt;continent&lt;/code&gt; and columns having each unique value in the
+&lt;code&gt;year&lt;/code&gt; column as a header. In this case, the wide one would
+look something like the table below.&lt;/p&gt;
 &lt;p&gt;&lt;img src="https://vishalkatti.com/posts/2022-08-29-tidyrpivotwiderimages/Step2.png" style="width:60.0%" /&gt;&lt;/p&gt;
 &lt;p&gt;The wide format has unique values of the column that are not pushed
 into headers. In this case, the &lt;code&gt;continent&lt;/code&gt; column becomes
@@ -70,10 +71,10 @@ unique for each row.&lt;/p&gt;
 &lt;code&gt;my_data&lt;/code&gt; table.&lt;/p&gt;
 &lt;pre class="r"&gt;&lt;code&gt;my_data &amp;lt;- data.frame(
   id = 1:10,
-  year = c(2002L, 2002L, 2002L, 2002L, 2002L, 2007L, 2007L, 2007L, 2007L, 2007L), 
-continent = c(&amp;quot;Africa&amp;quot;, &amp;quot;Americas&amp;quot;, &amp;quot;Asia&amp;quot;, &amp;quot;Europe&amp;quot;, &amp;quot;Oceania&amp;quot;, &amp;quot;Africa&amp;quot;, &amp;quot;Americas&amp;quot;, &amp;quot;Asia&amp;quot;, &amp;quot;Europe&amp;quot;, 
-&amp;quot;Oceania&amp;quot;), 
-average_life_expectancy = c(53.33, 72.42, 69.23, 76.7, 79.74, 54.81, 73.61, 70.73, 77.65, 80.72)
+  year = c(2002L, 2002L, 2002L, 2002L, 2002L, 2007L, 2007L, 2007L, 2007L, 2007L),
+  continent = c(&amp;quot;Africa&amp;quot;, &amp;quot;Americas&amp;quot;, &amp;quot;Asia&amp;quot;, &amp;quot;Europe&amp;quot;, &amp;quot;Oceania&amp;quot;, &amp;quot;Africa&amp;quot;, 
+                &amp;quot;Americas&amp;quot;, &amp;quot;Asia&amp;quot;, &amp;quot;Europe&amp;quot;, &amp;quot;Oceania&amp;quot;),
+  average_life_expectancy = c(53.33, 72.42, 69.23, 76.7, 79.74, 54.81, 73.61, 70.73, 77.65, 80.72)
 )
 
 knitr::kable(my_data)&lt;/code&gt;&lt;/pre&gt;
@@ -290,16 +291,20 @@ knitr::kable(wide_minimal)&lt;/code&gt;&lt;/pre&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;So why did &lt;code&gt;NA&lt;/code&gt;s appear in the result?
-&lt;code&gt;pivot_wider()&lt;/code&gt; creates unique combinations of all columns
+&lt;p&gt;&lt;strong&gt;So why did &lt;code&gt;NA&lt;/code&gt;s appear in the
+result?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;pivot_wider()&lt;/code&gt; creates unique combinations of all columns
 not included in &lt;code&gt;names_from&lt;/code&gt; or &lt;code&gt;values_from&lt;/code&gt;
 argument. Therefore, if your dataframe/tibble had a primary key prior to
 the transformation, the primary key of your transformed “wide” dataframe
 is your old primary key + unique combinations of all columns not
 included in &lt;code&gt;names_from&lt;/code&gt; or &lt;code&gt;values_from&lt;/code&gt;
-argument. This gives an unusable output with &lt;code&gt;NA&lt;/code&gt;s. To
-specify which column/s to be made unique, pass their name to the
-&lt;code&gt;id_cols&lt;/code&gt; argument.&lt;/p&gt;
+argument. We do have &lt;code&gt;id&lt;/code&gt; column as a primary key in the
+original tibble. This gives an unusable output with &lt;code&gt;NA&lt;/code&gt;s for
+each combination.&lt;/p&gt;
+&lt;p&gt;To specify which column/s to be made unique, pass their name to the
+&lt;code&gt;id_cols&lt;/code&gt; argument. Here we pass the &lt;code&gt;continent&lt;/code&gt;
+column to the &lt;code&gt;id_cols&lt;/code&gt; argument.&lt;/p&gt;
 &lt;pre class="r"&gt;&lt;code&gt;my_data_longer &amp;lt;- pivot_wider(
                         data        = my_data,
                         id_cols     = continent, 
@@ -346,7 +351,7 @@ knitr::kable(my_data_longer)&lt;/code&gt;&lt;/pre&gt;
 &lt;/table&gt;
 &lt;p&gt;If you are a visual person like me and wish to see this
 transformation with explanations, check out this GIF I made using good
-ol’ Powerpoint.&lt;/p&gt;
+ol’ PowerPoint.&lt;/p&gt;
 &lt;div class="figure"&gt;
 &lt;img src="https://vishalkatti.com/posts/2022-08-29-tidyrpivotwiderimages/pivot_wider.gif" alt="" /&gt;
 &lt;p class="caption"&gt;{tidyr} pivot_wider() explained&lt;/p&gt;

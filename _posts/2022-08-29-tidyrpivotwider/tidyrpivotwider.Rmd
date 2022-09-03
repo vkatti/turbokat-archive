@@ -40,15 +40,15 @@ In this post, we will see how to convert a long dataframe to wide format using t
 
 # The long one
 
-Consider the following data table. It has been created from the famous Gapminder dataset. This table shows the average life expectancy in each continent for 2 years. While some of you may say that Gapminder data contains records for a lot more number of years, here we consider just the latest 2 years for ease of explanation and visual purposes.
+Consider the following data table. It has been created from the famous Gapminder dataset. This table shows the average life expectancy in each continent for 2 years. While some of you may say that Gapminder data contains records for a lot more number of years, here we consider just the latest 2 years for ease of explanation and visual purposes. We have added an extra `id` column for teaching purpose.
 
-![Continent-wise Average Life Expectancy over last 2 years](images/Step1.png)
+![Continent-wise Average Life Expectancy over last 2 years](images/Step1.png){width="60%"}
 
 `my_data` is in the long format as we have continent names and year in their own column and average life expectancy values for each unique combination of year and continent.  If we want to compare life expectancy across years for each continent, we need to have the life expectancy values for each continent side-by-side for easier viewing i.e. we need to convert to the wide format. To convert this tibble to the wide format, we need to push the `year` values into the headers and the `average_life_expectancy` values under the corresponding year column.
 
 # The wide one
 
-The long format of this table would ideally have only `year`, `continent` and `average_life_expectancy` columns and look something like the table below.
+The wide format of this table would ideally have only `continent` and columns having each unique value in the `year` column as a header. In this case, the wide one would  look something like the table below.
 
 ![](images/Step2.png){width="60%"}
 
@@ -59,10 +59,10 @@ Let's recreate the above transformation in R. First, we create the `my_data` tab
 ```{r}
 my_data <- data.frame(
   id = 1:10,
-  year = c(2002L, 2002L, 2002L, 2002L, 2002L, 2007L, 2007L, 2007L, 2007L, 2007L), 
-continent = c("Africa", "Americas", "Asia", "Europe", "Oceania", "Africa", "Americas", "Asia", "Europe", 
-"Oceania"), 
-average_life_expectancy = c(53.33, 72.42, 69.23, 76.7, 79.74, 54.81, 73.61, 70.73, 77.65, 80.72)
+  year = c(2002L, 2002L, 2002L, 2002L, 2002L, 2007L, 2007L, 2007L, 2007L, 2007L),
+  continent = c("Africa", "Americas", "Asia", "Europe", "Oceania", "Africa", 
+                "Americas", "Asia", "Europe", "Oceania"),
+  average_life_expectancy = c(53.33, 72.42, 69.23, 76.7, 79.74, 54.81, 73.61, 70.73, 77.65, 80.72)
 )
 
 knitr::kable(my_data)
@@ -92,8 +92,11 @@ wide_minimal <- pivot_wider(
 knitr::kable(wide_minimal)
 ```
 
-So why did `NA`s appear in the result?
-`pivot_wider()` creates unique combinations of all columns not included in `names_from` or `values_from` argument. Therefore, if your dataframe/tibble had a primary key prior to the transformation, the primary key of your transformed "wide" dataframe is your old primary key + unique combinations of all columns not included in `names_from` or `values_from` argument. This gives an unusable output with `NA`s. To specify which column/s to be made unique, pass their name to the `id_cols` argument.
+**So why did `NA`s appear in the result?** 
+
+`pivot_wider()` creates unique combinations of all columns not included in `names_from` or `values_from` argument. Therefore, if your dataframe/tibble had a primary key prior to the transformation, the primary key of your transformed "wide" dataframe is your old primary key + unique combinations of all columns not included in `names_from` or `values_from` argument. We do have `id` column as a primary key in the original tibble. This gives an unusable output with `NA`s for each combination. 
+
+To specify which column/s to be made unique, pass their name to the `id_cols` argument. Here we pass the `continent` column to the `id_cols` argument.
 
 ```{r}
 my_data_longer <- pivot_wider(
@@ -107,7 +110,7 @@ knitr::kable(my_data_longer)
 ```
 
 
-If you are a visual person like me and wish to see this transformation with explanations, check out this GIF I made using good ol' Powerpoint.
+If you are a visual person like me and wish to see this transformation with explanations, check out this GIF I made using good ol' PowerPoint.
 
 ![{tidyr} pivot_wider() explained](images/pivot_wider.gif)
 

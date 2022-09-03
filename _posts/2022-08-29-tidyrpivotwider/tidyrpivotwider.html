@@ -118,7 +118,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["images/pivot_wider.gif","images/Step1.png","images/Step2.png"]}
+  {"type":"character","attributes":{},"value":["images/pivot_wider.gif","images/Step1.png","images/Step2.png","tidyrpivotwider_files/anchor-4.2.2/anchor.min.js","tidyrpivotwider_files/bowser-1.9.3/bowser.min.js","tidyrpivotwider_files/distill-2.2.21/template.v2.js","tidyrpivotwider_files/header-attrs-2.14/header-attrs.js","tidyrpivotwider_files/jquery-3.6.0/jquery-3.6.0.js","tidyrpivotwider_files/jquery-3.6.0/jquery-3.6.0.min.js","tidyrpivotwider_files/jquery-3.6.0/jquery-3.6.0.min.map","tidyrpivotwider_files/popper-2.6.0/popper.min.js","tidyrpivotwider_files/tippy-6.2.7/tippy-bundle.umd.min.js","tidyrpivotwider_files/tippy-6.2.7/tippy-light-border.css","tidyrpivotwider_files/tippy-6.2.7/tippy.css","tidyrpivotwider_files/tippy-6.2.7/tippy.umd.min.js","tidyrpivotwider_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1557,9 +1557,10 @@ package.</p>
 famous Gapminder dataset. This table shows the average life expectancy
 in each continent for 2 years. While some of you may say that Gapminder
 data contains records for a lot more number of years, here we consider
-just the latest 2 years for ease of explanation and visual purposes.</p>
+just the latest 2 years for ease of explanation and visual purposes. We
+have added an extra <code>id</code> column for teaching purpose.</p>
 <figure>
-<img src="images/Step1.png"
+<img src="images/Step1.png" style="width:60.0%"
 alt="Continent-wise Average Life Expectancy over last 2 years" />
 <figcaption aria-hidden="true">Continent-wise Average Life Expectancy
 over last 2 years</figcaption>
@@ -1574,10 +1575,10 @@ the wide format, we need to push the <code>year</code> values into the
 headers and the <code>average_life_expectancy</code> values under the
 corresponding year column.</p>
 <h1 id="the-wide-one">The wide one</h1>
-<p>The long format of this table would ideally have only
-<code>year</code>, <code>continent</code> and
-<code>average_life_expectancy</code> columns and look something like the
-table below.</p>
+<p>The wide format of this table would ideally have only
+<code>continent</code> and columns having each unique value in the
+<code>year</code> column as a header. In this case, the wide one would
+look something like the table below.</p>
 <p><img src="images/Step2.png" style="width:60.0%" /></p>
 <p>The wide format has unique values of the column that are not pushed
 into headers. In this case, the <code>continent</code> column becomes
@@ -1588,10 +1589,10 @@ unique for each row.</p>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>my_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span></span>
 <span>  id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>10</span>,</span>
-<span>  year <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2002L</span>, <span class='fl'>2002L</span>, <span class='fl'>2002L</span>, <span class='fl'>2002L</span>, <span class='fl'>2002L</span>, <span class='fl'>2007L</span>, <span class='fl'>2007L</span>, <span class='fl'>2007L</span>, <span class='fl'>2007L</span>, <span class='fl'>2007L</span><span class='op'>)</span>, </span>
-<span>continent <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Africa"</span>, <span class='st'>"Americas"</span>, <span class='st'>"Asia"</span>, <span class='st'>"Europe"</span>, <span class='st'>"Oceania"</span>, <span class='st'>"Africa"</span>, <span class='st'>"Americas"</span>, <span class='st'>"Asia"</span>, <span class='st'>"Europe"</span>, </span>
-<span><span class='st'>"Oceania"</span><span class='op'>)</span>, </span>
-<span>average_life_expectancy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>53.33</span>, <span class='fl'>72.42</span>, <span class='fl'>69.23</span>, <span class='fl'>76.7</span>, <span class='fl'>79.74</span>, <span class='fl'>54.81</span>, <span class='fl'>73.61</span>, <span class='fl'>70.73</span>, <span class='fl'>77.65</span>, <span class='fl'>80.72</span><span class='op'>)</span></span>
+<span>  year <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>2002L</span>, <span class='fl'>2002L</span>, <span class='fl'>2002L</span>, <span class='fl'>2002L</span>, <span class='fl'>2002L</span>, <span class='fl'>2007L</span>, <span class='fl'>2007L</span>, <span class='fl'>2007L</span>, <span class='fl'>2007L</span>, <span class='fl'>2007L</span><span class='op'>)</span>,</span>
+<span>  continent <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Africa"</span>, <span class='st'>"Americas"</span>, <span class='st'>"Asia"</span>, <span class='st'>"Europe"</span>, <span class='st'>"Oceania"</span>, <span class='st'>"Africa"</span>, </span>
+<span>                <span class='st'>"Americas"</span>, <span class='st'>"Asia"</span>, <span class='st'>"Europe"</span>, <span class='st'>"Oceania"</span><span class='op'>)</span>,</span>
+<span>  average_life_expectancy <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>53.33</span>, <span class='fl'>72.42</span>, <span class='fl'>69.23</span>, <span class='fl'>76.7</span>, <span class='fl'>79.74</span>, <span class='fl'>54.81</span>, <span class='fl'>73.61</span>, <span class='fl'>70.73</span>, <span class='fl'>77.65</span>, <span class='fl'>80.72</span><span class='op'>)</span></span>
 <span><span class='op'>)</span></span>
 <span></span>
 <span><span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='va'>my_data</span><span class='op'>)</span></span></code></pre>
@@ -1818,16 +1819,20 @@ get a wide formatted tibble but with missing data!</p>
 </tbody>
 </table>
 </div>
-<p>So why did <code>NA</code>s appear in the result?
-<code>pivot_wider()</code> creates unique combinations of all columns
+<p><strong>So why did <code>NA</code>s appear in the
+result?</strong></p>
+<p><code>pivot_wider()</code> creates unique combinations of all columns
 not included in <code>names_from</code> or <code>values_from</code>
 argument. Therefore, if your dataframe/tibble had a primary key prior to
 the transformation, the primary key of your transformed “wide” dataframe
 is your old primary key + unique combinations of all columns not
 included in <code>names_from</code> or <code>values_from</code>
-argument. This gives an unusable output with <code>NA</code>s. To
-specify which column/s to be made unique, pass their name to the
-<code>id_cols</code> argument.</p>
+argument. We do have <code>id</code> column as a primary key in the
+original tibble. This gives an unusable output with <code>NA</code>s for
+each combination.</p>
+<p>To specify which column/s to be made unique, pass their name to the
+<code>id_cols</code> argument. Here we pass the <code>continent</code>
+column to the <code>id_cols</code> argument.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>my_data_longer</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tidyr.tidyverse.org/reference/pivot_wider.html'>pivot_wider</a></span><span class='op'>(</span></span>
@@ -1878,7 +1883,7 @@ specify which column/s to be made unique, pass their name to the
 </div>
 <p>If you are a visual person like me and wish to see this
 transformation with explanations, check out this GIF I made using good
-ol’ Powerpoint.</p>
+ol’ PowerPoint.</p>
 <figure>
 <img src="images/pivot_wider.gif"
 alt="{tidyr} pivot_wider() explained" />
