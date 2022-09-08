@@ -5,7 +5,7 @@ description: |
 author:
   - name: Vishal Katti
 date: 2021-10-19
-preview: images/R2XL2PPT_logo.png
+preview: https://i.imgur.com/T6uCTXN.png
 categories:
   - Rstats
   - Excel
@@ -66,7 +66,7 @@ and tables created from the `gapminder` dataset. This `.pptx` file also
 has a custom footer.
 
 ![The Gapminder World Population
-Report](images/base_report.gif "The Gapminder World Report")
+Report](https://i.imgur.com/LL6UwWH.gif "The Gapminder World Report")
 
 We want to create the same presentation with same structure but at a
 continent-level. `gapminder` has data for 5 continents and we wish to
@@ -84,14 +84,14 @@ In my case, I've created a new R Project folder named `R2XL2PPT` as
 shown below.
 
 ![Save As PowerPoint Template
-(.potx)](images/save_as_potx.png "Save As PowerPoint Template (.potx)")
+(.potx)](https://i.imgur.com/NvdILBA.png "Save As PowerPoint Template (.potx)")
 
 Now let us prep the template. If you open the template file by
 double-click or right-click \> New, it would open a fresh `.pptx`
 presentation using the template. Right-Click and click Open in the
 context menu to open the `.potx` template file for editing.
 
-![CORRECT: Right-Click \> Open](images/edit_potx_open.png)
+![CORRECT: Right-Click \> Open](https://i.imgur.com/eQokXoX.png)
 
 Once you have the template open, we will add names to all the text
 placeholders, tables and graphs we wish to update. To update the
@@ -102,7 +102,7 @@ placeholder name:
 3.  In the Selection Pane, change the name of the selected item.
 
 ![Add shape names from Selection
-Pane](images/add_shape_names.png "Add shape names from Selection Pane")
+Pane](https://i.imgur.com/xhA0D3u.png "Add shape names from Selection Pane")
 
 Advisory: We use the format `NN_[Position]Object` where `NN` is the
 slide number, `[Position]` is the either TopLeft, TopRight, BottomLeft,
@@ -124,7 +124,7 @@ create an Excel document which looks identical to the template with
 respect to the named items. Please see image below.
 
 ![PowerPoint item to Excel named range
-mapping](images/create_excel_template.png "PowerPoint item to Excel named range mapping")
+mapping](https://i.imgur.com/A080o1Z.png "PowerPoint item to Excel named range mapping")
 
 For every named item, depending on whether it is a textbox or chart or
 table, we will create a named range for that item. For example, for item
@@ -147,13 +147,13 @@ An excel worksheet is displayed with the underlying data. Copy-paste the
 entire data into the Excel template.
 
 ![Excel Chart: Right Click \> Edit
-Data](images/edit_data.png "Excel Chart: Right Click > Edit Data"){width="225"}
+Data](https://i.imgur.com/rVsb1a6.png "Excel Chart: Right Click > Edit Data"){width="225"}
 
 For the `GP_template.potx`, the corresponding excel template
 `XL2PPT.xlsm` looks like the below image. Please note that this template
 does not have the VBA macro yet.
 
-![XL2PPT design](images/excel_template.png "XL2PPT design")
+![XL2PPT design](https://i.imgur.com/oMdSUvp.png "XL2PPT design")
 
 ## The VBA Macro
 

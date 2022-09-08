@@ -105,20 +105,14 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta property="og:type" content="article"/>
 <meta property="og:description" content="Using R to trigger Excel VBA macros to create PowerPoint presentations!"/>
 <meta property="og:url" content="https://vishalkatti.com/posts/2021-08-29-rtovbatoppt/"/>
-<meta property="og:image" content="https://vishalkatti.com/posts/2021-08-29-rtovbatoppt/images/R2XL2PPT_logo.png"/>
-<meta property="og:image:width" content="1500"/>
-<meta property="og:image:height" content="619"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="Vishal Katti"/>
 
 <!--  https://dev.twitter.com/cards/types/summary -->
-<meta property="twitter:card" content="summary_large_image"/>
+<meta property="twitter:card" content="summary"/>
 <meta property="twitter:title" content="Vishal Katti: Unholy Trinity of R, Excel VBA and Powerpoint - Part 1 of 2"/>
 <meta property="twitter:description" content="Using R to trigger Excel VBA macros to create PowerPoint presentations!"/>
 <meta property="twitter:url" content="https://vishalkatti.com/posts/2021-08-29-rtovbatoppt/"/>
-<meta property="twitter:image" content="https://vishalkatti.com/posts/2021-08-29-rtovbatoppt/images/R2XL2PPT_logo.png"/>
-<meta property="twitter:image:width" content="1500"/>
-<meta property="twitter:image:height" content="619"/>
 <meta property="twitter:site" content="@vishal_katti"/>
 <meta property="twitter:creator" content="@vishal_katti"/>
 
@@ -133,7 +127,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["creative_commons","title","description","author","date","preview","categories","output","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["CC BY"]},{"type":"character","attributes":{},"value":["Unholy Trinity of R, Excel VBA and Powerpoint - Part 1 of 2"]},{"type":"character","attributes":{},"value":["Using R to trigger Excel VBA macros to create PowerPoint presentations!"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Vishal Katti"]}]}]},{"type":"character","attributes":{},"value":["2021-10-19"]},{"type":"character","attributes":{},"value":["images/R2XL2PPT_logo.png"]},{"type":"character","attributes":{},"value":["Rstats","Excel","VBA","PowerPoint"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["https://vishalkatti.com/posts/2021-08-29-rtovbatoppt/"]},{"type":"character","attributes":{},"value":["https://vishalkatti.com/posts/2021-08-29-rtovbatoppt/"]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["creative_commons","title","description","author","date","preview","categories","output","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["CC BY"]},{"type":"character","attributes":{},"value":["Unholy Trinity of R, Excel VBA and Powerpoint - Part 1 of 2"]},{"type":"character","attributes":{},"value":["Using R to trigger Excel VBA macros to create PowerPoint presentations!"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Vishal Katti"]}]}]},{"type":"character","attributes":{},"value":["2021-10-19"]},{"type":"character","attributes":{},"value":["https://i.imgur.com/T6uCTXN.png"]},{"type":"character","attributes":{},"value":["Rstats","Excel","VBA","PowerPoint"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["https://vishalkatti.com/posts/2021-08-29-rtovbatoppt/"]},{"type":"character","attributes":{},"value":["https://vishalkatti.com/posts/2021-08-29-rtovbatoppt/"]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -2589,7 +2583,8 @@ contains 3 slides with a title slide and 2 content slides having graphs
 and tables created from the <code>gapminder</code> dataset. This
 <code>.pptx</code> file also has a custom footer.</p>
 <figure>
-<img src="images/base_report.gif" title="The Gapminder World Report"
+<img src="https://i.imgur.com/LL6UwWH.gif"
+title="The Gapminder World Report"
 alt="The Gapminder World Population Report" />
 <figcaption aria-hidden="true">The Gapminder World Population
 Report</figcaption>
@@ -2608,7 +2603,7 @@ href="https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects">he
 In my case, I’ve created a new R Project folder named
 <code>R2XL2PPT</code> as shown below.</p>
 <figure>
-<img src="images/save_as_potx.png"
+<img src="https://i.imgur.com/NvdILBA.png"
 title="Save As PowerPoint Template (.potx)"
 alt="Save As PowerPoint Template (.potx)" />
 <figcaption aria-hidden="true">Save As PowerPoint Template
@@ -2620,7 +2615,7 @@ double-click or right-click &gt; New, it would open a fresh
 click Open in the context menu to open the <code>.potx</code> template
 file for editing.</p>
 <figure>
-<img src="images/edit_potx_open.png"
+<img src="https://i.imgur.com/eQokXoX.png"
 alt="CORRECT: Right-Click &gt; Open" />
 <figcaption aria-hidden="true">CORRECT: Right-Click &gt;
 Open</figcaption>
@@ -2634,7 +2629,7 @@ placeholder name:</p>
 <li>In the Selection Pane, change the name of the selected item.</li>
 </ol>
 <figure>
-<img src="images/add_shape_names.png"
+<img src="https://i.imgur.com/xhA0D3u.png"
 title="Add shape names from Selection Pane"
 alt="Add shape names from Selection Pane" />
 <figcaption aria-hidden="true">Add shape names from Selection
@@ -2655,7 +2650,7 @@ href="content/GP_template.potx">here</a>.</p>
 now create an Excel document which looks identical to the template with
 respect to the named items. Please see image below.</p>
 <figure>
-<img src="images/create_excel_template.png"
+<img src="https://i.imgur.com/A080o1Z.png"
 title="PowerPoint item to Excel named range mapping"
 alt="PowerPoint item to Excel named range mapping" />
 <figcaption aria-hidden="true">PowerPoint item to Excel named range
@@ -2681,7 +2676,7 @@ The entire table must be set as a named range.</p>
 <code>Edit Data</code>. An excel worksheet is displayed with the
 underlying data. Copy-paste the entire data into the Excel template.</p>
 <figure>
-<img src="images/edit_data.png"
+<img src="https://i.imgur.com/rVsb1a6.png"
 title="Excel Chart: Right Click &gt; Edit Data" width="225"
 alt="Excel Chart: Right Click &gt; Edit Data" />
 <figcaption aria-hidden="true">Excel Chart: Right Click &gt; Edit
@@ -2691,7 +2686,7 @@ Data</figcaption>
 template <code>XL2PPT.xlsm</code> looks like the below image. Please
 note that this template does not have the VBA macro yet.</p>
 <figure>
-<img src="images/excel_template.png" title="XL2PPT design"
+<img src="https://i.imgur.com/oMdSUvp.png" title="XL2PPT design"
 alt="XL2PPT design" />
 <figcaption aria-hidden="true">XL2PPT design</figcaption>
 </figure>

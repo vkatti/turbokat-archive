@@ -5,7 +5,7 @@ description: |
 author:
   - name: Vishal Katti
 date: 2021-12-29
-preview: images/R2XL2PPT_logo.png
+preview: https://i.imgur.com/T6uCTXN.png
 categories:
   - Rstats
   - Excel
@@ -39,12 +39,12 @@ given data using VBA.
 The report we want to automate is...
 
 ![The Gapminder Report : The PowerPoint presentation we want to
-automate](images/base_report.gif "The Gapminder Report")
+automate](https://i.imgur.com/LL6UwWH.gif "The Gapminder Report")
 
 ...and the Excel and PowerPoint template we created are shown below.
 
 ![Excel Template with VBA
-macro](images/excel_template.png "Excel Template with VBA macro")
+macro](https://i.imgur.com/tB3QxhJ.png "Excel Template with VBA macro")
 
 In this post, we will write the R script that will first massage the
 data into desired format and then load the data for one region into the
@@ -86,7 +86,7 @@ Yes, we have Oceania with only Australia and New Zealand. For ease of
 use, let us include these countries along with Asian countries in a new
 `Region` variable.
 
-![02_chart](images/02_chart.png "02_chart")
+![02_chart](https://i.imgur.com/KvGxnyt.png "02_chart")
 
 We will create the `region` variable in the gapminder data. But first,
 let us load some relevant packages.
@@ -176,7 +176,7 @@ Now that we have the datasets needed for `02_chart`, let's proceed to
 the create `02_table` . This table gives you the count of countries that
 fall under various population ranges.
 
-![02_table on Slide 2](images/02_table.png "02_table"){width="250"}
+![02_table on Slide 2](https://i.imgur.com/uf3flVN.png "02_table"){width="250"}
 
 Let's create `02_table`. To create this table, we first create a new
 variable called `pop_range`.
@@ -212,7 +212,7 @@ reactable(pop_groups, compact=TRUE, style = "font-size:12px")
 Slide 3 contains 2 strings and one chart. The data for the chart looks
 as shown below.
 
-![03_chart table for Slide 3](images/03_slide.png "Slide 3")
+![03_chart table for Slide 3](https://i.imgur.com/kDAbook.png "Slide 3")
 
 The data for `03_chart` is the list of top 10 countries in each region
 as per latest record i.e. 2007. Let's create the `top10` table.
@@ -333,7 +333,7 @@ for (curr_region in unique_regions) {
 Once the code runs completely, you will see 4 new PowerPoint
 Presentations in your working folder.
 
-![Output Files](images/output_ppt.png "Output Files")
+![Output Files](https://i.imgur.com/Pe8yyxI.png "Output Files")
 
 You can download the full R script from
 [here](https://gist.github.com/vkatti/cc95c56e11c1b8985bbd288f353c7386 "Navigate to Github Gist").
