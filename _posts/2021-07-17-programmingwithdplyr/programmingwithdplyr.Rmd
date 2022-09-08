@@ -9,7 +9,7 @@ categories:
   - Rstats
   - dplyr
   - functions
-preview: thor.gif
+preview: https://i.imgur.com/H9jo8OB.gif
 output:
   distill::distill_article:
     toc: true
@@ -452,7 +452,7 @@ You could further extend this by creating a custom filtering function that gives
 
 The ability to create such dynamic functions, enabled by the wonderful {dplyr} package, allows us to level-up in terms of programming with R and helps make our code neat and tidy.
 
-![How I feel while creating custom functions with {dplyr}! I can almost hear the music! Source: gifer.com](thor.gif)
+![How I feel while creating custom functions with {dplyr}! I can almost hear the music! Source: imgur.com](https://i.imgur.com/H9jo8OB.gif)
 
 # References
 

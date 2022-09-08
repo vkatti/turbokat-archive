@@ -6,7 +6,7 @@ author:
   - name: Vishal Katti
     url: {}
 date: 2022-01-18
-preview: https://64.media.tumblr.com/f6dc1e64c3d63e1f308e46445cafb6ab/tumblr_mo7km0eiRW1qedb29o1_500.gif
+preview: https://i.imgur.com/hbjbLMN.gif
 categories:
   - Rstats
   - functions
@@ -555,7 +555,7 @@ make_date(yyyy = 2022, mm = 2, dd = 31) # are there 31 days in February?
 Do you think our function `make_date` is robust enough?
 
 ![As robust as Superman! Source:
-Tumblr](https://64.media.tumblr.com/f6dc1e64c3d63e1f308e46445cafb6ab/tumblr_mo7km0eiRW1qedb29o1_500.gif)
+Imgur](https://i.imgur.com/hbjbLMN.gif)
 
 ## Conclusion
 
