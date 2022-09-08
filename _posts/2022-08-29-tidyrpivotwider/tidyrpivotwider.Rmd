@@ -6,7 +6,7 @@ author:
   - name: Vishal Katti
     url: {}
 date: 2022-08-29
-preview: images/pivot_wider.gif
+preview: https://i.imgur.com/A9SfEdJ.gif
 categories:
   - Rstats
   - functions
@@ -42,7 +42,7 @@ In this post, we will see how to convert a long dataframe to wide format using t
 
 Consider the following data table. It has been created from the famous Gapminder dataset. This table shows the average life expectancy in each continent for 2 years. While some of you may say that Gapminder data contains records for a lot more number of years, here we consider just the latest 2 years for ease of explanation and visual purposes. We have added an extra `id` column for teaching purpose.
 
-![Continent-wise Average Life Expectancy over last 2 years](images/Step1.png){width="60%"}
+![Continent-wise Average Life Expectancy over last 2 years](https://i.imgur.com/pV7FveQ.png){width="60%"}
 
 `my_data` is in the long format as we have continent names and year in their own column and average life expectancy values for each unique combination of year and continent.  If we want to compare life expectancy across years for each continent, we need to have the life expectancy values for each continent side-by-side for easier viewing i.e. we need to convert to the wide format. To convert this tibble to the wide format, we need to push the `year` values into the headers and the `average_life_expectancy` values under the corresponding year column.
 
@@ -50,7 +50,7 @@ Consider the following data table. It has been created from the famous Gapminder
 
 The wide format of this table would ideally have only `continent` and columns having each unique value in the `year` column as a header. In this case, the wide one would  look something like the table below.
 
-![](images/Step2.png){width="60%"}
+![](https://i.imgur.com/KUS6maA.png){width="60%"}
 
 The wide format has unique values of the column that are not pushed into headers. In this case, the `continent` column becomes unique for each row.
 
@@ -112,7 +112,7 @@ knitr::kable(my_data_longer)
 
 If you are a visual person like me and wish to see this transformation with explanations, check out this GIF I made using good ol' PowerPoint.
 
-![{tidyr} pivot_wider() explained](images/pivot_wider.gif)
+![{tidyr} pivot_wider() explained](https://i.imgur.com/A9SfEdJ.gif)
 
 
 

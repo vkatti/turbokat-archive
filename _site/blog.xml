@@ -45,7 +45,7 @@ data contains records for a lot more number of years, here we consider
 just the latest 2 years for ease of explanation and visual purposes. We
 have added an extra &lt;code&gt;id&lt;/code&gt; column for teaching purpose.&lt;/p&gt;
 &lt;div class="figure"&gt;
-&lt;img src="https://vishalkatti.com/posts/2022-08-29-tidyrpivotwiderimages/Step1.png" style="width:60.0%" alt="" /&gt;
+&lt;img src="https://i.imgur.com/pV7FveQ.png" style="width:60.0%" alt="" /&gt;
 &lt;p class="caption"&gt;Continent-wise Average Life Expectancy over last 2
 years&lt;/p&gt;
 &lt;/div&gt;
@@ -63,7 +63,7 @@ corresponding year column.&lt;/p&gt;
 &lt;code&gt;continent&lt;/code&gt; and columns having each unique value in the
 &lt;code&gt;year&lt;/code&gt; column as a header. In this case, the wide one would
 look something like the table below.&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://vishalkatti.com/posts/2022-08-29-tidyrpivotwiderimages/Step2.png" style="width:60.0%" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://i.imgur.com/KUS6maA.png" style="width:60.0%" /&gt;&lt;/p&gt;
 &lt;p&gt;The wide format has unique values of the column that are not pushed
 into headers. In this case, the &lt;code&gt;continent&lt;/code&gt; column becomes
 unique for each row.&lt;/p&gt;
@@ -353,7 +353,7 @@ knitr::kable(my_data_longer)&lt;/code&gt;&lt;/pre&gt;
 transformation with explanations, check out this GIF I made using good
 ol’ PowerPoint.&lt;/p&gt;
 &lt;div class="figure"&gt;
-&lt;img src="https://vishalkatti.com/posts/2022-08-29-tidyrpivotwiderimages/pivot_wider.gif" alt="" /&gt;
+&lt;img src="https://i.imgur.com/A9SfEdJ.gif" alt="" /&gt;
 &lt;p class="caption"&gt;{tidyr} pivot_wider() explained&lt;/p&gt;
 &lt;/div&gt;
 &lt;h1 id="conclusion"&gt;Conclusion&lt;/h1&gt;
@@ -382,7 +382,7 @@ Report Generation in R. R package version 1.39.&lt;/li&gt;
       <category>pivot</category>
       <guid>https://vishalkatti.com/posts/2022-08-29-tidyrpivotwider</guid>
       <pubDate>Sun, 28 Aug 2022 00:00:00 +0000</pubDate>
-      <media:content url="https://vishalkatti.com/posts/2022-08-29-tidyrpivotwider/images/pivot_wider.gif" medium="image" type="image/gif"/>
+      <media:content url="https://i.imgur.com/A9SfEdJ.gif" medium="image" type="image/gif"/>
     </item>
     <item>
       <title>Pivoting your tables with Tidyr: Part I</title>
@@ -420,7 +420,7 @@ in each continent for 2 years. While some of you may say that Gapminder
 data contains records for a lot more number of years, here we consider
 just the latest 2 years for ease of explanation and visual purposes.&lt;/p&gt;
 &lt;div class="figure"&gt;
-&lt;img src="https://vishalkatti.com/posts/2022-07-08-tidyrpivotlongerimages/Step1.png" alt="" /&gt;
+&lt;img src="https://i.imgur.com/sMJDveZ.png" alt="" /&gt;
 &lt;p class="caption"&gt;Continent-wise Average Life Expectancy over last 2
 years&lt;/p&gt;
 &lt;/div&gt;
@@ -429,13 +429,13 @@ in column headers and average life expectancy values in each of those
 columns. To convert this tibble to the long format, we need to pull
 together the continent names in one column and their corresponding
 values into another column.&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://vishalkatti.com/posts/2022-07-08-tidyrpivotlongerimages/Step2.png" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://i.imgur.com/kbMDurH.png" /&gt;&lt;/p&gt;
 &lt;h1 id="the-long-one"&gt;The long one&lt;/h1&gt;
 &lt;p&gt;The long format of this table would ideally have only
 &lt;code&gt;year&lt;/code&gt;, &lt;code&gt;continent&lt;/code&gt; and
 &lt;code&gt;average_life_expectancy&lt;/code&gt; columns and look something like the
 table below.&lt;/p&gt;
-&lt;p&gt;&lt;img src="https://vishalkatti.com/posts/2022-07-08-tidyrpivotlongerimages/Step3.png" style="width:60.0%" /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://i.imgur.com/63PMzJ3.png" style="width:60.0%" /&gt;&lt;/p&gt;
 &lt;p&gt;The long format has repeated values of the column that are not
 gathered/collected. In this case, the &lt;code&gt;year&lt;/code&gt; column gets its
 values repeated for each row.&lt;/p&gt;
@@ -683,7 +683,7 @@ knitr::kable(my_data_longer)&lt;/code&gt;&lt;/pre&gt;
 transformation with explanations, check out this GIF I made using good
 ol’ Powerpoint.&lt;/p&gt;
 &lt;div class="figure"&gt;
-&lt;img src="https://vishalkatti.com/posts/2022-07-08-tidyrpivotlongerimages/pivot_longer.gif" alt="" /&gt;
+&lt;img src="https://i.imgur.com/0qMbFC1.gif" alt="" /&gt;
 &lt;p class="caption"&gt;{tidyr} pivot_longer() explained&lt;/p&gt;
 &lt;/div&gt;
 &lt;h1 id="conclusion"&gt;Conclusion&lt;/h1&gt;
@@ -717,7 +717,7 @@ Report Generation in R. R package version 1.39.&lt;/li&gt;
       <category>pivot</category>
       <guid>https://vishalkatti.com/posts/2022-07-08-tidyrpivotlonger</guid>
       <pubDate>Fri, 08 Jul 2022 00:00:00 +0000</pubDate>
-      <media:content url="https://vishalkatti.com/posts/2022-07-08-tidyrpivotlonger/images/pivot_longer.gif" medium="image" type="image/gif"/>
+      <media:content url="https://i.imgur.com/0qMbFC1.gif" medium="image" type="image/gif"/>
     </item>
     <item>
       <title>Writing Robust R Functions</title>

@@ -105,16 +105,14 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta property="og:type" content="article"/>
 <meta property="og:description" content="Converting &quot;wide&quot; to &quot;long&quot; format"/>
 <meta property="og:url" content="https://vishalkatti.com/posts/2022-07-08-tidyrpivotlonger/"/>
-<meta property="og:image" content="https://vishalkatti.com/posts/2022-07-08-tidyrpivotlonger/images/pivot_longer.gif"/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="Vishal Katti"/>
 
 <!--  https://dev.twitter.com/cards/types/summary -->
-<meta property="twitter:card" content="summary_large_image"/>
+<meta property="twitter:card" content="summary"/>
 <meta property="twitter:title" content="Vishal Katti: Pivoting your tables with Tidyr: Part I"/>
 <meta property="twitter:description" content="Converting &quot;wide&quot; to &quot;long&quot; format"/>
 <meta property="twitter:url" content="https://vishalkatti.com/posts/2022-07-08-tidyrpivotlonger/"/>
-<meta property="twitter:image" content="https://vishalkatti.com/posts/2022-07-08-tidyrpivotlonger/images/pivot_longer.gif"/>
 <meta property="twitter:site" content="@vishal_katti"/>
 <meta property="twitter:creator" content="@vishal_katti"/>
 
@@ -129,7 +127,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["creative_commons","title","description","author","date","preview","categories","output","editor_options","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["CC BY"]},{"type":"character","attributes":{},"value":["Pivoting your tables with Tidyr: Part I"]},{"type":"character","attributes":{},"value":["Converting \"wide\" to \"long\" format"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Vishal Katti"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["2022-07-08"]},{"type":"character","attributes":{},"value":["images/pivot_longer.gif"]},{"type":"character","attributes":{},"value":["Rstats","functions","tidyr","pivot"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["chunk_output_type"]}},"value":[{"type":"character","attributes":{},"value":["inline"]}]},{"type":"character","attributes":{},"value":["https://vishalkatti.com/posts/2022-07-08-tidyrpivotlonger/"]},{"type":"character","attributes":{},"value":["https://vishalkatti.com/posts/2022-07-08-tidyrpivotlonger/"]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["creative_commons","title","description","author","date","preview","categories","output","editor_options","citation_url","canonical_url"]}},"value":[{"type":"character","attributes":{},"value":["CC BY"]},{"type":"character","attributes":{},"value":["Pivoting your tables with Tidyr: Part I"]},{"type":"character","attributes":{},"value":["Converting \"wide\" to \"long\" format"]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","url"]}},"value":[{"type":"character","attributes":{},"value":["Vishal Katti"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":[]}},"value":[]}]}]},{"type":"character","attributes":{},"value":["2022-07-08"]},{"type":"character","attributes":{},"value":["https://i.imgur.com/0qMbFC1.gif"]},{"type":"character","attributes":{},"value":["Rstats","functions","tidyr","pivot"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained","toc"]}},"value":[{"type":"logical","attributes":{},"value":[false]},{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["chunk_output_type"]}},"value":[{"type":"character","attributes":{},"value":["inline"]}]},{"type":"character","attributes":{},"value":["https://vishalkatti.com/posts/2022-07-08-tidyrpivotlonger/"]},{"type":"character","attributes":{},"value":["https://vishalkatti.com/posts/2022-07-08-tidyrpivotlonger/"]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
@@ -2570,7 +2568,7 @@ in each continent for 2 years. While some of you may say that Gapminder
 data contains records for a lot more number of years, here we consider
 just the latest 2 years for ease of explanation and visual purposes.</p>
 <figure>
-<img src="images/Step1.png"
+<img src="https://i.imgur.com/sMJDveZ.png"
 alt="Continent-wise Average Life Expectancy over last 2 years" />
 <figcaption aria-hidden="true">Continent-wise Average Life Expectancy
 over last 2 years</figcaption>
@@ -2580,13 +2578,13 @@ in column headers and average life expectancy values in each of those
 columns. To convert this tibble to the long format, we need to pull
 together the continent names in one column and their corresponding
 values into another column.</p>
-<p><img src="images/Step2.png" /></p>
+<p><img src="https://i.imgur.com/kbMDurH.png" /></p>
 <h1 id="the-long-one">The long one</h1>
 <p>The long format of this table would ideally have only
 <code>year</code>, <code>continent</code> and
 <code>average_life_expectancy</code> columns and look something like the
 table below.</p>
-<p><img src="images/Step3.png" style="width:60.0%" /></p>
+<p><img src="https://i.imgur.com/63PMzJ3.png" style="width:60.0%" /></p>
 <p>The long format has repeated values of the column that are not
 gathered/collected. In this case, the <code>year</code> column gets its
 values repeated for each row.</p>
@@ -2850,7 +2848,7 @@ below</p>
 transformation with explanations, check out this GIF I made using good
 ol’ Powerpoint.</p>
 <figure>
-<img src="images/pivot_longer.gif"
+<img src="https://i.imgur.com/0qMbFC1.gif"
 alt="{tidyr} pivot_longer() explained" />
 <figcaption aria-hidden="true">{tidyr} pivot_longer()
 explained</figcaption>

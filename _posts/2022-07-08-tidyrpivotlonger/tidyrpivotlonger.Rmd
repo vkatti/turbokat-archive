@@ -6,7 +6,7 @@ author:
   - name: Vishal Katti
     url: {}
 date: 2022-07-08
-preview: images/pivot_longer.gif
+preview: https://i.imgur.com/0qMbFC1.gif
 categories:
   - Rstats
   - functions
@@ -44,17 +44,17 @@ In this post, we will see how to convert a wide dataframe to long format using t
 
 Consider the following data table. It has been created from the famous Gapminder dataset. This table shows the average life expectancy in each continent for 2 years. While some of you may say that Gapminder data contains records for a lot more number of years, here we consider just the latest 2 years for ease of explanation and visual purposes.
 
-![Continent-wise Average Life Expectancy over last 2 years](images/Step1.png)
+![Continent-wise Average Life Expectancy over last 2 years](https://i.imgur.com/sMJDveZ.png)
 
 `my_data` is in the wide format as we have continent names in column headers and average life expectancy values in each of those columns. To convert this tibble to the long format, we need to pull together the continent names in one column and their corresponding values into another column.
 
-![](images/Step2.png)
+![](https://i.imgur.com/kbMDurH.png)
 
 # The long one
 
 The long format of this table would ideally have only `year`, `continent` and `average_life_expectancy` columns and look something like the table below.
 
-![](images/Step3.png){width="60%"}
+![](https://i.imgur.com/63PMzJ3.png){width="60%"}
 
 The long format has repeated values of the column that are not gathered/collected. In this case, the `year` column gets its values repeated for each row.
 
@@ -111,7 +111,7 @@ knitr::kable(my_data_longer)
 
 If you are a visual person like me and wish to see this transformation with explanations, check out this GIF I made using good ol' Powerpoint.
 
-![{tidyr} pivot_longer() explained](images/pivot_longer.gif)
+![{tidyr} pivot_longer() explained](https://i.imgur.com/0qMbFC1.gif)
 
 # Conclusion
 
