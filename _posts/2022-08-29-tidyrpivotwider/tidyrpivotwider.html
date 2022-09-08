@@ -189,6 +189,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   d-article table.gt_table td,
   d-article table.gt_table th {
     border-bottom: none;
+    font-size: 100%;
   }
 
   .html-widget {
@@ -1261,15 +1262,21 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
-        if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
-          var fn = $(this).children()[0]
+        const citeChild = $(this).children()[0]
+        // Do not process if @xyz has been used without escaping and without bibliography activated
+        // https://github.com/rstudio/distill/issues/466
+        if (citeChild === undefined) return true
+
+        if (citeChild.nodeName == "D-FOOTNOTE") {
+          var fn = citeChild
           $(this).html(fn.shadowRoot.querySelector("sup"))
           $(this).id = fn.id
           fn.remove()
         }
         var refs = $(this).attr('data-cites').split(" ");
         var refHtml = refs.map(function(ref) {
-          return "<p>" + $('#ref-' + ref).html() + "</p>";
+          // Could use CSS.escape too here, we insure backward compatibility in navigator
+          return "<p>" + $('div[id="ref-' + ref + '"]').html() + "</p>";
         }).join("\n");
         window.tippy(this, {
           allowHTML: true,
@@ -1468,7 +1475,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="tidyrpivotwider_files/header-attrs-2.14/header-attrs.js"></script>
+  <script src="tidyrpivotwider_files/header-attrs-2.16/header-attrs.js"></script>
   <script src="tidyrpivotwider_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <script src="tidyrpivotwider_files/popper-2.6.0/popper.min.js"></script>
   <link href="tidyrpivotwider_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
@@ -1531,60 +1538,24 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </nav>
 </div>
 <h1 id="intro">Intro</h1>
-<p>This is part 2 of the Pivoting your tables with Tidyr series. Read
-Part 1 <a
-href="https://www.vishalkatti.com/posts/2022-07-08-tidyrpivotlonger/">here</a>.</p>
-<p>We discussed the advantages of using the long format during data
-analysis, most users feel that the wide format is more readable by
-human. This is why most reports tend to have the data arranged in the
-wide format.</p>
-<p>The wide format has at least one column which acts as a primary key
-i.e. it is unique and each value appears only once. It can also have
-multiple column whose unique combination acts as a primary key i.e. each
-combination appears only once.</p>
-<p>Read more about wide vs. long formats <a
-href="https://www.statology.org/long-vs-wide-data/">here</a>.</p>
-<p>While the long format is preferred and is desirable for data and
-plotting operations using R, Python or other data processing programming
-languages, the wide format is more human-readable. The {tidyr} R package
-has functions that allow you to transform your tabular data between the
-two formats.</p>
-<p>In this post, we will see how to convert a long dataframe to wide
-format using the <em>pivot_wider()</em> function from {tidyr}
-package.</p>
+<p>This is part 2 of the Pivoting your tables with Tidyr series. Read Part 1 <a href="https://www.vishalkatti.com/posts/2022-07-08-tidyrpivotlonger/">here</a>.</p>
+<p>We discussed the advantages of using the long format during data analysis, most users feel that the wide format is more readable by human. This is why most reports tend to have the data arranged in the wide format.</p>
+<p>The wide format has at least one column which acts as a primary key i.e. it is unique and each value appears only once. It can also have multiple column whose unique combination acts as a primary key i.e. each combination appears only once.</p>
+<p>Read more about wide vs. long formats <a href="https://www.statology.org/long-vs-wide-data/">here</a>.</p>
+<p>While the long format is preferred and is desirable for data and plotting operations using R, Python or other data processing programming languages, the wide format is more human-readable. The {tidyr} R package has functions that allow you to transform your tabular data between the two formats.</p>
+<p>In this post, we will see how to convert a long dataframe to wide format using the <em>pivot_wider()</em> function from {tidyr} package.</p>
 <h1 id="the-long-one">The long one</h1>
-<p>Consider the following data table. It has been created from the
-famous Gapminder dataset. This table shows the average life expectancy
-in each continent for 2 years. While some of you may say that Gapminder
-data contains records for a lot more number of years, here we consider
-just the latest 2 years for ease of explanation and visual purposes. We
-have added an extra <code>id</code> column for teaching purpose.</p>
+<p>Consider the following data table. It has been created from the famous Gapminder dataset. This table shows the average life expectancy in each continent for 2 years. While some of you may say that Gapminder data contains records for a lot more number of years, here we consider just the latest 2 years for ease of explanation and visual purposes. We have added an extra <code>id</code> column for teaching purpose.</p>
 <figure>
-<img src="https://i.imgur.com/pV7FveQ.png" style="width:60.0%"
-alt="Continent-wise Average Life Expectancy over last 2 years" />
-<figcaption aria-hidden="true">Continent-wise Average Life Expectancy
-over last 2 years</figcaption>
+<img src="https://i.imgur.com/pV7FveQ.png" style="width:60.0%" alt="Continent-wise Average Life Expectancy over last 2 years" />
+<figcaption aria-hidden="true">Continent-wise Average Life Expectancy over last 2 years</figcaption>
 </figure>
-<p><code>my_data</code> is in the long format as we have continent names
-and year in their own column and average life expectancy values for each
-unique combination of year and continent. If we want to compare life
-expectancy across years for each continent, we need to have the life
-expectancy values for each continent side-by-side for easier viewing
-i.e. we need to convert to the wide format. To convert this tibble to
-the wide format, we need to push the <code>year</code> values into the
-headers and the <code>average_life_expectancy</code> values under the
-corresponding year column.</p>
+<p><code>my_data</code> is in the long format as we have continent names and year in their own column and average life expectancy values for each unique combination of year and continent. If we want to compare life expectancy across years for each continent, we need to have the life expectancy values for each continent side-by-side for easier viewing i.e. we need to convert to the wide format. To convert this tibble to the wide format, we need to push the <code>year</code> values into the headers and the <code>average_life_expectancy</code> values under the corresponding year column.</p>
 <h1 id="the-wide-one">The wide one</h1>
-<p>The wide format of this table would ideally have only
-<code>continent</code> and columns having each unique value in the
-<code>year</code> column as a header. In this case, the wide one would
-look something like the table below.</p>
+<p>The wide format of this table would ideally have only <code>continent</code> and columns having each unique value in the <code>year</code> column as a header. In this case, the wide one would look something like the table below.</p>
 <p><img src="https://i.imgur.com/KUS6maA.png" style="width:60.0%" /></p>
-<p>The wide format has unique values of the column that are not pushed
-into headers. In this case, the <code>continent</code> column becomes
-unique for each row.</p>
-<p>Let’s recreate the above transformation in R. First, we create the
-<code>my_data</code> table.</p>
+<p>The wide format has unique values of the column that are not pushed into headers. In this case, the <code>continent</code> column becomes unique for each row.</p>
+<p>Let’s recreate the above transformation in R. First, we create the <code>my_data</code> table.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>my_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span></span>
@@ -1670,12 +1641,8 @@ unique for each row.</p>
 </tbody>
 </table>
 </div>
-<p>To convert this table into wide format, we use the
-<em>pivot_wider()</em> function from {tidyr} R package. Let us see how
-to use this function.</p>
-<p>💡<em>Tip: use <code>formals</code> to view all the formal arguments
-of a function and their default values. <code>formals</code> returns a
-named list.</em></p>
+<p>To convert this table into wide format, we use the <em>pivot_wider()</em> function from {tidyr} R package. Let us see how to use this function.</p>
+<p>💡<em>Tip: use <code>formals</code> to view all the formal arguments of a function and their default values. <code>formals</code> returns a named list.</em></p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyr.tidyverse.org'>tidyr</a></span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span>, warn.conflicts <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
@@ -1729,13 +1696,8 @@ NULL
 
 $...</code></pre>
 </div>
-<p>The result of <code>formals(pivot_wider)</code> tells us that the
-minimum information needed to use this function is to provide values to
-the <code>data</code>,<code>names_from</code> and
-<code>values_from</code> arguments as all other arguments have default
-values and hence, are optional.</p>
-<p>Using only the minimum arguments with <code>pivot_wider()</code>, we
-get a wide formatted tibble but with missing data!</p>
+<p>The result of <code>formals(pivot_wider)</code> tells us that the minimum information needed to use this function is to provide values to the <code>data</code>,<code>names_from</code> and <code>values_from</code> arguments as all other arguments have default values and hence, are optional.</p>
+<p>Using only the minimum arguments with <code>pivot_wider()</code>, we get a wide formatted tibble but with missing data!</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>wide_minimal</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tidyr.tidyverse.org/reference/pivot_wider.html'>pivot_wider</a></span><span class='op'>(</span></span>
@@ -1819,20 +1781,9 @@ get a wide formatted tibble but with missing data!</p>
 </tbody>
 </table>
 </div>
-<p><strong>So why did <code>NA</code>s appear in the
-result?</strong></p>
-<p><code>pivot_wider()</code> creates unique combinations of all columns
-not included in <code>names_from</code> or <code>values_from</code>
-argument. Therefore, if your dataframe/tibble had a primary key prior to
-the transformation, the primary key of your transformed “wide” dataframe
-is your old primary key + unique combinations of all columns not
-included in <code>names_from</code> or <code>values_from</code>
-argument. We do have <code>id</code> column as a primary key in the
-original tibble. This gives an unusable output with <code>NA</code>s for
-each combination.</p>
-<p>To specify which column/s to be made unique, pass their name to the
-<code>id_cols</code> argument. Here we pass the <code>continent</code>
-column to the <code>id_cols</code> argument.</p>
+<p><strong>So why did <code>NA</code>s appear in the result?</strong></p>
+<p><code>pivot_wider()</code> creates unique combinations of all columns not included in <code>names_from</code> or <code>values_from</code> argument. Therefore, if your dataframe/tibble had a primary key prior to the transformation, the primary key of your transformed “wide” dataframe is your old primary key + unique combinations of all columns not included in <code>names_from</code> or <code>values_from</code> argument. We do have <code>id</code> column as a primary key in the original tibble. This gives an unusable output with <code>NA</code>s for each combination.</p>
+<p>To specify which column/s to be made unique, pass their name to the <code>id_cols</code> argument. Here we pass the <code>continent</code> column to the <code>id_cols</code> argument.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>my_data_longer</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tidyr.tidyverse.org/reference/pivot_wider.html'>pivot_wider</a></span><span class='op'>(</span></span>
@@ -1881,35 +1832,21 @@ column to the <code>id_cols</code> argument.</p>
 </tbody>
 </table>
 </div>
-<p>If you are a visual person like me and wish to see this
-transformation with explanations, check out this GIF I made using good
-ol’ PowerPoint.</p>
+<p>If you are a visual person like me and wish to see this transformation with explanations, check out this GIF I made using good ol’ PowerPoint.</p>
 <figure>
-<img src="https://i.imgur.com/A9SfEdJ.gif"
-alt="{tidyr} pivot_wider() explained" />
-<figcaption aria-hidden="true">{tidyr} pivot_wider()
-explained</figcaption>
+<img src="https://i.imgur.com/A9SfEdJ.gif" alt="{tidyr} pivot_wider() explained" />
+<figcaption aria-hidden="true">{tidyr} pivot_wider() explained</figcaption>
 </figure>
 <h1 id="conclusion">Conclusion</h1>
-<p><code>pivot_wider()</code> is the successor for the great
-<code>spread()</code> function and has many advantages over the latter.
-This function has many other arguments that allow some truly great
-transformations. Mastering this function (and its long counterpart) is a
-great skill upgrade while massaging your data to make it “tidy”.</p>
+<p><code>pivot_wider()</code> is the successor for the great <code>spread()</code> function and has many advantages over the latter. This function has many other arguments that allow some truly great transformations. Mastering this function (and its long counterpart) is a great skill upgrade while massaging your data to make it “tidy”.</p>
 <p>Happy Spreading!</p>
 <h1 id="references">References</h1>
 <ul>
-<li><a href="https://www.statology.org/long-vs-wide-data/">Long vs. Wide
-Data: What’s the Difference?</a></li>
-<li>Hadley Wickham and Maximilian Girlich (2022). tidyr: Tidy Messy
-Data. R package version 1.2.0. <a
-href="https://CRAN.R-project.org/package=tidyr"
-class="uri">https://CRAN.R-project.org/package=tidyr</a></li>
-<li>Yihui Xie (2022). knitr: A General-Purpose Package for Dynamic
-Report Generation in R. R package version 1.39.</li>
+<li><a href="https://www.statology.org/long-vs-wide-data/">Long vs. Wide Data: What’s the Difference?</a></li>
+<li>Hadley Wickham and Maximilian Girlich (2022). tidyr: Tidy Messy Data. R package version 1.2.0. <a href="https://CRAN.R-project.org/package=tidyr" class="uri">https://CRAN.R-project.org/package=tidyr</a></li>
+<li>Yihui Xie (2022). knitr: A General-Purpose Package for Dynamic Report Generation in R. R package version 1.39.</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre
-class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

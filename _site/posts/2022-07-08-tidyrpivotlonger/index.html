@@ -809,6 +809,7 @@ d-title .dt-tags {
 d-article table.gt_table td,
 d-article table.gt_table th {
   border-bottom: none;
+  font-size: 100%;
 }
 
 .html-widget {
@@ -1881,15 +1882,21 @@ function init_distill() {
 
     // hoverable references
     $('span.citation[data-cites]').each(function() {
-      if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
-        var fn = $(this).children()[0]
+      const citeChild = $(this).children()[0]
+      // Do not process if @xyz has been used without escaping and without bibliography activated
+      // https://github.com/rstudio/distill/issues/466
+      if (citeChild === undefined) return true
+
+      if (citeChild.nodeName == "D-FOOTNOTE") {
+        var fn = citeChild
         $(this).html(fn.shadowRoot.querySelector("sup"))
         $(this).id = fn.id
         fn.remove()
       }
       var refs = $(this).attr('data-cites').split(" ");
       var refHtml = refs.map(function(ref) {
-        return "<p>" + $('#ref-' + ref).html() + "</p>";
+        // Could use CSS.escape too here, we insure backward compatibility in navigator
+        return "<p>" + $('div[id="ref-' + ref + '"]').html() + "</p>";
       }).join("\n");
       window.tippy(this, {
         allowHTML: true,
@@ -2422,7 +2429,7 @@ d-appendix d-footnote-list a.footnote-backlink {
   color: var(--hover-color, white);
 }</style>
 <!--/radix_placeholder_distill-->
-  <script src="../../site_libs/header-attrs-2.14/header-attrs.js"></script>
+  <script src="../../site_libs/header-attrs-2.16/header-attrs.js"></script>
   <script src="../../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <script src="../../site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="../../site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
@@ -2540,56 +2547,29 @@ d-appendix d-footnote-list a.footnote-backlink {
 </nav>
 </div>
 <h1 id="intro">Intro</h1>
-<p>One of the primary data manipulation operations is pivoting your
-tabular data from “wide” format to “long” format and vice-versa.</p>
+<p>One of the primary data manipulation operations is pivoting your tabular data from “wide” format to “long” format and vice-versa.</p>
 <p>The idea is to make your tabular data “tidy” i.e.</p>
 <ul>
 <li>Every column is a variable.</li>
 <li>Every row is an observation.</li>
 <li>Every cell is a single value.</li>
 </ul>
-<p>In other words, every column contains just one type of information,
-every row in the table is a snapshot or a version of the information
-your table captures and every cell contains just one piece of
-information. Read more about wide vs. long formats <a
-href="https://www.statology.org/long-vs-wide-data/">here</a>.</p>
-<p>While the wide format is more human-readable, the long format is
-preferred and is desirable for data and plotting operations using R,
-Python or other data processing programming languages. The {tidyr} R
-package has functions that allow you to transform your tabular data
-between the two formats.</p>
-<p>In this post, we will see how to convert a wide dataframe to long
-format using the <em>pivot_longer()</em> function from {tidyr}
-package.</p>
+<p>In other words, every column contains just one type of information, every row in the table is a snapshot or a version of the information your table captures and every cell contains just one piece of information. Read more about wide vs. long formats <a href="https://www.statology.org/long-vs-wide-data/">here</a>.</p>
+<p>While the wide format is more human-readable, the long format is preferred and is desirable for data and plotting operations using R, Python or other data processing programming languages. The {tidyr} R package has functions that allow you to transform your tabular data between the two formats.</p>
+<p>In this post, we will see how to convert a wide dataframe to long format using the <em>pivot_longer()</em> function from {tidyr} package.</p>
 <h1 id="the-wide-one">The wide one</h1>
-<p>Consider the following data table. It has been created from the
-famous Gapminder dataset. This table shows the average life expectancy
-in each continent for 2 years. While some of you may say that Gapminder
-data contains records for a lot more number of years, here we consider
-just the latest 2 years for ease of explanation and visual purposes.</p>
+<p>Consider the following data table. It has been created from the famous Gapminder dataset. This table shows the average life expectancy in each continent for 2 years. While some of you may say that Gapminder data contains records for a lot more number of years, here we consider just the latest 2 years for ease of explanation and visual purposes.</p>
 <figure>
-<img src="https://i.imgur.com/sMJDveZ.png"
-alt="Continent-wise Average Life Expectancy over last 2 years" />
-<figcaption aria-hidden="true">Continent-wise Average Life Expectancy
-over last 2 years</figcaption>
+<img src="https://i.imgur.com/sMJDveZ.png" alt="Continent-wise Average Life Expectancy over last 2 years" />
+<figcaption aria-hidden="true">Continent-wise Average Life Expectancy over last 2 years</figcaption>
 </figure>
-<p><code>my_data</code> is in the wide format as we have continent names
-in column headers and average life expectancy values in each of those
-columns. To convert this tibble to the long format, we need to pull
-together the continent names in one column and their corresponding
-values into another column.</p>
+<p><code>my_data</code> is in the wide format as we have continent names in column headers and average life expectancy values in each of those columns. To convert this tibble to the long format, we need to pull together the continent names in one column and their corresponding values into another column.</p>
 <p><img src="https://i.imgur.com/kbMDurH.png" /></p>
 <h1 id="the-long-one">The long one</h1>
-<p>The long format of this table would ideally have only
-<code>year</code>, <code>continent</code> and
-<code>average_life_expectancy</code> columns and look something like the
-table below.</p>
+<p>The long format of this table would ideally have only <code>year</code>, <code>continent</code> and <code>average_life_expectancy</code> columns and look something like the table below.</p>
 <p><img src="https://i.imgur.com/63PMzJ3.png" style="width:60.0%" /></p>
-<p>The long format has repeated values of the column that are not
-gathered/collected. In this case, the <code>year</code> column gets its
-values repeated for each row.</p>
-<p>Let’s recreate the above transformation in R. First, we create the
-<code>my_data</code> table.</p>
+<p>The long format has repeated values of the column that are not gathered/collected. In this case, the <code>year</code> column gets its values repeated for each row.</p>
+<p>Let’s recreate the above transformation in R. First, we create the <code>my_data</code> table.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>my_data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span></span>
@@ -2634,12 +2614,8 @@ values repeated for each row.</p>
 </tbody>
 </table>
 </div>
-<p>To convert this table into long format, we use the
-<em>pivot_longer()</em> function from {tidyr} R package. Let us see how
-to use this function.</p>
-<p>💡<em>Tip: use <code>formals</code> to view all the formal arguments
-of a function and their default values. <code>formals</code> returns a
-named list.</em></p>
+<p>To convert this table into long format, we use the <em>pivot_longer()</em> function from {tidyr} R package. Let us see how to use this function.</p>
+<p>💡<em>Tip: use <code>formals</code> to view all the formal arguments of a function and their default values. <code>formals</code> returns a named list.</em></p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyr.tidyverse.org'>tidyr</a></span>, quietly <span class='op'>=</span> <span class='cn'>TRUE</span>, warn.conflicts <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
@@ -2687,13 +2663,8 @@ NULL
 
 $...</code></pre>
 </div>
-<p>The result of <code>formals(pivot_longer)</code> tells us that the
-minimum information needed to use this function is to provide values to
-the <code>data</code> and <code>cols</code> arguments as all other
-arguments have default values and hence, are optional.</p>
-<p>Using only the minimum arguments with <code>pivot_longer()</code>, we
-get a long formatted tibble with the columns <code>year</code>,
-<code>name</code> and <code>value</code>.</p>
+<p>The result of <code>formals(pivot_longer)</code> tells us that the minimum information needed to use this function is to provide values to the <code>data</code> and <code>cols</code> arguments as all other arguments have default values and hence, are optional.</p>
+<p>Using only the minimum arguments with <code>pivot_longer()</code>, we get a long formatted tibble with the columns <code>year</code>, <code>name</code> and <code>value</code>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>long_minimal</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>pivot_longer</a></span><span class='op'>(</span></span>
@@ -2765,14 +2736,8 @@ get a long formatted tibble with the columns <code>year</code>,
 </tbody>
 </table>
 </div>
-<p>Notice that the continent names and their corresponding average life
-expectancy values appear in columns named <code>name</code> and
-<code>value</code>. These are the default column names. We can change
-these column names by providing our own names to the arguments
-<code>names_to</code> and <code>values_to</code>.</p>
-<p>Since the <code>year</code> column is the only one that remains as
-is, we can rewrite the above <code>pivot_longer</code> statement as
-below</p>
+<p>Notice that the continent names and their corresponding average life expectancy values appear in columns named <code>name</code> and <code>value</code>. These are the default column names. We can change these column names by providing our own names to the arguments <code>names_to</code> and <code>values_to</code>.</p>
+<p>Since the <code>year</code> column is the only one that remains as is, we can rewrite the above <code>pivot_longer</code> statement as below</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>my_data_longer</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://tidyr.tidyverse.org/reference/pivot_longer.html'>pivot_longer</a></span><span class='op'>(</span>data      <span class='op'>=</span> <span class='va'>my_data</span>,</span>
@@ -2844,40 +2809,21 @@ below</p>
 </tbody>
 </table>
 </div>
-<p>If you are a visual person like me and wish to see this
-transformation with explanations, check out this GIF I made using good
-ol’ Powerpoint.</p>
+<p>If you are a visual person like me and wish to see this transformation with explanations, check out this GIF I made using good ol’ Powerpoint.</p>
 <figure>
-<img src="https://i.imgur.com/0qMbFC1.gif"
-alt="{tidyr} pivot_longer() explained" />
-<figcaption aria-hidden="true">{tidyr} pivot_longer()
-explained</figcaption>
+<img src="https://i.imgur.com/0qMbFC1.gif" alt="{tidyr} pivot_longer() explained" />
+<figcaption aria-hidden="true">{tidyr} pivot_longer() explained</figcaption>
 </figure>
 <h1 id="conclusion">Conclusion</h1>
-<p><code>pivot_longer()</code> is the successor for the great
-<code>gather()</code> function and has many advantages over the latter.
-<code>pivot_longer()</code> repeats all the values in the columns that
-are not included in the <code>cols</code> argument. Therefore, if your
-dataframe/tibble had a primary key prior to the transformation, the
-primary key of your transformed “longer” dataframe is your old primary
-key + the new column created by <code>names_to</code>. This function has
-many other arguments that allow some truly great transformations.
-Mastering this function (and its wide counterpart) is a great skill
-upgrade while massaging your data to make it “tidy”.</p>
+<p><code>pivot_longer()</code> is the successor for the great <code>gather()</code> function and has many advantages over the latter. <code>pivot_longer()</code> repeats all the values in the columns that are not included in the <code>cols</code> argument. Therefore, if your dataframe/tibble had a primary key prior to the transformation, the primary key of your transformed “longer” dataframe is your old primary key + the new column created by <code>names_to</code>. This function has many other arguments that allow some truly great transformations. Mastering this function (and its wide counterpart) is a great skill upgrade while massaging your data to make it “tidy”.</p>
 <p>Happy Gathering!</p>
 <h1 id="references">References</h1>
 <ul>
-<li><a href="https://www.statology.org/long-vs-wide-data/">Long vs. Wide
-Data: What’s the Difference?</a></li>
-<li>Hadley Wickham and Maximilian Girlich (2022). tidyr: Tidy Messy
-Data. R package version 1.2.0. <a
-href="https://CRAN.R-project.org/package=tidyr"
-class="uri">https://CRAN.R-project.org/package=tidyr</a></li>
-<li>Yihui Xie (2022). knitr: A General-Purpose Package for Dynamic
-Report Generation in R. R package version 1.39.</li>
+<li><a href="https://www.statology.org/long-vs-wide-data/">Long vs. Wide Data: What’s the Difference?</a></li>
+<li>Hadley Wickham and Maximilian Girlich (2022). tidyr: Tidy Messy Data. R package version 1.2.0. <a href="https://CRAN.R-project.org/package=tidyr" class="uri">https://CRAN.R-project.org/package=tidyr</a></li>
+<li>Yihui Xie (2022). knitr: A General-Purpose Package for Dynamic Report Generation in R. R package version 1.39.</li>
 </ul>
-<div class="sourceCode" id="cb2"><pre
-class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <div class="article-footer">
   <p class="social_footer">

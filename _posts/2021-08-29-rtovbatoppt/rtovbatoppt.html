@@ -189,6 +189,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   d-article table.gt_table td,
   d-article table.gt_table th {
     border-bottom: none;
+    font-size: 100%;
   }
 
   .html-widget {
@@ -1261,15 +1262,21 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
-        if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
-          var fn = $(this).children()[0]
+        const citeChild = $(this).children()[0]
+        // Do not process if @xyz has been used without escaping and without bibliography activated
+        // https://github.com/rstudio/distill/issues/466
+        if (citeChild === undefined) return true
+
+        if (citeChild.nodeName == "D-FOOTNOTE") {
+          var fn = citeChild
           $(this).html(fn.shadowRoot.querySelector("sup"))
           $(this).id = fn.id
           fn.remove()
         }
         var refs = $(this).attr('data-cites').split(" ");
         var refHtml = refs.map(function(ref) {
-          return "<p>" + $('#ref-' + ref).html() + "</p>";
+          // Could use CSS.escape too here, we insure backward compatibility in navigator
+          return "<p>" + $('div[id="ref-' + ref + '"]').html() + "</p>";
         }).join("\n");
         window.tippy(this, {
           allowHTML: true,
@@ -1468,7 +1475,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="rtovbatoppt_files/header-attrs-2.14/header-attrs.js"></script>
+  <script src="rtovbatoppt_files/header-attrs-2.16/header-attrs.js"></script>
   <script src="rtovbatoppt_files/jquery-3.6.0/jquery-3.6.0.min.js"></script>
   <script src="rtovbatoppt_files/popper-2.6.0/popper.min.js"></script>
   <link href="rtovbatoppt_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
@@ -1508,8 +1515,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="dt-tag">PowerPoint</div>
 </div>
 <!--/radix_placeholder_categories-->
-<p><p>Using R to trigger Excel VBA macros to create PowerPoint
-presentations!</p></p>
+<p><p>Using R to trigger Excel VBA macros to create PowerPoint presentations!</p></p>
 </div>
 
 <div class="d-byline">
@@ -1524,92 +1530,78 @@ presentations!</p></p>
 <h3>Contents</h3>
 <ul>
 <li><a href="#tldr" id="toc-tldr">TL;DR</a></li>
-<li><a href="#the-powerpoint-template"
-id="toc-the-powerpoint-template">The PowerPoint Template</a></li>
-<li><a href="#the-excel-template" id="toc-the-excel-template">The Excel
-Template</a></li>
-<li><a href="#the-vba-macro" id="toc-the-vba-macro">The VBA
-Macro</a></li>
+<li><a href="#the-powerpoint-template" id="toc-the-powerpoint-template">The PowerPoint Template</a></li>
+<li><a href="#the-excel-template" id="toc-the-excel-template">The Excel Template</a></li>
+<li><a href="#the-vba-macro" id="toc-the-vba-macro">The VBA Macro</a></li>
 <li><a href="#r" id="toc-r">R</a></li>
 </ul>
 </nav>
 </div>
-<p>One of the most common tasks in most offices, is creating
-presentations and reports in Microsoft PowerPoint. While the tool is
-great for creating ad hoc presentations, editing the same with new data
-on a periodic basis gets tedious. Now, I know that some wonderful
-packages like <code>officer</code> and <code>officedown</code> exist
-that enable us to create PowerPoint presentations with editable charts
-from R itself. You can read all about this in the amazing <a
-href="https://alison.rbind.io/blog/2021-07-officedown/">Alison Hill’s
-blog post “Up and running with officedown”</a>.</p>
-<p>Since I discovered R while looking for a better alternative to VBA
-for data analysis and Excel/PowerPoint automation, the following is an
+<p>One of the most common tasks in most offices, is creating presentations
+and reports in Microsoft PowerPoint. While the tool is great for
+creating ad hoc presentations, editing the same with new data on a
+periodic basis gets tedious. Now, I know that some wonderful packages
+like <code>officer</code> and <code>officedown</code> exist that enable us to create
+PowerPoint presentations with editable charts from R itself. You can
+read all about this in the amazing <a href="https://alison.rbind.io/blog/2021-07-officedown/">Alison Hill’s blog post “Up and
+running with
+officedown”</a>.</p>
+<p>Since I discovered R while looking for a better alternative to VBA for
+data analysis and Excel/PowerPoint automation, the following is an
 alternative workflow to create multiple PowerPoint presentations using a
 combination of these technologies. Note that this workflow uses the
-<code>RDCOMClient</code> package which works in Windows environment
-only.</p>
+<code>RDCOMClient</code> package which works in Windows environment only.</p>
 <h2 id="tldr">TL;DR</h2>
 <p>In this 2-part blog, we create a PowerPoint template with named
 placeholders which we populate from an Excel file using VBA. The Excel
-file is loaded with data using R with the help of <code>openxlsx</code>
-package and then the macro is triggered using the
-<code>RDCOMClient</code> package.</p>
-<p>This solution has great potential to give you the same feeling as
-those Jurassic Park scientists that Dr. Ian Malcolm remarked about!</p>
-<p>Advantages of this approach over <code>officer</code> and
-<code>officedown</code>:</p>
+file is loaded with data using R with the help of <code>openxlsx</code> package and
+then the macro is triggered using the <code>RDCOMClient</code> package.</p>
+<p>This solution has great potential to give you the same feeling as those
+Jurassic Park scientists that Dr. Ian Malcolm remarked about!</p>
+<p>Advantages of this approach over <code>officer</code> and <code>officedown</code>:</p>
 <ol type="1">
 <li>Slide/content/header/footer formatting control is in the PowerPoint
 template rather than R code.</li>
 <li>All charts are native and can contain any feature (dual axis, mixed
-data series like bar + line, line + points). All Excel chart-types are
-available. Go wild!</li>
+data series like bar + line, line + points). All Excel chart-types
+are available. Go wild!</li>
 <li>You can use any PowerPoint template design (Yes, even your
 sad/weird/exciting corporate template!).</li>
 </ol>
 <p>Let’s begin.</p>
 <p>Suppose we want to automate the following PowerPoint presentation. It
 contains 3 slides with a title slide and 2 content slides having graphs
-and tables created from the <code>gapminder</code> dataset. This
-<code>.pptx</code> file also has a custom footer.</p>
+and tables created from the <code>gapminder</code> dataset. This <code>.pptx</code> file also
+has a custom footer.</p>
 <figure>
-<img src="https://i.imgur.com/LL6UwWH.gif"
-title="The Gapminder World Report"
-alt="The Gapminder World Population Report" />
+<img src="https://i.imgur.com/LL6UwWH.gif" title="The Gapminder World Report" alt="The Gapminder World Population Report" />
 <figcaption aria-hidden="true">The Gapminder World Population
 Report</figcaption>
 </figure>
 <p>We want to create the same presentation with same structure but at a
-continent-level. <code>gapminder</code> has data for 5 continents and we
-wish to create 5 presentations by the end of this.</p>
+continent-level. <code>gapminder</code> has data for 5 continents and we wish to
+create 5 presentations by the end of this.</p>
 <h2 id="the-powerpoint-template">The PowerPoint Template</h2>
 <p>In this approach, we start with the PowerPoint presentation file. We
 will create a template with placeholders and charts with dummy data.
-Usually, you would have a copy of the <code>.pptx</code> file you want
-to automate. Save a copy of it as a
-<code>PowerPoint Template (.potx)</code>, ideally to your R Project
-folder. To know more about what an R Project is, read about it <a
-href="https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects">here</a>.
-In my case, I’ve created a new R Project folder named
-<code>R2XL2PPT</code> as shown below.</p>
+Usually, you would have a copy of the <code>.pptx</code> file you want to automate.
+Save a copy of it as a <code>PowerPoint Template (.potx)</code>, ideally to your R
+Project folder. To know more about what an R Project is, read about it
+<a href="https://support.rstudio.com/hc/en-us/articles/200526207-Using-Projects">here</a>.
+In my case, I’ve created a new R Project folder named <code>R2XL2PPT</code> as
+shown below.</p>
 <figure>
-<img src="https://i.imgur.com/NvdILBA.png"
-title="Save As PowerPoint Template (.potx)"
-alt="Save As PowerPoint Template (.potx)" />
+<img src="https://i.imgur.com/NvdILBA.png" title="Save As PowerPoint Template (.potx)" alt="Save As PowerPoint Template (.potx)" />
 <figcaption aria-hidden="true">Save As PowerPoint Template
 (.potx)</figcaption>
 </figure>
 <p>Now let us prep the template. If you open the template file by
-double-click or right-click &gt; New, it would open a fresh
-<code>.pptx</code> presentation using the template. Right-Click and
-click Open in the context menu to open the <code>.potx</code> template
-file for editing.</p>
+double-click or right-click &gt; New, it would open a fresh <code>.pptx</code>
+presentation using the template. Right-Click and click Open in the
+context menu to open the <code>.potx</code> template file for editing.</p>
 <figure>
-<img src="https://i.imgur.com/eQokXoX.png"
-alt="CORRECT: Right-Click &gt; Open" />
-<figcaption aria-hidden="true">CORRECT: Right-Click &gt;
-Open</figcaption>
+<img src="https://i.imgur.com/eQokXoX.png" alt="CORRECT: Right-Click &gt; Open" />
+<figcaption aria-hidden="true">CORRECT: Right-Click &gt; Open</figcaption>
 </figure>
 <p>Once you have the template open, we will add names to all the text
 placeholders, tables and graphs we wish to update. To update the
@@ -1620,65 +1612,57 @@ placeholder name:</p>
 <li>In the Selection Pane, change the name of the selected item.</li>
 </ol>
 <figure>
-<img src="https://i.imgur.com/xhA0D3u.png"
-title="Add shape names from Selection Pane"
-alt="Add shape names from Selection Pane" />
+<img src="https://i.imgur.com/xhA0D3u.png" title="Add shape names from Selection Pane" alt="Add shape names from Selection Pane" />
 <figcaption aria-hidden="true">Add shape names from Selection
 Pane</figcaption>
 </figure>
-<p>Advisory: We use the format <code>NN_[Position]Object</code> where
-<code>NN</code> is the slide number, <code>[Position]</code> is the
-either TopLeft, TopRight, BottomLeft, BottomRight or any other position
-and finally, <code>Object</code> is either Table, Chart, Title,
-Subtitle, TextBox etc. You can use any fancy identifier here, just make
-sure that your future self and others can recognise them easily.</p>
-<p>Once you set the names of all the items that you want to customise,
-save the template.</p>
-<p>Download the <code>GP_template.potx</code> template <a
-href="content/GP_template.potx">here</a>.</p>
+<p>Advisory: We use the format <code>NN_[Position]Object</code> where <code>NN</code> is the
+slide number, <code>[Position]</code> is the either TopLeft, TopRight, BottomLeft,
+BottomRight or any other position and finally, <code>Object</code> is either Table,
+Chart, Title, Subtitle, TextBox etc. You can use any fancy identifier
+here, just make sure that your future self and others can recognise them
+easily.</p>
+<p>Once you set the names of all the items that you want to customise, save
+the template.</p>
+<p>Download the <code>GP_template.potx</code> template
+<a href="content/GP_template.potx">here</a>.</p>
 <h2 id="the-excel-template">The Excel Template</h2>
-<p>To populate all the named items in the PowerPoint template, we will
-now create an Excel document which looks identical to the template with
+<p>To populate all the named items in the PowerPoint template, we will now
+create an Excel document which looks identical to the template with
 respect to the named items. Please see image below.</p>
 <figure>
-<img src="https://i.imgur.com/A080o1Z.png"
-title="PowerPoint item to Excel named range mapping"
-alt="PowerPoint item to Excel named range mapping" />
+<img src="https://i.imgur.com/A080o1Z.png" title="PowerPoint item to Excel named range mapping" alt="PowerPoint item to Excel named range mapping" />
 <figcaption aria-hidden="true">PowerPoint item to Excel named range
 mapping</figcaption>
 </figure>
-<p>For every named item, depending on whether it is a textbox or chart
-or table, we will create a named range for that item. For example, for
-item <code>01_title</code> in the PowerPoint template, we create a
-<code>S1_title</code> named range (which points to cell C3) as a
-placeholder for it. If you don’t know how to create a named range in
-Excel, read more <a
-href="https://support.microsoft.com/en-us/office/define-and-use-names-in-formulas-4d0f13ac-53b7-422e-afd2-abd7ff379c64">here</a>.</p>
+<p>For every named item, depending on whether it is a textbox or chart or
+table, we will create a named range for that item. For example, for item
+<code>01_title</code> in the PowerPoint template, we create a <code>S1_title</code> named
+range (which points to cell C3) as a placeholder for it. If you don’t
+know how to create a named range in Excel, read more
+<a href="https://support.microsoft.com/en-us/office/define-and-use-names-in-formulas-4d0f13ac-53b7-422e-afd2-abd7ff379c64">here</a>.</p>
 <blockquote>
 <p>Excel does not allow named ranges names to start with a number, hence
-<code>01_title</code> is mapped to <code>S1_title</code>. The S stands
-for Slide. Just one of those Excel quirks I guess!</p>
+<code>01_title</code> is mapped to <code>S1_title</code>. The S stands for Slide. Just one
+of those Excel quirks I guess!</p>
 </blockquote>
-<p>You can set a single Excel cell as named range for each
-<strong>textbox</strong> in the PowerPoint template. You can copy-paste
-<strong>tables</strong> from Powerpoint to the Excel template directly.
-The entire table must be set as a named range.</p>
-<p>For charts, right-click the chart in PowerPoint and select
-<code>Edit Data</code>. An excel worksheet is displayed with the
-underlying data. Copy-paste the entire data into the Excel template.</p>
+<p>You can set a single Excel cell as named range for each <strong>textbox</strong> in
+the PowerPoint template. You can copy-paste <strong>tables</strong> from Powerpoint
+to the Excel template directly. The entire table must be set as a named
+range.</p>
+<p>For charts, right-click the chart in PowerPoint and select <code>Edit Data</code>.
+An excel worksheet is displayed with the underlying data. Copy-paste the
+entire data into the Excel template.</p>
 <figure>
-<img src="https://i.imgur.com/rVsb1a6.png"
-title="Excel Chart: Right Click &gt; Edit Data" width="225"
-alt="Excel Chart: Right Click &gt; Edit Data" />
+<img src="https://i.imgur.com/rVsb1a6.png" title="Excel Chart: Right Click &gt; Edit Data" width="225" alt="Excel Chart: Right Click &gt; Edit Data" />
 <figcaption aria-hidden="true">Excel Chart: Right Click &gt; Edit
 Data</figcaption>
 </figure>
-<p>For the <code>GP_template.potx</code>, the corresponding excel
-template <code>XL2PPT.xlsm</code> looks like the below image. Please
-note that this template does not have the VBA macro yet.</p>
+<p>For the <code>GP_template.potx</code>, the corresponding excel template
+<code>XL2PPT.xlsm</code> looks like the below image. Please note that this template
+does not have the VBA macro yet.</p>
 <figure>
-<img src="https://i.imgur.com/oMdSUvp.png" title="XL2PPT design"
-alt="XL2PPT design" />
+<img src="https://i.imgur.com/oMdSUvp.png" title="XL2PPT design" alt="XL2PPT design" />
 <figcaption aria-hidden="true">XL2PPT design</figcaption>
 </figure>
 <h2 id="the-vba-macro">The VBA Macro</h2>
@@ -1688,8 +1672,7 @@ alt="XL2PPT design" />
 <code>GP_template.potx</code> file.</li>
 <li>Copy text/numbers from various placeholders and replace existing
 text/numbers in the PowerPoint presentation.</li>
-<li>Save the presentation with custom file name with <code>.pptx</code>
-extension.</li>
+<li>Save the presentation with custom file name with <code>.pptx</code> extension.</li>
 </ol>
 <p>The actual mapping of the named ranges in the Excel template to the
 named shapes in the PowerPoint template happens in the VBA code.
@@ -1697,8 +1680,7 @@ However, at this stage, you can actually create the PowerPoint
 presentation by copying the numbers into the Excel template and hitting
 the big <code>RUN MACRO</code> button.</p>
 <p>For your reference, I am embedding the VBA macro code below. You can
-download the <code>XL2PPT.xlsm</code> file from <a
-href="content/XL2PPT.xlsm">here</a>.</p>
+download the <code>XL2PPT.xlsm</code> file from <a href="content/XL2PPT.xlsm">here</a>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <details closed>
 <summary>
@@ -1712,18 +1694,16 @@ href="content/XL2PPT.xlsm">here</a>.</p>
 <p>Suppose we want to create a 10 variations of PowerPoint presentation
 using the same template. While creating the presentation from Excel is
 now automated, how about creating the numbers for each of those 10
-variations? This is where we bring in R with the <code>openxlsx</code>
-and <code>RDCOMClient</code> packages. We use the <code>tidyverse</code>
-set of packages to read in data, clean and massage the data into the
-various formats we need, <code>openxlsx</code> to write the data (single
-numbers, text or tables of numbers) to the Excel template and
-<code>RDCOMClient</code> to run the embedded VBA code in the Excel
-template.</p>
+variations? This is where we bring in R with the <code>openxlsx</code> and
+<code>RDCOMClient</code> packages. We use the <code>tidyverse</code> set of packages to read
+in data, clean and massage the data into the various formats we need,
+<code>openxlsx</code> to write the data (single numbers, text or tables of numbers)
+to the Excel template and <code>RDCOMClient</code> to run the embedded VBA code in
+the Excel template.</p>
 <p>Check out the upcoming Part 2 of this blog to see how to run VBA code
 using R. Let me know if you find this useful or any corrections required
 in the comments below.</p>
-<div class="sourceCode" id="cb1"><pre
-class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

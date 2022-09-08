@@ -189,6 +189,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   d-article table.gt_table td,
   d-article table.gt_table th {
     border-bottom: none;
+    font-size: 100%;
   }
 
   .html-widget {
@@ -1261,15 +1262,21 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
       // hoverable references
       $('span.citation[data-cites]').each(function() {
-        if ($(this).children()[0].nodeName == "D-FOOTNOTE") {
-          var fn = $(this).children()[0]
+        const citeChild = $(this).children()[0]
+        // Do not process if @xyz has been used without escaping and without bibliography activated
+        // https://github.com/rstudio/distill/issues/466
+        if (citeChild === undefined) return true
+
+        if (citeChild.nodeName == "D-FOOTNOTE") {
+          var fn = citeChild
           $(this).html(fn.shadowRoot.querySelector("sup"))
           $(this).id = fn.id
           fn.remove()
         }
         var refs = $(this).attr('data-cites').split(" ");
         var refHtml = refs.map(function(ref) {
-          return "<p>" + $('#ref-' + ref).html() + "</p>";
+          // Could use CSS.escape too here, we insure backward compatibility in navigator
+          return "<p>" + $('div[id="ref-' + ref + '"]').html() + "</p>";
         }).join("\n");
         window.tippy(this, {
           allowHTML: true,
@@ -5548,14 +5555,10 @@ distill-header .nav a {
 <nav class="l-text toc figcaption" id="TOC">
 <h3>Contents</h3>
 <ul>
-<li><a href="#top-level-data-course" id="toc-top-level-data-course">Top-Level data:
-<strong>course</strong></a></li>
-<li><a href="#second-level-data-student" id="toc-second-level-data-student">Second Level Data:
-<strong>student</strong></a></li>
-<li><a href="#vanilla-reactable" id="toc-vanilla-reactable">Vanilla
-<code>reactable</code></a></li>
-<li><a href="#basic-formatting" id="toc-basic-formatting">Basic
-Formatting</a></li>
+<li><a href="#top-level-data-course" id="toc-top-level-data-course">Top-Level data: <strong>course</strong></a></li>
+<li><a href="#second-level-data-student" id="toc-second-level-data-student">Second Level Data: <strong>student</strong></a></li>
+<li><a href="#vanilla-reactable" id="toc-vanilla-reactable">Vanilla <code>reactable</code></a></li>
+<li><a href="#basic-formatting" id="toc-basic-formatting">Basic Formatting</a></li>
 <li><a href="#grouping-and-aggregating" id="toc-grouping-and-aggregating">Grouping and Aggregating</a></li>
 <li><a href="#the-final-drill-down-table" id="toc-the-final-drill-down-table">The final Drill-down Table</a></li>
 <li><a href="#conclusion" id="toc-conclusion">Conclusion</a></li>
@@ -5563,21 +5566,12 @@ Formatting</a></li>
 </ul>
 </nav>
 </div>
-<p>We often come across denormalized data that has 2 or more levels of
-information. For example, top-level info like course info with data
-fields like course id, course name, description, start/end date and
-second-level info like student info with data fields like with student
-id, student name, age and gender. We may also have these two groups of
-data as separate tables with a primary-key foreign-key design, usually
-from a well-designed SQL database.</p>
+<p>We often come across denormalized data that has 2 or more levels of information. For example, top-level info like course info with data fields like course id, course name, description, start/end date and second-level info like student info with data fields like with student id, student name, age and gender. We may also have these two groups of data as separate tables with a primary-key foreign-key design, usually from a well-designed SQL database.</p>
 <blockquote>
-<p>NOTE: If you are reading this article from anywhere except <a href="https://vishalkatti.com" class="uri">https://vishalkatti.com</a>,
-you may not see some of the interactive elements below. Go to <a href="https://www.vishalkatti.com/posts/2021-07-27-drilldown/">original
-post here</a></p>
+<p>NOTE: If you are reading this article from anywhere except <a href="https://vishalkatti.com" class="uri">https://vishalkatti.com</a>, you may not see some of the interactive elements below. Go to <a href="https://www.vishalkatti.com/posts/2021-07-27-drilldown/">original post here</a></p>
 </blockquote>
 <p>Let us create some data.</p>
-<h2 id="top-level-data-course">Top-Level data:
-<strong>course</strong></h2>
+<h2 id="top-level-data-course">Top-Level data: <strong>course</strong></h2>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -5596,8 +5590,7 @@ post here</a></p>
   </script>
 </div>
 </div>
-<h2 id="second-level-data-student">Second Level Data:
-<strong>student</strong></h2>
+<h2 id="second-level-data-student">Second Level Data: <strong>student</strong></h2>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
@@ -5615,10 +5608,7 @@ post here</a></p>
   </script>
 </div>
 </div>
-<p>If we are sourcing data from a database, it is probable that you
-would see these 2 levels of data in 2 separate tables/views, but most
-business users are comfortable with MS Excel and want <strong>all the
-data in one sheet</strong>!!</p>
+<p>If we are sourcing data from a database, it is probable that you would see these 2 levels of data in 2 separate tables/views, but most business users are comfortable with MS Excel and want <strong>all the data in one sheet</strong>!!</p>
 <p>So the data actually looks something like this.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -5632,20 +5622,10 @@ data in one sheet</strong>!!</p>
   </script>
 </div>
 </div>
-<p>Displaying such data in a table causes all the top-level data fields
-to repeat for every second-level record. You can see that
-<code>course_id</code>, <code>course_name</code>,
-<code>start_date</code> and <code>end_date</code> columns repeat for all
-students who enrolled in the same course. Take a moment to think about
-how would you display such data in an interactive table in a web page,
-HTML report or Shiny app.</p>
-<p>It is advisable to split such denormalized data into normalized data
-i.e. create the original top-level and second level tables from the
-<code>combined_df</code>.</p>
+<p>Displaying such data in a table causes all the top-level data fields to repeat for every second-level record. You can see that <code>course_id</code>, <code>course_name</code>, <code>start_date</code> and <code>end_date</code> columns repeat for all students who enrolled in the same course. Take a moment to think about how would you display such data in an interactive table in a web page, HTML report or Shiny app.</p>
+<p>It is advisable to split such denormalized data into normalized data i.e. create the original top-level and second level tables from the <code>combined_df</code>.</p>
 <h2 id="vanilla-reactable">Vanilla <code>reactable</code></h2>
-<p>One of my favorite R packages is <code>{reactable}</code>. The
-default output creates a neat interactive table with pagination (if data
-has more than 10 rows) and ability to sort columns.</p>
+<p>One of my favorite R packages is <code>{reactable}</code>. The default output creates a neat interactive table with pagination (if data has more than 10 rows) and ability to sort columns.</p>
 <div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://glin.github.io/reactable/">reactable</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span>, warn.conflicts <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
@@ -5680,14 +5660,9 @@ has more than 10 rows) and ability to sort columns.</p>
 <div id="htmlwidget-d308ea22dc0f64dbf7ed" class="reactable html-widget" style="width:auto;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-d308ea22dc0f64dbf7ed">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"course_id":[1,1,1,2,2,2,2,2,2,2,2,2,2,3,3,3,3,4,4,4],"course_name":["Course A","Course A","Course A","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course C","Course C","Course C","Course C","Course D","Course D","Course D"],"start_date":["2021-01-01","2021-01-01","2021-01-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-03-01","2021-03-01","2021-03-01","2021-03-01","2021-04-01","2021-04-01","2021-04-01"],"end_date":["2021-01-31","2021-01-31","2021-01-31","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-03-31","2021-03-31","2021-03-31","2021-03-31","2021-04-30","2021-04-30","2021-04-30"],"s_id":[4,5,14,6,7,8,9,10,13,15,17,18,19,1,3,12,16,2,11,20],"s_name":["Student D","Student E","Student N","Student F","Student G","Student H","Student I","Student J","Student M","Student O","Student Q","Student R","Student S","Student A","Student C","Student L","Student P","Student B","Student K","Student T"],"gender":["X","Y","Y","Y","Y","X","Z","Z","Y","Y","Z","X","X","X","X","X","Z","X","X","Z"],"age":[22,19,21,25,20,18,27,28,21,35,22,21,19,21,30,25,30,22,32,35]},"columns":[{"accessor":"course_id","name":"CID","type":"numeric","width":50,"align":"center"},{"accessor":"course_name","name":"Course Name","type":"character","width":140},{"accessor":"start_date","name":"Start Date","type":"Date","width":120,"align":"center"},{"accessor":"end_date","name":"End Date","type":"Date","width":120,"align":"center"},{"accessor":"s_id","name":"SID","type":"numeric","width":70,"align":"center"},{"accessor":"s_name","name":"Student Name","type":"character"},{"accessor":"gender","name":"Gender","type":"character","width":80,"align":"center"},{"accessor":"age","name":"Age","type":"numeric","width":50}],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"striped":true,"compact":true,"dataKey":"37ac57f783425a81c3f289334adfb3a2"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
-<p>However, the problem of repeating top-level fields still
-persists.</p>
+<p>However, the problem of repeating top-level fields still persists.</p>
 <h2 id="grouping-and-aggregating">Grouping and Aggregating</h2>
-<p><code>{reactable}</code> has a <strong>groupBy</strong> argument
-which lets us combined rows with common data fields and the
-<strong>aggregate</strong> argument inside <code>colDef</code> lets us
-define what aggregation to be used for each column of the top-level
-data.</p>
+<p><code>{reactable}</code> has a <strong>groupBy</strong> argument which lets us combined rows with common data fields and the <strong>aggregate</strong> argument inside <code>colDef</code> lets us define what aggregation to be used for each column of the top-level data.</p>
 <div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://glin.github.io/reactable/reference/reactable.html">reactable</a></span><span class="op">(</span></span>
@@ -5716,13 +5691,8 @@ data.</p>
 <div id="htmlwidget-44db758151977091446d" class="reactable html-widget" style="width:auto;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-44db758151977091446d">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"course_id":[1,1,1,2,2,2,2,2,2,2,2,2,2,3,3,3,3,4,4,4],"course_name":["Course A","Course A","Course A","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course C","Course C","Course C","Course C","Course D","Course D","Course D"],"start_date":["2021-01-01","2021-01-01","2021-01-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-03-01","2021-03-01","2021-03-01","2021-03-01","2021-04-01","2021-04-01","2021-04-01"],"end_date":["2021-01-31","2021-01-31","2021-01-31","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-03-31","2021-03-31","2021-03-31","2021-03-31","2021-04-30","2021-04-30","2021-04-30"],"s_id":[4,5,14,6,7,8,9,10,13,15,17,18,19,1,3,12,16,2,11,20],"s_name":["Student D","Student E","Student N","Student F","Student G","Student H","Student I","Student J","Student M","Student O","Student Q","Student R","Student S","Student A","Student C","Student L","Student P","Student B","Student K","Student T"],"gender":["X","Y","Y","Y","Y","X","Z","Z","Y","Y","Z","X","X","X","X","X","Z","X","X","Z"],"age":[22,19,21,25,20,18,27,28,21,35,22,21,19,21,30,25,30,22,32,35]},"columns":[{"accessor":"course_id","name":"CID","type":"numeric","aggregate":"count","width":100,"align":"left"},{"accessor":"course_name","name":"Course Name","type":"character","aggregate":"unique","width":140},{"accessor":"start_date","name":"Start Date","type":"Date","aggregate":"unique","width":120,"align":"center"},{"accessor":"end_date","name":"End Date","type":"Date","aggregate":"unique","width":120,"align":"center"},{"accessor":"s_id","name":"SID","type":"numeric","width":70,"align":"center"},{"accessor":"s_name","name":"Student Name","type":"character"},{"accessor":"gender","name":"Gender","type":"character","width":80,"align":"center"},{"accessor":"age","name":"Age","type":"numeric","width":50}],"pivotBy":["course_id"],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"striped":true,"compact":true,"dataKey":"e9fc15f3a53a06ad3569f7b3f70a31cd"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
-<p>In this case, all the columns which are not <code>aggregate</code>d
-remain hidden. Clicking the little triangle in the <code>CID</code>
-column displays the hidden rows. Looks better, but again, the issue of
-duplicated data remains.</p>
-<p>You can aggregate the second-level columns too, but this distorts the
-table and frankly, looks ugly. Here I aggregate the <code>SID</code>
-column in addition to all the other top-level columns.</p>
+<p>In this case, all the columns which are not <code>aggregate</code>d remain hidden. Clicking the little triangle in the <code>CID</code> column displays the hidden rows. Looks better, but again, the issue of duplicated data remains.</p>
+<p>You can aggregate the second-level columns too, but this distorts the table and frankly, looks ugly. Here I aggregate the <code>SID</code> column in addition to all the other top-level columns.</p>
 <div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://glin.github.io/reactable/reference/reactable.html">reactable</a></span><span class="op">(</span></span>
@@ -5748,20 +5718,10 @@ column in addition to all the other top-level columns.</p>
 <div id="htmlwidget-67b62794e33863e62991" class="reactable html-widget" style="width:auto;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-67b62794e33863e62991">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"course_id":[1,1,1,2,2,2,2,2,2,2,2,2,2,3,3,3,3,4,4,4],"course_name":["Course A","Course A","Course A","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course B","Course C","Course C","Course C","Course C","Course D","Course D","Course D"],"start_date":["2021-01-01","2021-01-01","2021-01-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-02-01","2021-03-01","2021-03-01","2021-03-01","2021-03-01","2021-04-01","2021-04-01","2021-04-01"],"end_date":["2021-01-31","2021-01-31","2021-01-31","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-02-28","2021-03-31","2021-03-31","2021-03-31","2021-03-31","2021-04-30","2021-04-30","2021-04-30"],"s_id":[4,5,14,6,7,8,9,10,13,15,17,18,19,1,3,12,16,2,11,20],"s_name":["Student D","Student E","Student N","Student F","Student G","Student H","Student I","Student J","Student M","Student O","Student Q","Student R","Student S","Student A","Student C","Student L","Student P","Student B","Student K","Student T"],"gender":["X","Y","Y","Y","Y","X","Z","Z","Y","Y","Z","X","X","X","X","X","Z","X","X","Z"],"age":[22,19,21,25,20,18,27,28,21,35,22,21,19,21,30,25,30,22,32,35]},"columns":[{"accessor":"course_id","name":"CID","type":"numeric","aggregate":"count","width":100,"align":"left"},{"accessor":"course_name","name":"Course Name","type":"character","aggregate":"unique","width":140},{"accessor":"start_date","name":"Start Date","type":"Date","aggregate":"unique","width":120,"align":"center"},{"accessor":"end_date","name":"End Date","type":"Date","aggregate":"unique","width":120,"align":"center"},{"accessor":"s_id","name":"SID","type":"numeric","aggregate":"unique","width":70,"align":"center"},{"accessor":"s_name","name":"Student Name","type":"character"},{"accessor":"gender","name":"Gender","type":"character","width":80,"align":"center"},{"accessor":"age","name":"Age","type":"numeric","width":50}],"pivotBy":["course_id"],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"striped":true,"compact":true,"dataKey":"51a6dfecd993aea3dbb11e027155fa81"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
-<p>Wouldn’t it be nice if we could display only the top-level columns by
-default and on clicking the small triangle for a row, show all the
-second-level columns corresponding to that row only, like a drill-down
-table?</p>
-<p>To do this we need 2 separate tables. Earlier in this post, I said it
-is advisable to split such denormalized data into normalized data
-i.e. create the original top-level and second level tables from the
-<code>combined_df</code>. Let’s recreate the 2 tables.</p>
-<p>I want to demonstrate how we go from the combined data to the 2
-tables. Hence I will not use the <code>course</code> and
-<code>student</code> tables created earlier.</p>
-<p>Creating the <code>top_level</code> table using just the columns in
-<code>course</code>. Let’s also create a new column
-<code>n_students</code> depicting count of students in each course.</p>
+<p>Wouldn’t it be nice if we could display only the top-level columns by default and on clicking the small triangle for a row, show all the second-level columns corresponding to that row only, like a drill-down table?</p>
+<p>To do this we need 2 separate tables. Earlier in this post, I said it is advisable to split such denormalized data into normalized data i.e. create the original top-level and second level tables from the <code>combined_df</code>. Let’s recreate the 2 tables.</p>
+<p>I want to demonstrate how we go from the combined data to the 2 tables. Hence I will not use the <code>course</code> and <code>student</code> tables created earlier.</p>
+<p>Creating the <code>top_level</code> table using just the columns in <code>course</code>. Let’s also create a new column <code>n_students</code> depicting count of students in each course.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">top_level</span> <span class="op">&lt;-</span> <span class="va">combined_df</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> </span>
@@ -5792,11 +5752,7 @@ tables. Hence I will not use the <code>course</code> and
 </div>
 </div>
 <h2 id="the-final-drill-down-table">The final Drill-down Table</h2>
-<p>Now that we have the 2 tables ready, let us now create the final
-<code>{reactable}</code>. The trick here is to use the
-<strong>details</strong> argument to which we pass another
-<code>{reactable}</code> of just the rows with students data
-corresponding to given course.</p>
+<p>Now that we have the 2 tables ready, let us now create the final <code>{reactable}</code>. The trick here is to use the <strong>details</strong> argument to which we pass another <code>{reactable}</code> of just the rows with students data corresponding to given course.</p>
 <div class="layout-chunk" data-layout="l-body-outset">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://glin.github.io/reactable/reference/reactable.html">reactable</a></span><span class="op">(</span></span>
@@ -5834,24 +5790,12 @@ corresponding to given course.</p>
 <div id="htmlwidget-5a0cb435521fcff53b1c" class="reactable html-widget" style="width:auto;height:auto;"></div>
 <script type="application/json" data-for="htmlwidget-5a0cb435521fcff53b1c">{"x":{"tag":{"name":"Reactable","attribs":{"data":{"course_id":[1,2,3,4],"course_name":["Course A","Course B","Course C","Course D"],"start_date":["2021-01-01","2021-02-01","2021-03-01","2021-04-01"],"end_date":["2021-01-31","2021-02-28","2021-03-31","2021-04-30"],"n_students":[3,10,4,3]},"columns":[{"accessor":".details","name":"","type":"NULL","sortable":false,"resizable":false,"filterable":false,"searchable":false,"width":45,"align":"center","details":[{"name":"Reactable","attribs":{"data":{"course_id":[1,1,1],"s_id":[4,5,14],"s_name":["Student D","Student E","Student N"],"gender":["X","Y","Y"],"age":[22,19,21]},"columns":[{"accessor":"course_id","name":"course_id","type":"numeric","show":false},{"accessor":"s_id","name":"SID","type":"numeric","width":70,"align":"center"},{"accessor":"s_name","name":"Student Name","type":"character"},{"accessor":"gender","name":"Gender","type":"character","width":90,"align":"center"},{"accessor":"age","name":"Age","type":"numeric","width":50,"align":"center"}],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"bordered":true,"compact":true,"dataKey":"12036566002706ab50f66831a92eae32","nested":true},"children":[]},{"name":"Reactable","attribs":{"data":{"course_id":[2,2,2,2,2,2,2,2,2,2],"s_id":[6,7,8,9,10,13,15,17,18,19],"s_name":["Student F","Student G","Student H","Student I","Student J","Student M","Student O","Student Q","Student R","Student S"],"gender":["Y","Y","X","Z","Z","Y","Y","Z","X","X"],"age":[25,20,18,27,28,21,35,22,21,19]},"columns":[{"accessor":"course_id","name":"course_id","type":"numeric","show":false},{"accessor":"s_id","name":"SID","type":"numeric","width":70,"align":"center"},{"accessor":"s_name","name":"Student Name","type":"character"},{"accessor":"gender","name":"Gender","type":"character","width":90,"align":"center"},{"accessor":"age","name":"Age","type":"numeric","width":50,"align":"center"}],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"bordered":true,"compact":true,"dataKey":"6587f2ad3dcb0fcc5216bf4473c986a0","nested":true},"children":[]},{"name":"Reactable","attribs":{"data":{"course_id":[3,3,3,3],"s_id":[1,3,12,16],"s_name":["Student A","Student C","Student L","Student P"],"gender":["X","X","X","Z"],"age":[21,30,25,30]},"columns":[{"accessor":"course_id","name":"course_id","type":"numeric","show":false},{"accessor":"s_id","name":"SID","type":"numeric","width":70,"align":"center"},{"accessor":"s_name","name":"Student Name","type":"character"},{"accessor":"gender","name":"Gender","type":"character","width":90,"align":"center"},{"accessor":"age","name":"Age","type":"numeric","width":50,"align":"center"}],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"bordered":true,"compact":true,"dataKey":"e3963514a17cdadfff8af46fde214632","nested":true},"children":[]},{"name":"Reactable","attribs":{"data":{"course_id":[4,4,4],"s_id":[2,11,20],"s_name":["Student B","Student K","Student T"],"gender":["X","X","Z"],"age":[22,32,35]},"columns":[{"accessor":"course_id","name":"course_id","type":"numeric","show":false},{"accessor":"s_id","name":"SID","type":"numeric","width":70,"align":"center"},{"accessor":"s_name","name":"Student Name","type":"character"},{"accessor":"gender","name":"Gender","type":"character","width":90,"align":"center"},{"accessor":"age","name":"Age","type":"numeric","width":50,"align":"center"}],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"bordered":true,"compact":true,"dataKey":"5a3a2a276df6d52409d68b95331871bb","nested":true},"children":[]}]},{"accessor":"course_id","name":"CID","type":"numeric","width":50,"align":"center"},{"accessor":"course_name","name":"Course Name","type":"character"},{"accessor":"start_date","name":"Start Date","type":"Date","width":120,"align":"center"},{"accessor":"end_date","name":"End Date","type":"Date","width":120,"align":"center"},{"accessor":"n_students","name":"No. of Students","type":"numeric","width":130,"align":"center"}],"resizable":true,"filterable":true,"defaultPageSize":10,"paginationType":"numbers","showPageInfo":true,"minRows":1,"striped":true,"compact":true,"dataKey":"4234130aace77d06280744fa5876f205"},"children":[]},"class":"reactR_markup"},"evals":[],"jsHooks":[]}</script>
 </div>
-<p>Since the sub-table is also a <code>{reactable}</code>, you can go
-another level down… and another, but please do consider the usability
-aspect of this feature before taking that decision. I haven’t tried
-going beyond 2 levels of data myself. Maybe a part 2 to this post??</p>
+<p>Since the sub-table is also a <code>{reactable}</code>, you can go another level down… and another, but please do consider the usability aspect of this feature before taking that decision. I haven’t tried going beyond 2 levels of data myself. Maybe a part 2 to this post??</p>
 <h2 id="conclusion">Conclusion</h2>
-<p>Drill-down tables let you pack a lot of data in a compact manner and
-allow use by multiple audiences interested in varying degrees/levels of
-information. <code>{reactable}</code> can help create an interactive
-data table from tabular data with sorting and pagination by default. The
-data table is an HTML widget that can be used in R Markdown documents
-and Shiny applications, or viewed from an R console. A lot of features
-can be enabled/disabled using the basic arguments of the
-<code>reactable()</code> function and much more using custom
-JavaScript.</p>
+<p>Drill-down tables let you pack a lot of data in a compact manner and allow use by multiple audiences interested in varying degrees/levels of information. <code>{reactable}</code> can help create an interactive data table from tabular data with sorting and pagination by default. The data table is an HTML widget that can be used in R Markdown documents and Shiny applications, or viewed from an R console. A lot of features can be enabled/disabled using the basic arguments of the <code>reactable()</code> function and much more using custom JavaScript.</p>
 <h2 id="references-citations">References &amp; Citations</h2>
 <ul>
-<li>Greg Lin (2020). reactable: Interactive Data Tables Based on ‘React
-Table’. R package version 0.2.3. <a href="https://CRAN.R-project.org/package=reactable" class="uri">https://CRAN.R-project.org/package=reactable</a></li>
+<li>Greg Lin (2020). reactable: Interactive Data Tables Based on ‘React Table’. R package version 0.2.3. <a href="https://CRAN.R-project.org/package=reactable" class="uri">https://CRAN.R-project.org/package=reactable</a></li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
