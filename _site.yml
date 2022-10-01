@@ -11,7 +11,7 @@ navbar:
     - text: "Blog"
       href: blog.html
     - text: "CV"
-      href: content/docs/VishalKatti_CV.pdf
+      href: content/docs/2022-10-01_Vishal_Katti_Resume.pdf
     - icon: fa fa-github
       href: https://github.com/vkatti
     - icon: fa fa-linkedin
